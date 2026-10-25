@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayo Belajar Tajwid</title>
-    <!-- Tailwind CSS CDN (Langsung aktif tanpa instalasi) -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM CDN -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel untuk membaca kode JSX langsung di browser -->
+    <!-- Babel untuk JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,28 +17,46 @@
 <body class="bg-gray-50 text-gray-800">
     <div id="root"></div>
 
-    <!-- Kode Aplikasi Utama -->
     <script type="text/babel">
         function App() {
-            const [user, setUser] = React.useState(null);
+            // 1. Masukkan Project URL dan Anon Key Supabase Anda di sini
+            const SUPABASE_URL = https://qhiaawsvsilwynreerdm.supabase.co/rest/v1/; 
+            const SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoaWFhd3N2c2lsd3lucmVlcmRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MzgxMzksImV4cCI6MjEwODUxNDEzOX0.V56bbVi7usxoPXNpgUJQHETJ4j3FOz0dzuk5FMqPKbg;
 
-            // Ganti atau pastikan Vercel Environment Variables terbaca, 
-            // atau masukkan langsung jika ingin instan (tapi amannya via env Vercel)
-            const supabaseUrl = window.ENV_SUPABASE_URL || "";
-            const supabaseAnonKey = window.ENV_SUPABASE_ANON_KEY || "";
+            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
             const handleGoogleLogin = async () => {
-                alert("Fitur Login Google akan terhubung ke Supabase.");
+                const { error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin
+                    }
+                });
+                if (error) {
+                    alert("Gagal login: " + error.message);
+                }
             };
 
             return (
                 <div className="min-h-screen flex flex-col items-center justify-center p-4">
                     <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
+                        {/* Logo Aplikasi */}
                         <div className="mb-6 flex justify-center">
-                            <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold text-2xl shadow-inner">
+                            <img 
+                                src="./AYO BELAJAR TAJWID.png" 
+                                alt="Logo Ayo Belajar Tajwid" 
+                                className="w-24 h-24 object-cover rounded-2xl shadow-md border border-gray-100"
+                                onError={(e) => {
+                                    // Fallback jika gambar gagal dimuat
+                                    e.target.style.display = 'none';
+                                    document.getElementById('fallback-logo').style.display = 'flex';
+                                }}
+                            />
+                            <div id="fallback-logo" style={{display: 'none'}} className="w-24 h-24 bg-emerald-100 rounded-2xl items-center justify-center text-emerald-600 font-bold text-xl shadow-inner">
                                 ABT
                             </div>
                         </div>
+
                         <h1 className="text-2xl font-bold text-gray-900 mb-2">Pusat Layanan Tajwid</h1>
                         <p className="text-gray-600 mb-8 text-sm">
                             Silakan masuk menggunakan akun Google resmi Anda yang terdaftar.
