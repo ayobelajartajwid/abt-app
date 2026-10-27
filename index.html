@@ -23,6 +23,16 @@
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Data Wilayah Provinsi dan Kota/Kabupaten Contoh di Indonesia
+        const wilayahIndonesia = {
+            "DKI Jakarta": ["Jakarta Pusat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Barat", "Jakarta Utara"],
+            "Jawa Barat": ["Bandung", "Bekasi", "Bogor", "Depok", "Cimahi", "Sukabumi", "Tasikmalaya"],
+            "Jawa Tengah": ["Semarang", "Surakarta", "Solo", "Magelang", "Pekalongan", "Salatiga", "Tegal"],
+            "Jawa Timur": ["Surabaya", "Malang", "Sidoarjo", "Jember", "Kediri", "Madiun", "Blitar"],
+            "DI Yogyakarta": ["Yogyakarta", "Sleman", "Bantul", "Kulon Progo", "Gunungkidul"],
+            "Banten": ["Tangerang", "Serang", "Cilegon", "Tangerang Selatan"]
+        };
+
         function App() {
             const [user, setUser] = React.useState(null);
             const [role, setRole] = React.useState('student');
@@ -32,8 +42,20 @@
             const [isRegister, setIsRegister] = React.useState(false);
             const [email, setEmail] = React.useState('');
             const [password, setPassword] = React.useState('');
-            const [selectedRole, setSelectedRole] = React.useState('student'); // 'teacher' atau 'student'
+            const [selectedRole, setSelectedRole] = React.useState('student');
+            
+            // Field Tambahan Registrasi
+            const [fullName, setFullName] = React.useState('');
+            const [whatsapp, setWhatsapp] = React.useState('');
+            const [gender, setGender] = React.useState('Ikhwan');
+            const [province, setProvince] = React.useState('DKI Jakarta');
+            const [city, setCity] = React.useState('Jakarta Pusat');
+            const [birthYear, setBirthYear] = React.useState('1995');
             const [authError, setAuthError] = React.useState('');
+
+            // Navigasi Sidebar Tab
+            const [activeTab, setActiveTab] = React.useState('dashboard');
+            const [allUsers, setAllUsers] = React.useState([]);
 
             React.useEffect(() => {
                 supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
@@ -56,14 +78,13 @@
             const handleUserSession = async (authUser) => {
                 setUser(authUser);
                 
-                // Khusus Admin Utama
                 if (authUser.email === "ayobelajartajwid@gmail.com") {
                     setRole('admin');
+                    fetchAllUsers();
                 } else {
-                    // Ambil role dari database tabel profiles, atau fallback ke stored metadata/default
                     const { data } = await supabaseClient
                         .from('profiles')
-                        .select('role')
+                        .select('*')
                         .eq('id', authUser.id)
                         .single();
                     
@@ -77,50 +98,53 @@
                 }
             };
 
-            // Login Email & Password
+            const fetchAllUsers = async () => {
+                const { data } = await supabaseClient.from('profiles').select('*');
+                if (data) setAllUsers(data);
+            };
+
+            // Register / Login Handler
             const handleEmailAuth = async (e) => {
                 e.preventDefault();
                 setAuthError('');
 
                 if (isRegister) {
-                    // Proses Pendaftaran Manual dengan Role
                     const { data, error } = await supabaseClient.auth.signUp({
                         email,
                         password,
                         options: {
-                            data: { role: selectedRole }
+                            data: { role: selectedRole, full_name: fullName, whatsapp, gender, province, city, birth_year: birthYear }
                         }
                     });
                     if (error) {
                         setAuthError(error.message);
                     } else {
-                        // Simpan juga ke tabel profiles jika ada
                         if (data.user) {
-                            await supabaseClient.from('profiles').upsert({ id: data.user.id, email, role: selectedRole });
+                            await supabaseClient.from('profiles').upsert({
+                                id: data.user.id,
+                                email,
+                                role: selectedRole,
+                                full_name: fullName,
+                                whatsapp,
+                                gender,
+                                province,
+                                city,
+                                birth_year: birthYear
+                            });
                         }
-                        alert("Pendaftaran berhasil! Silakan cek email untuk verifikasi atau langsung login.");
+                        alert("Pendaftaran berhasil! Silakan masuk menggunakan akun Anda.");
                         setIsRegister(false);
                     }
                 } else {
-                    // Proses Login Manual
-                    const { error } = await supabaseClient.auth.signInWithPassword({
-                        email,
-                        password
-                    });
-                    if (error) {
-                        setAuthError("Gagal masuk: " + error.message);
-                    }
+                    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                    if (error) setAuthError("Gagal masuk: " + error.message);
                 }
             };
 
-            // Login Google OAuth
             const handleGoogleLogin = async () => {
-                // Untuk Google, jika mendaftar baru, role default disimpan lewat metadata/tabel nanti
                 const { error } = await supabaseClient.auth.signInWithOAuth({
                     provider: 'google',
-                    options: {
-                        redirectTo: window.location.origin
-                    }
+                    options: { redirectTo: window.location.origin }
                 });
                 if (error) alert("Gagal login Google: " + error.message);
             };
@@ -141,11 +165,11 @@
                 );
             }
 
-            // 1. HALAMAN AUTHENTIKASI (LOGIN & REGISTER)
+            // 1. HALAMAN LOGIN / REGISTER
             if (!user) {
                 return (
-                    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-emerald-900/5">
-                        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+                    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-emerald-900/5 py-10">
+                        <div className="max-w-xl w-full bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
                             <div className="mb-6 flex justify-center">
                                 <img src="./AYO BELAJAR TAJWID.png" alt="Logo" className="w-20 h-20 object-cover rounded-2xl shadow-md border" />
                             </div>
@@ -161,7 +185,6 @@
                                 </div>
                             )}
 
-                            {/* Tombol Google Login */}
                             <button 
                                 onClick={handleGoogleLogin}
                                 className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-2xl py-3 px-4 text-gray-700 font-semibold hover:bg-gray-50 transition shadow-sm mb-4"
@@ -177,53 +200,76 @@
 
                             <div className="flex items-center my-4">
                                 <div className="flex-grow border-t border-gray-200"></div>
-                                <span className="px-3 text-gray-400 text-xs uppercase">Atau Email</span>
+                                <span className="px-3 text-gray-400 text-xs uppercase">Atau Email & Password</span>
                                 <div className="flex-grow border-t border-gray-200"></div>
                             </div>
 
-                            {/* Form Manual Email & Password */}
                             <form onSubmit={handleEmailAuth} className="space-y-4">
+                                {isRegister && (
+                                    <>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-600 mb-1">Nama Lengkap</label>
+                                                <input type="text" required value={fullName} onChange={e => setFullName(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm" placeholder="Nama lengkap..." />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-600 mb-1">Nomor WhatsApp</label>
+                                                <input type="text" required value={whatsapp} onChange={e => setWhatsapp(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm" placeholder="08123456789" />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-600 mb-1">Gender</label>
+                                                <select value={gender} onChange={e => setGender(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm bg-white">
+                                                    <option value="Ikhwan">Ikhwan (Laki-laki)</option>
+                                                    <option value="Akhwat">Akhwat (Perempuan)</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-600 mb-1">Provinsi</label>
+                                                <select value={province} onChange={e => { setProvince(e.target.value); setCity(wilayahIndonesia[e.target.value][0]); }} className="w-full px-3 py-2 rounded-xl border text-sm bg-white">
+                                                    {Object.keys(wilayahIndonesia.map ? wilayahIndonesia : {}).map(prov => (
+                                                        <option key={prov} value={prov}>{prov}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-600 mb-1">Kota / Kabupaten</label>
+                                                <select value={city} onChange={e => setCity(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm bg-white">
+                                                    {(wilayahIndonesia[province] || []).map(c => (
+                                                        <option key={c} value={c}>{c}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-600 mb-1">Tahun Kelahiran</label>
+                                                <input type="number" required value={birthYear} onChange={e => setBirthYear(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm" placeholder="1995" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-semibold text-gray-600 mb-1">Pilih Peran (Role)</label>
+                                                <select value={selectedRole} onChange={e => setSelectedRole(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm bg-white">
+                                                    <option value="student">Peserta / Siswa</option>
+                                                    <option value="teacher">Guru / Pengajar</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-600 mb-1">Email</label>
-                                    <input 
-                                        type="email" 
-                                        required 
-                                        value={email} 
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                        placeholder="nama@email.com"
-                                    />
+                                    <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="nama@email.com" />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-600 mb-1">Password</label>
-                                    <input 
-                                        type="password" 
-                                        required 
-                                        value={password} 
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                        placeholder="••••••••"
-                                    />
+                                    <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="••••••••" />
                                 </div>
 
-                                {isRegister && (
-                                    <div>
-                                        <label className="block text-xs font-semibold text-gray-600 mb-1">Pilih Role / Peran</label>
-                                        <select 
-                                            value={selectedRole} 
-                                            onChange={(e) => setSelectedRole(e.target.value)}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
-                                        >
-                                            <option value="student">Peserta / Siswa</option>
-                                            <option value="teacher">Guru / Pengajar</option>
-                                        </select>
-                                    </div>
-                                )}
-
-                                <button 
-                                    type="submit" 
-                                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-semibold text-sm transition shadow-sm"
-                                >
+                                <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-semibold text-sm transition shadow-sm">
                                     {isRegister ? 'Daftar Akun' : 'Masuk'}
                                 </button>
                             </form>
@@ -240,79 +286,199 @@
                 );
             }
 
-            // 2. DASHBOARD UTAMA SESUAI ROLE
+            // 2. DASHBOARD UTAMA DENGAN SIDEBAR
             return (
-                <div className="min-h-screen flex flex-col bg-gray-50">
-                    <header className="bg-emerald-700 text-white shadow-md sticky top-0 z-50">
-                        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <img src="./AYO BELAJAR TAJWID.png" className="w-9 h-9 rounded-lg bg-white p-0.5" alt="Logo" />
-                                <div>
-                                    <h1 className="font-bold text-lg leading-tight">Ayo Belajar Tajwid</h1>
-                                    <span className="text-xs bg-emerald-800 text-emerald-200 px-2 py-0.5 rounded-full font-medium uppercase">
-                                        Role: {role}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <span className="text-sm hidden sm:inline text-emerald-100">{user.email}</span>
-                                <button onClick={handleLogout} className="bg-emerald-800 hover:bg-emerald-900 text-white text-xs px-3 py-2 rounded-xl font-medium transition">
-                                    Keluar
-                                </button>
+                <div className="min-h-screen flex bg-gray-100">
+                    {/* Sidebar */}
+                    <aside className="w-64 bg-emerald-800 text-white flex flex-col shadow-xl">
+                        <div className="p-5 border-b border-emerald-700 flex items-center gap-3">
+                            <img src="./AYO BELAJAR TAJWID.png" className="w-10 h-10 rounded-xl bg-white p-1" alt="Logo" />
+                            <div>
+                                <h1 className="font-bold text-sm leading-tight">Ayo Belajar Tajwid</h1>
+                                <span className="text-xs bg-emerald-900 text-emerald-200 px-2 py-0.5 rounded-full font-medium uppercase">
+                                    {role}
+                                </span>
                             </div>
                         </div>
-                    </header>
 
-                    <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
-                        {role === 'admin' && (
-                            <div className="space-y-6">
-                                <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-6 rounded-3xl shadow-md">
-                                    <h2 className="text-2xl font-bold mb-1">Panel Kendali Admin</h2>
-                                    <p className="text-emerald-100 text-sm">Mengontrol seluruh aktivitas guru, peserta, kelas, laporan, dan keuangan.</p>
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                                        <div className="text-emerald-600 text-2xl font-bold mb-1">Kontrol Guru</div>
-                                        <div className="text-gray-500 text-sm">Kelola & Gaji Pengajar</div>
-                                    </div>
-                                    <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                                        <div className="text-emerald-600 text-2xl font-bold mb-1">Kontrol Peserta</div>
-                                        <div className="text-gray-500 text-sm">Status Pembayaran & Tagihan</div>
-                                    </div>
-                                    <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                                        <div className="text-emerald-600 text-2xl font-bold mb-1">Manajemen Kelas</div>
-                                        <div className="text-gray-500 text-sm">Buka Kelas Reguler & Privat</div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        <nav className="flex-1 p-4 space-y-2 text-sm font-medium">
+                            {role === 'admin' && (
+                                <>
+                                    <button onClick={() => setActiveTab('dashboard')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'dashboard' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>📊 Dashboard Admin</button>
+                                    <button onClick={() => setActiveTab('users')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'users' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>👥 Data Pengguna Terdaftar</button>
+                                    <button onClick={() => setActiveTab('classes')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'classes' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>🏫 Manajemen Kelas & Guru</button>
+                                    <button onClick={() => setActiveTab('finance')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'finance' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>💰 Keuangan & Gaji</button>
+                                </>
+                            )}
 
-                        {role === 'teacher' && (
-                            <div className="space-y-6">
-                                <div className="bg-gradient-to-r from-teal-600 to-cyan-700 text-white p-6 rounded-3xl shadow-md">
-                                    <h2 className="text-2xl font-bold mb-1">Dashboard Pengajar (Guru)</h2>
-                                    <p className="text-teal-100 text-sm">Kelola murid, catatan pertemuan, laporan bulanan, dan status gaji.</p>
-                                </div>
-                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                                    <h3 className="font-bold text-lg text-gray-800 mb-3">Fitur Guru Aktif</h3>
-                                    <p className="text-gray-500 text-sm">Silakan gunakan menu laporan pertemuan dan chat peserta di sini.</p>
-                                </div>
-                            </div>
-                        )}
+                            {role === 'teacher' && (
+                                <>
+                                    <button onClick={() => setActiveTab('dashboard')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'dashboard' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>📊 Dashboard Guru</button>
+                                    <button onClick={() => setActiveTab('students')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'students' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>👨‍🎓 List Murid & Pembayaran</button>
+                                    <button onClick={() => setActiveTab('reports')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'reports' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>📝 Catatan & Laporan Bulanan</button>
+                                    <button onClick={() => setActiveTab('salary')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'salary' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>💵 Status Pencairan Gaji</button>
+                                    <button onClick={() => setActiveTab('chat')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'chat' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>💬 Chat dengan Peserta</button>
+                                </>
+                            )}
 
-                        {role === 'student' && (
-                            <div className="space-y-6">
-                                <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                                    <h2 className="text-xl font-bold text-emerald-900 mb-1">Dashboard Peserta (Siswa)</h2>
-                                    <p className="text-gray-500 text-sm">Pilih kelas tajwid, pantau status pembayaran, dan berinteraksi dengan guru.</p>
+                            {role === 'student' && (
+                                <>
+                                    <button onClick={() => setActiveTab('dashboard')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'dashboard' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>📊 Dashboard Peserta</button>
+                                    <button onClick={() => setActiveTab('enroll')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'enroll' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>📖 Pendaftaran & Kelas Saya</button>
+                                    <button onClick={() => setActiveTab('payment')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'payment' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>💳 Status Pembayaran Bulanan</button>
+                                    <button onClick={() => setActiveTab('chat')} className={`w-full text-left px-4 py-2.5 rounded-xl transition ${activeTab === 'chat' ? 'bg-emerald-700' : 'hover:bg-emerald-700/50'}`}>💬 Chat Admin & Guru</button>
+                                </>
+                            )}
+                        </nav>
+
+                        <div className="p-4 border-t border-emerald-700">
+                            <button onClick={handleLogout} className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-xl text-xs font-semibold transition">
+                                Keluar (Logout)
+                            </button>
+                        </div>
+                    </aside>
+
+                    {/* Main Content Area */}
+                    <div className="flex-1 flex flex-col min-w-0">
+                        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 shadow-sm">
+                            <h2 className="font-bold text-lg text-emerald-900 capitalize">Tab: {activeTab}</h2>
+                            <span className="text-sm text-gray-600">Login sebagai: <strong className="text-emerald-700">{user.email}</strong></span>
+                        </header>
+
+                        <main className="flex-1 p-6 overflow-y-auto">
+                            {/* ================= ADMIN VIEW ================= */}
+                            {role === 'admin' && activeTab === 'dashboard' && (
+                                <div className="space-y-6">
+                                    <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-6 rounded-3xl shadow-md">
+                                        <h2 className="text-2xl font-bold mb-1">Panel Kendali Admin</h2>
+                                        <p className="text-emerald-100 text-sm">Mengontrol seluruh aktivitas guru, peserta, kelas, laporan, dan keuangan.</p>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div className="bg-white p-5 rounded-2xl shadow-sm border">
+                                            <div className="text-emerald-600 text-2xl font-bold mb-1">8 Guru</div>
+                                            <div className="text-gray-500 text-sm">Jumlah Guru Aktif</div>
+                                        </div>
+                                        <div className="bg-white p-5 rounded-2xl shadow-sm border">
+                                            <div className="text-emerald-600 text-2xl font-bold mb-1">{allUsers.length} Pengguna</div>
+                                            <div className="text-gray-500 text-sm">Total Akun Terdaftar</div>
+                                        </div>
+                                        <div className="bg-white p-5 rounded-2xl shadow-sm border">
+                                            <div className="text-emerald-600 text-2xl font-bold mb-1">6 Kelas</div>
+                                            <div className="text-gray-500 text-sm">Kelas Aktif Berjalan</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                                    <h3 className="font-bold text-lg text-gray-800 mb-3">Kelas Pilihan Anda</h3>
-                                    <p className="text-gray-500 text-sm">Belum ada kelas yang diikuti. Hubungi admin untuk pendaftaran kelas.</p>
+                            )}
+
+                            {role === 'admin' && activeTab === 'users' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-4">Data Seluruh Pengguna Terdaftar</h3>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left text-sm">
+                                            <thead>
+                                                <tr className="border-b bg-gray-50 text-gray-600">
+                                                    <th className="p-3">Nama</th>
+                                                    <th className="p-3">Email</th>
+                                                    <th className="p-3">Role</th>
+                                                    <th className="p-3">WhatsApp</th>
+                                                    <th className="p-3">Gender</th>
+                                                    <th className="p-3">Domisili</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {allUsers.map((u, i) => (
+                                                    <tr key={i} className="border-b hover:bg-gray-50">
+                                                        <td className="p-3 font-semibold">{u.full_name || '-'}</td>
+                                                        <td className="p-3">{u.email}</td>
+                                                        <td className="p-3 uppercase text-xs font-bold text-emerald-700">{u.role}</td>
+                                                        <td className="p-3">{u.whatsapp || '-'}</td>
+                                                        <td className="p-3">{u.gender || '-'}</td>
+                                                        <td className="p-3">{u.city}, {u.province}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </main>
+                            )}
+
+                            {role === 'admin' && activeTab !== 'dashboard' && activeTab !== 'users' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-2">Manajemen {activeTab}</h3>
+                                    <p className="text-gray-500 text-sm">Fitur manajemen lanjutan untuk administrator.</p>
+                                </div>
+                            )}
+
+                            {/* ================= TEACHER VIEW ================= */}
+                            {role === 'teacher' && activeTab === 'dashboard' && (
+                                <div className="space-y-6">
+                                    <div className="bg-gradient-to-r from-teal-600 to-cyan-700 text-white p-6 rounded-3xl shadow-md">
+                                        <h2 className="text-2xl font-bold mb-1">Dashboard Pengajar (Guru)</h2>
+                                        <p className="text-teal-100 text-sm">Kelola murid, catatan pertemuan, laporan bulanan, dan status gaji.</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {role === 'teacher' && activeTab === 'students' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-4">List Murid Aktif & Status Pembayaran</h3>
+                                    <p className="text-gray-500 text-sm">Daftar peserta yang terikat di kelas Anda.</p>
+                                </div>
+                            )}
+
+                            {role === 'teacher' && activeTab === 'reports' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-4">Catatan Pertemuan & Laporan Bulanan</h3>
+                                    <button className="bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-semibold">Kirim Laporan ke Admin</button>
+                                </div>
+                            )}
+
+                            {role === 'teacher' && activeTab === 'salary' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-4">Status Pencairan Gaji</h3>
+                                    <p className="text-gray-500 text-sm">Nominal gaji bulan ini: <strong className="text-emerald-700">Rp 2.500.000 (Tersalurkan)</strong></p>
+                                </div>
+                            )}
+
+                            {role === 'teacher' && activeTab === 'chat' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-4">Fitur Chat dengan Peserta</h3>
+                                    <p className="text-gray-500 text-sm">Ruang komunikasi langsung antara guru dan murid.</p>
+                                </div>
+                            )}
+
+                            {/* ================= STUDENT VIEW ================= */}
+                            {role === 'student' && activeTab === 'dashboard' && (
+                                <div className="space-y-6">
+                                    <div className="bg-white p-6 rounded-3xl shadow-sm border">
+                                        <h2 className="text-xl font-bold text-emerald-900 mb-1">Dashboard Peserta (Siswa)</h2>
+                                        <p className="text-gray-500 text-sm">Pilih kelas tajwid, pantau status pembayaran, dan berinteraksi dengan guru.</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {role === 'student' && activeTab === 'enroll' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-4">Pendaftaran Kelas & Kelas Saya</h3>
+                                    <button className="bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-semibold">Daftar ke Kelas Baru</button>
+                                </div>
+                            )}
+
+                            {role === 'student' && activeTab === 'payment' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-4">Status Pembayaran Bulanan</h3>
+                                    <p className="text-gray-500 text-sm">Tagihan Bulan Ini: <span className="text-emerald-600 font-bold">Lunas</span></p>
+                                </div>
+                            )}
+
+                            {role === 'student' && activeTab === 'chat' && (
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-4">Chat dengan Admin & Guru</h3>
+                                    <p className="text-gray-500 text-sm">Pusat bantuan pesan dan konsultasi tajwid.</p>
+                                </div>
+                            )}
+                        </main>
+                    </div>
                 </div>
             );
         }
