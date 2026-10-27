@@ -83,6 +83,8 @@
             const [kelasList, setKelasList] = React.useState([]);
             const [pendaftaranList, setPendaftaranList] = React.useState([]);
 
+            // Modal Tambah Kelas
+            const [showAddClassModal, setShowAddClassModal] = React.useState(false);
             const [namaKelas, setNamaKelas] = React.useState('');
             const [jenisKelas, setJenisKelas] = React.useState('Reguler');
             const [deskripsiKelas, setDeskripsiKelas] = React.useState('');
@@ -178,12 +180,12 @@
                         .upload(filePath, file);
 
                     if (uploadError) {
-                        alert("Gagal upload file: " + uploadError.message + ". Pastikan bucket 'kelas-assets' sudah publik di Supabase.");
+                        alert("Gagal upload file: " + uploadError.message + ". Pastikan policy storage bucket 'kelas-assets' sudah diatur publik di Supabase.");
                         return '';
                     }
 
                     const { data } = supabaseClient.storage.from('kelas-assets').getPublicUrl(filePath);
-                    return data.publicUrl ? data.publicUrl.publicUrl || data.publicUrl : '';
+                    return data.publicUrl ? data.publicUrl : '';
                 } catch (err) {
                     console.error("Upload catch error:", err);
                     return '';
@@ -288,6 +290,7 @@
                     if (error) throw error;
 
                     alert("Kelas baru berhasil diterbitkan!");
+                    setShowAddClassModal(false);
                     setNamaKelas('');
                     setDeskripsiKelas('');
                     setBukuPanduan('');
@@ -508,6 +511,9 @@
                                     <button onClick={() => setActiveTab('classes')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'classes' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
                                         Manajemen Kelas & Guru
                                     </button>
+                                    <button onClick={() => setActiveTab('teachers')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'teachers' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
+                                        Manajemen Guru
+                                    </button>
                                 </>
                             )}
 
@@ -533,9 +539,10 @@
                     <div className="flex-1 flex flex-col min-w-0">
                         <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 shadow-sm">
                             <h2 className="font-extrabold text-xl text-emerald-900 tracking-wide">
-                                {activeTab === 'dashboard' && 'Dashboard'}
+                                {activeTab === 'dashboard' && 'Dashboard Admin'}
                                 {activeTab === 'users' && 'Data Pengguna Terdaftar'}
                                 {activeTab === 'classes' && 'Manajemen Kelas & Guru'}
+                                {activeTab === 'teachers' && 'Manajemen Guru'}
                                 {activeTab === 'available_classes' && 'Kelas Tersedia'}
                             </h2>
                             <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1.5 rounded-xl border">
@@ -549,7 +556,30 @@
                                 <div className="space-y-6">
                                     <div className="bg-gradient-to-r from-emerald-600 to-teal-800 text-white p-8 rounded-3xl shadow-lg">
                                         <h2 className="text-3xl font-extrabold mb-2">Selamat Datang, Ahlan Wa Sahlan {userProfile?.full_name || 'Admin Utama'}</h2>
-                                        <p className="text-emerald-100 text-sm">Panel Kendali Admin Sistem Tajwid.</p>
+                                        <p className="text-emerald-100 text-sm">Mengontrol seluruh aktivitas guru, peserta aktif, kelas pembelajaran, laporan, dan rekapitulasi keuangan secara real-time.</p>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4">
+                                            <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">👨‍🏫</div>
+                                            <div>
+                                                <div className="text-2xl font-extrabold text-gray-800">{allUsers.filter(u => u.role === 'teacher').length} Guru</div>
+                                                <div className="text-gray-400 text-xs font-semibold uppercase">Total Guru Pengajar</div>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4">
+                                            <div className="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">👨‍🎓</div>
+                                            <div>
+                                                <div className="text-2xl font-extrabold text-gray-800">{allUsers.filter(u => u.role === 'student').length} Peserta Aktif</div>
+                                                <div className="text-gray-400 text-xs font-semibold uppercase">Total Peserta Terdaftar</div>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4">
+                                            <div className="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center font-bold">🏫</div>
+                                            <div>
+                                                <div className="text-2xl font-extrabold text-gray-800">{kelasList.length} Kelas</div>
+                                                <div className="text-gray-400 text-xs font-semibold uppercase">Kelas Aktif Berjalan</div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-4">
@@ -557,7 +587,7 @@
                                         <div className="overflow-x-auto">
                                             <table className="w-full text-left text-sm">
                                                 <thead>
-                                                    <tr className="border-b bg-gray-50/70 text-gray-500 text-xs uppercase">
+                                                    <tr className="border-b bg-gray-50 text-gray-500 text-xs uppercase">
                                                         <th className="p-4">Peserta</th>
                                                         <th className="p-4">Kelas</th>
                                                         <th className="p-4">Bukti Bayar</th>
@@ -565,19 +595,15 @@
                                                         <th className="p-4">Aksi</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="divide-y divide-gray-100">
+                                                <tbody className="divide-y">
                                                     {pendaftaranList.map((p, i) => (
-                                                        <tr key={i} className="hover:bg-gray-50/50">
-                                                            <td className="p-4 font-bold text-gray-800">{p.profiles?.full_name || '-'}</td>
-                                                            <td className="p-4 text-gray-600">{p.kelas?.nama_kelas || '-'}</td>
+                                                        <tr key={i} className="hover:bg-gray-50">
+                                                            <td className="p-4 font-bold">{p.profiles?.full_name || '-'}</td>
+                                                            <td className="p-4">{p.kelas?.nama_kelas || '-'}</td>
                                                             <td className="p-4">
-                                                                {p.bukti_bayar_url ? (
-                                                                    <a href={p.bukti_bayar_url} target="_blank" rel="noreferrer" className="text-emerald-600 font-semibold underline text-xs">Lihat Bukti</a>
-                                                                ) : '-'}
+                                                                {p.bukti_bayar_url ? <a href={p.bukti_bayar_url} target="_blank" rel="noreferrer" className="text-emerald-600 font-semibold underline text-xs">Lihat Bukti</a> : '-'}
                                                             </td>
-                                                            <td className="p-4">
-                                                                <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">{p.status}</span>
-                                                            </td>
+                                                            <td className="p-4"><span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">{p.status}</span></td>
                                                             <td className="p-4 flex gap-2">
                                                                 <button onClick={() => handleStatusPendaftaran(p.id, 'Disetujui')} className="bg-emerald-600 text-white px-3 py-1 rounded-xl text-xs font-bold">Setujui</button>
                                                                 <button onClick={() => handleStatusPendaftaran(p.id, 'Ditolak')} className="bg-red-500 text-white px-3 py-1 rounded-xl text-xs font-bold">Tolak</button>
@@ -593,52 +619,174 @@
 
                             {role === 'admin' && activeTab === 'users' && (
                                 <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-4">
-                                    <h3 className="font-bold text-lg text-gray-800">Daftar Pengguna</h3>
-                                    <table className="w-full text-left text-sm">
-                                        <thead>
-                                            <tr className="border-b bg-gray-50 text-gray-500 text-xs uppercase">
-                                                <th className="p-4">Nama</th>
-                                                <th className="p-4">Email</th>
-                                                <th className="p-4">Usia Aktual</th>
-                                                <th className="p-4">Domisili</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y">
-                                            {allUsers.map((u, i) => (
-                                                <tr key={i}>
-                                                    <td className="p-4 font-bold">{u.full_name}</td>
-                                                    <td className="p-4">{u.email}</td>
-                                                    <td className="p-4 font-semibold text-emerald-800">{hitungUsia(u.birth_year)}</td>
-                                                    <td className="p-4">{u.city}, {u.province}</td>
+                                    <h3 className="font-bold text-lg text-gray-800">Daftar Seluruh Pengguna Terdaftar</h3>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left text-sm">
+                                            <thead>
+                                                <tr className="border-b bg-gray-50 text-gray-500 text-xs uppercase">
+                                                    <th className="p-4">Nama Lengkap</th>
+                                                    <th className="p-4">Email</th>
+                                                    <th className="p-4">Peran</th>
+                                                    <th className="p-4">WhatsApp</th>
+                                                    <th className="p-4">Gender</th>
+                                                    <th className="p-4">Usia Aktual</th>
+                                                    <th className="p-4">Domisili</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody className="divide-y">
+                                                {allUsers.map((u, i) => (
+                                                    <tr key={i} className="hover:bg-gray-50">
+                                                        <td className="p-4 font-bold">{u.full_name || '-'}</td>
+                                                        <td className="p-4 text-gray-600">{u.email}</td>
+                                                        <td className="p-4"><span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-emerald-100 text-emerald-700">{u.role}</span></td>
+                                                        <td className="p-4 text-gray-600">{u.whatsapp || '-'}</td>
+                                                        <td className="p-4 text-gray-600">{u.gender || '-'}</td>
+                                                        <td className="p-4 font-semibold text-emerald-800">{hitungUsia(u.birth_year)}</td>
+                                                        <td className="p-4 text-gray-600">{u.city ? `${u.city}, ${u.province}` : '-'}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             )}
 
                             {role === 'admin' && activeTab === 'classes' && (
-                                <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
-                                    <h3 className="font-extrabold text-xl text-gray-800">Buat Kelas Baru</h3>
-                                    <form onSubmit={handleCreateClass} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <input type="text" required placeholder="Nama Kelas" value={namaKelas} onChange={e => setNamaKelas(e.target.value)} className="p-3 border rounded-xl text-sm" />
-                                        <select value={jenisKelas} onChange={e => setJenisKelas(e.target.value)} className="p-3 border rounded-xl text-sm bg-white">
-                                            <option value="Reguler">Reguler</option>
-                                            <option value="Privat">Privat</option>
-                                        </select>
-                                        <textarea placeholder="Deskripsi" value={deskripsiKelas} onChange={e => setDeskripsiKelas(e.target.value)} className="md:col-span-2 p-3 border rounded-xl text-sm"></textarea>
+                                <div className="space-y-6">
+                                    <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-sm border">
                                         <div>
-                                            <label className="block text-xs font-bold text-gray-600 mb-1">Thumbnail</label>
-                                            <input type="file" accept="image/*" onChange={e => setThumbnailFile(e.target.files[0])} className="w-full p-2 border rounded-xl text-sm bg-white" />
+                                            <h3 className="font-extrabold text-xl text-gray-800">Manajemen Kelas Pembelajaran</h3>
+                                            <p className="text-gray-500 text-sm">Kelola daftar kelas dan terbitkan kelas baru.</p>
                                         </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-gray-600 mb-1">QRIS Pembayaran</label>
-                                            <input type="file" accept="image/*" onChange={e => setQrisFile(e.target.files[0])} className="w-full p-2 border rounded-xl text-sm bg-white" />
-                                        </div>
-                                        <button type="submit" disabled={uploading} className="md:col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm">
-                                            {uploading ? 'Mengunggah...' : 'Terbitkan Kelas'}
+                                        <button onClick={() => setShowAddClassModal(true)} className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-2xl font-bold text-sm shadow-md transition">
+                                            + Tambah Kelas Baru
                                         </button>
-                                    </form>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {kelasList.map((cls, idx) => (
+                                            <div key={idx} className="bg-white border rounded-3xl p-6 shadow-sm space-y-4">
+                                                {cls.thumbnail_url && <img src={cls.thumbnail_url} alt="Thumbnail" className="w-full aspect-[4/5] object-cover rounded-2xl border" />}
+                                                <div className="flex justify-between items-start">
+                                                    <h4 className="font-extrabold text-lg text-emerald-900">{cls.nama_kelas}</h4>
+                                                    <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">{cls.jenis}</span>
+                                                </div>
+                                                <p className="text-gray-600 text-xs">{cls.deskripsi}</p>
+                                                <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
+                                                    <div>📖 <strong>Buku:</strong> {cls.buku_panduan || '-'}</div>
+                                                    <div>📅 <strong>Jadwal:</strong> {cls.jadwal} ({cls.frekuensi})</div>
+                                                    <div>👥 <strong>Target:</strong> {cls.target_gender} ({cls.rentang_usia})</div>
+                                                    <div>💰 <strong>Investasi:</strong> {cls.investasi}</div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Modal Pop-up Tambah Kelas */}
+                                    {showAddClassModal && (
+                                        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+                                            <div className="bg-white rounded-3xl max-w-2xl w-full p-8 space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+                                                <div className="flex justify-between items-center border-b pb-4">
+                                                    <h3 className="font-extrabold text-xl text-emerald-900">Formulir Tambah Kelas Baru</h3>
+                                                    <button onClick={() => setShowAddClassModal(false)} className="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                                                </div>
+                                                <form onSubmit={handleCreateClass} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Nama Kelas</label>
+                                                        <input type="text" required value={namaKelas} onChange={e => setNamaKelas(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="Contoh: Tahsin Dasar" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Jenis Kelas</label>
+                                                        <select value={jenisKelas} onChange={e => setJenisKelas(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm bg-white">
+                                                            <option value="Reguler">Reguler</option>
+                                                            <option value="Privat">Privat</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="md:col-span-2">
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Deskripsi Kelas</label>
+                                                        <textarea rows="2" required value={deskripsiKelas} onChange={e => setDeskripsiKelas(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="Deskripsi singkat..."></textarea>
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Buku Panduan</label>
+                                                        <input type="text" value={bukuPanduan} onChange={e => setBukuPanduan(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="Kitab At-Tajwid" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Terbuka Untuk</label>
+                                                        <select value={targetGender} onChange={e => setTargetGender(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm bg-white">
+                                                            <option value="Ikhwan">Ikhwan</option>
+                                                            <option value="Akhwat">Akhwat</option>
+                                                            <option value="Umum">Umum</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Rentang Usia</label>
+                                                        <input type="text" value={rentangUsia} onChange={e => setRentangUsia(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="17 - 40 Tahun" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Jadwal (Hari / Waktu)</label>
+                                                        <input type="text" value={jadwalKelas} onChange={e => setJadwalKelas(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="Sabtu / 16.00 WIB" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Frekuensi per Pekan</label>
+                                                        <input type="text" value={frekuensiKelas} onChange={e => setFrekuensiKelas(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="2 kali sepekan" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Investasi Belajar</label>
+                                                        <input type="text" value={investasi} onChange={e => setInvestasi(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border text-sm" placeholder="Rp 150.000 / bulan" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Upload Poster</label>
+                                                        <input type="file" accept="image/*" onChange={e => setPosterFile(e.target.files[0])} className="w-full p-2 border rounded-xl text-sm bg-white" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Upload Thumbnail (Rasio 4:5)</label>
+                                                        <input type="file" accept="image/*" onChange={e => setThumbnailFile(e.target.files[0])} className="w-full p-2 border rounded-xl text-sm bg-white" />
+                                                    </div>
+                                                    <div className="md:col-span-2">
+                                                        <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Upload QRIS Pembayaran</label>
+                                                        <input type="file" accept="image/*" onChange={e => setQrisFile(e.target.files[0])} className="w-full p-2 border rounded-xl text-sm bg-white" />
+                                                    </div>
+                                                    <div className="md:col-span-2 flex gap-3 pt-4 border-t">
+                                                        <button type="button" onClick={() => setShowAddClassModal(false)} className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-bold text-sm">Batal</button>
+                                                        <button type="submit" disabled={uploading} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm">{uploading ? 'Menyimpan...' : 'Terbitkan Kelas Baru'}</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {role === 'admin' && activeTab === 'teachers' && (
+                                <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-4">
+                                    <h3 className="font-extrabold text-lg text-gray-800">Manajemen Guru Pengajar</h3>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left text-sm">
+                                            <thead>
+                                                <tr className="border-b bg-gray-50 text-gray-500 text-xs uppercase">
+                                                    <th className="p-4">Nama Guru</th>
+                                                    <th className="p-4">Email / Kontak</th>
+                                                    <th className="p-4">Status Aktif</th>
+                                                    <th className="p-4">Pengajar di Kelas</th>
+                                                    <th className="p-4">Status Gaji Bulan Berjalan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y">
+                                                {allUsers.filter(u => u.role === 'teacher').map((t, i) => (
+                                                    <tr key={i} className="hover:bg-gray-50">
+                                                        <td className="p-4 font-bold">{t.full_name || '-'}</td>
+                                                        <td className="p-4 text-gray-600">{t.email} <br/><span className="text-xs text-gray-400">{t.whatsapp || '-'}</span></td>
+                                                        <td className="p-4"><span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">Aktif Mengajar</span></td>
+                                                        <td className="p-4 text-emerald-800 font-semibold">Tersedia di Sistem Kelas</td>
+                                                        <td className="p-4"><span className="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-700">Belum Dicairkan (Proses)</span></td>
+                                                    </tr>
+                                                ))}
+                                                {allUsers.filter(u => u.role === 'teacher').length === 0 && (
+                                                    <tr><td colSpan="5" className="p-6 text-center text-gray-400">Belum ada guru terdaftar.</td></tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             )}
 
@@ -652,11 +800,20 @@
                             {role === 'student' && activeTab === 'available_classes' && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {kelasList.map((cls, idx) => (
-                                        <div key={idx} className="bg-white border rounded-3xl p-6 shadow-sm space-y-4">
-                                            {cls.thumbnail_url && <img src={cls.thumbnail_url} alt="Thumb" className="w-full h-40 object-cover rounded-2xl" />}
-                                            <h4 className="font-extrabold text-lg text-emerald-900">{cls.nama_kelas}</h4>
-                                            <p className="text-gray-600 text-xs">{cls.deskripsi}</p>
-                                            <button onClick={() => setSelectedClassForEnroll(cls)} className="w-full bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-sm">
+                                        <div key={idx} className="bg-white border rounded-3xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
+                                            <div className="space-y-3">
+                                                {cls.thumbnail_url && <img src={cls.thumbnail_url} alt="Thumb" className="w-full aspect-[4/5] object-cover rounded-2xl border" />}
+                                                <div className="flex justify-between items-start">
+                                                    <h4 className="font-extrabold text-lg text-emerald-900">{cls.nama_kelas}</h4>
+                                                    <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">{cls.jenis}</span>
+                                                </div>
+                                                <p className="text-gray-600 text-xs">{cls.deskripsi}</p>
+                                                <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
+                                                    <div>📅 <strong>Jadwal:</strong> {cls.jadwal}</div>
+                                                    <div>💰 <strong>Investasi:</strong> <strong className="text-emerald-700">{cls.investasi}</strong></div>
+                                                </div>
+                                            </div>
+                                            <button onClick={() => setSelectedClassForEnroll(cls)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm shadow-sm">
                                                 Daftar & Bayar
                                             </button>
                                         </div>
@@ -666,14 +823,18 @@
 
                             {selectedClassForEnroll && (
                                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                                    <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4">
-                                        <h3 className="font-bold text-lg">Konfirmasi Pembayaran</h3>
-                                        {selectedClassForEnroll.qris_url && <img src={selectedClassForEnroll.qris_url} alt="QRIS" className="w-40 h-40 mx-auto object-contain border rounded-xl" />}
+                                    <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+                                        <h3 className="font-extrabold text-lg text-emerald-900">Konfirmasi Pembayaran Kelas</h3>
+                                        <p className="text-xs text-gray-600">Silakan scan QRIS di bawah ini dan unggah bukti transfer Anda.</p>
+                                        {selectedClassForEnroll.qris_url && <img src={selectedClassForEnroll.qris_url} alt="QRIS" className="w-48 h-48 mx-auto object-contain border rounded-xl" />}
                                         <form onSubmit={handleKirimPendaftaran} className="space-y-3">
-                                            <input type="file" required accept="image/*" onChange={e => setBuktiBayarFile(e.target.files[0])} className="w-full p-2 border rounded-xl text-sm" />
-                                            <div className="flex gap-2">
+                                            <div>
+                                                <label className="block text-xs font-bold text-gray-600 mb-1">Bukti Transfer</label>
+                                                <input type="file" required accept="image/*" onChange={e => setBuktiBayarFile(e.target.files[0])} className="w-full p-2 border rounded-xl text-sm bg-white" />
+                                            </div>
+                                            <div className="flex gap-2 pt-2">
                                                 <button type="button" onClick={() => setSelectedClassForEnroll(null)} className="flex-1 bg-gray-200 py-2.5 rounded-xl font-bold text-sm">Batal</button>
-                                                <button type="submit" disabled={uploading} className="flex-1 bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-sm">Kirim</button>
+                                                <button type="submit" disabled={uploading} className="flex-1 bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-sm">{uploading ? 'Mengirim...' : 'Kirim Bukti'}</button>
                                             </div>
                                         </form>
                                     </div>
