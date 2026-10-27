@@ -256,10 +256,23 @@
             };
 
             // Fitur Kirim Email Notifikasi via SMTP Admin
-            const handleSendEmail = (e) => {
+           const handleSendEmail = async (e) => {
                 e.preventDefault();
-                alert(`Notifikasi Email Resmi dari [ayobelajartajwid@gmail.com] berhasil dikirimkan ke: ${emailTarget.to}`);
-                setShowEmailModal(false);
+                try {
+                    const { data, error } = await supabaseClient.functions.invoke('send-email', {
+                        body: {
+                            to: emailTarget.to,
+                            subject: emailTarget.subject,
+                            body: emailTarget.body
+                        }
+                    });
+            
+                    if (error) throw error;
+                    alert(`Email resmi berhasil terkirim ke: ${emailTarget.to}`);
+                    setShowEmailModal(false);
+                } catch (err) {
+                    alert("Gagal mengirim email: " + err.message);
+                }
             };
 
             // Fitur Export Excel
