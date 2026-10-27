@@ -62,6 +62,7 @@
         function App() {
             const [user, setUser] = React.useState(null);
             const [role, setRole] = React.useState('student');
+            const [userProfile, setUserProfile] = React.useState(null);
             const [loading, setLoading] = React.useState(true);
             
             const [isRegister, setIsRegister] = React.useState(false);
@@ -80,7 +81,9 @@
             const [activeTab, setActiveTab] = React.useState('dashboard');
             const [allUsers, setAllUsers] = React.useState([]);
             const [kelasList, setKelasList] = React.useState([]);
+            const [pendaftaranList, setPendaftaranList] = React.useState([]);
 
+            // State Form Tambah Kelas oleh Admin
             const [namaKelas, setNamaKelas] = React.useState('');
             const [jenisKelas, setJenisKelas] = React.useState('Reguler');
             const [deskripsiKelas, setDeskripsiKelas] = React.useState('');
@@ -90,9 +93,16 @@
             const [jadwalKelas, setJadwalKelas] = React.useState('Sabtu / 16.00 WIB');
             const [frekuensiKelas, setFrekuensiKelas] = React.useState('2 kali sepekan');
             const [investasi, setInvestasi] = React.useState('Rp 150.000 / bulan');
-            const [posterUrl, setPosterUrl] = React.useState('');
-            const [thumbnailUrl, setThumbnailUrl] = React.useState('');
-            const [qrisUrl, setQrisUrl] = React.useState('');
+            
+            // File Upload States
+            const [posterFile, setPosterFile] = React.useState(null);
+            const [thumbnailFile, setThumbnailFile] = React.useState(null);
+            const [qrisFile, setQrisFile] = React.useState(null);
+            const [uploading, setUploading] = React.useState(false);
+
+            // Modal Pembayaran Peserta
+            const [selectedClassForEnroll, setSelectedClassForEnroll] = React.useState(null);
+            const [buktiBayarFile, setBuktiBayarFile] = React.useState(null);
 
             React.useEffect(() => {
                 supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
@@ -105,6 +115,7 @@
                     else {
                         setUser(null);
                         setRole('student');
+                        setUserProfile(null);
                     }
                     setLoading(false);
                 });
@@ -117,7 +128,7 @@
                 
                 if (authUser.email === "ayobelajartajwid@gmail.com") {
                     setRole('admin');
-                    fetchAllData();
+                    setUserProfile({ full_name: 'Admin Utama', birth_year: '1990' });
                 } else {
                     const { data } = await supabaseClient
                         .from('profiles')
@@ -125,15 +136,15 @@
                         .eq('id', authUser.id)
                         .single();
                     
-                    if (data && data.role) {
-                        setRole(data.role);
-                    } else if (authUser.user_metadata && authUser.user_metadata.role) {
-                        setRole(authUser.user_metadata.role);
-                    } else {
-                        setRole('student');
+                    if (data) {
+                        setUserProfile(data);
+                        setRole(data.role || 'student');
+                    } else if (authUser.user_metadata) {
+                        setUserProfile(authUser.user_metadata);
+                        setRole(authUser.user_metadata.role || 'student');
                     }
-                    fetchAllData();
                 }
+                fetchAllData();
             };
 
             const fetchAllData = async () => {
@@ -142,6 +153,30 @@
 
                 const { data: classData } = await supabaseClient.from('kelas').select('*');
                 if (classData) setKelasList(classData);
+
+                const { data: pendaftaranData } = await supabaseClient.from('pendaftaran_kelas').select('*, kelas(*), profiles(*)');
+                if (pendaftaranData) setPendaftaranList(pendaftaranData);
+            };
+
+            // Fungsi Universal Upload ke Supabase Storage
+            const uploadFileToStorage = async (file, folder = 'assets') => {
+                if (!file) return '';
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Math.random().toString(36.substring(2))}.${fileExt}`;
+                const filePath = `${folder}/${fileName}`;
+
+                const { error: uploadError } = await supabaseClient.storage
+                    .from('kelas-assets') // Pastikan bucket bernama 'kelas-assets' di public
+                    .upload(filePath, file);
+
+                if (uploadError) {
+                    // Fallback jika bucket belum ada, gunakan URL dummy atau alert
+                    alert("Gagal upload file: " + uploadError.message + ". Pastikan bucket 'kelas-assets' sudah dibuat publik di Supabase.");
+                    return '';
+                }
+
+                const { data } = supabaseClient.storage.from('kelas-assets').getPublicUrl(filePath);
+                return data.publicUrl;
             };
 
             const handleEmailAuth = async (e) => {
@@ -193,71 +228,119 @@
                 await supabaseClient.auth.signOut();
                 setUser(null);
                 setRole('student');
+                setUserProfile(null);
             };
 
             const handleDeleteAccount = async () => {
-                const confirmation = confirm("Apakah Anda yakin ingin menghapus akun ini secara permanen? Data Anda akan dihapus dari sistem.");
+                const confirmation = confirm("Apakah Anda yakin ingin menghapus akun ini secara permanen?");
                 if (!confirmation) return;
 
                 try {
-                    const { error: profileError } = await supabaseClient
-                        .from('profiles')
-                        .delete()
-                        .eq('id', user.id);
-
-                    if (profileError) {
-                        alert("Gagal menghapus profil: " + profileError.message);
-                        return;
-                    }
-
+                    await supabaseClient.from('profiles').delete().eq('id', user.id);
                     await supabaseClient.auth.signOut();
                     setUser(null);
                     setRole('student');
                     alert("Akun Anda berhasil dihapus dari sistem.");
                 } catch (err) {
-                    alert("Terjadi kesalahan saat menghapus akun: " + err.message);
+                    alert("Terjadi kesalahan: " + err.message);
                 }
             };
 
+            // Admin: Terbitkan Kelas Baru dengan Direct Upload
             const handleCreateClass = async (e) => {
                 e.preventDefault();
-                const { error } = await supabaseClient.from('kelas').insert([
-                    {
-                        nama_kelas: namaKelas,
-                        jenis: jenisKelas,
-                        deskripsi: deskripsiKelas,
-                        buku_panduan: bukuPanduan,
-                        target_gender: targetGender,
-                        rentang_usia: rentangUsia,
-                        jadwal: jadwalKelas,
-                        frekuensi: frekuensiKelas,
-                        investasi: investasi,
-                        poster_url: posterUrl,
-                        thumbnail_url: thumbnailUrl,
-                        qris_url: qrisUrl
-                    }
-                ]);
+                setUploading(true);
 
-                if (error) {
-                    alert("Gagal membuat kelas: " + error.message);
-                } else {
-                    alert("Kelas baru berhasil dibuat!");
+                try {
+                    const posterUrl = await uploadFileToStorage(posterFile, 'poster');
+                    const thumbnailUrl = await uploadFileToStorage(thumbnailFile, 'thumbnail');
+                    const qrisUrl = await uploadFileToStorage(qrisFile, 'qris');
+
+                    const { error } = await supabaseClient.from('kelas').insert([
+                        {
+                            nama_kelas: namaKelas,
+                            jenis: jenisKelas,
+                            deskripsi: deskripsiKelas,
+                            buku_panduan: bukuPanduan,
+                            target_gender: targetGender,
+                            rentang_usia: rentangUsia,
+                            jadwal: jadwalKelas,
+                            frekuensi: frekuensiKelas,
+                            investasi: investasi,
+                            poster_url: posterUrl || '',
+                            thumbnail_url: thumbnailUrl || '',
+                            qris_url: qrisUrl || ''
+                        }
+                    ]);
+
+                    if (error) throw error;
+
+                    alert("Kelas baru berhasil diterbitkan!");
                     setNamaKelas('');
                     setDeskripsiKelas('');
                     setBukuPanduan('');
+                    setPosterFile(null);
+                    setThumbnailFile(null);
+                    setQrisFile(null);
+                    fetchAllData();
+                } catch (err) {
+                    alert("Gagal membuat kelas: " + err.message);
+                } finally {
+                    setUploading(false);
+                }
+            };
+
+            // Peserta: Kirim Pendaftaran & Bukti Bayar
+            const handleKirimPendaftaran = async (e) => {
+                e.preventDefault();
+                if (!selectedClassForEnroll) return;
+                setUploading(true);
+
+                try {
+                    const buktiUrl = await uploadFileToStorage(buktiBayarFile, 'bukti_bayar');
+
+                    const { error } = await supabaseClient.from('pendaftaran_kelas').insert([
+                        {
+                            user_id: user.id,
+                            kelas_id: selectedClassForEnroll.id,
+                            status: 'Menunggu Konfirmasi',
+                            bukti_bayar_url: buktiUrl || ''
+                        }
+                    ]);
+
+                    if (error) throw error;
+
+                    alert("Pendaftaran dan bukti pembayaran berhasil dikirim! Menunggu konfirmasi admin.");
+                    setSelectedClassForEnroll(null);
+                    setBuktiBayarFile(null);
+                    fetchAllData();
+                } catch (err) {
+                    alert("Gagal mendaftar: " + err.message);
+                } finally {
+                    setUploading(false);
+                }
+            };
+
+            // Admin: Konfirmasi Pendaftaran Peserta
+            const handleStatusPendaftaran = async (pendaftaranId, statusBaru) => {
+                const { error } = await supabaseClient
+                    .from('pendaftaran_kelas')
+                    .update({ status: statusBaru })
+                    .eq('id', pendaftaranId);
+
+                if (error) {
+                    alert("Gagal memperbarui status: " + error.message);
+                } else {
+                    alert(`Pendaftaran berhasil ${statusBaru === 'Disetujui' ? 'disetujui' : 'ditolak'}!`);
                     fetchAllData();
                 }
             };
 
-            const handleDaftarKelas = async (kelasId) => {
-                const { error } = await supabaseClient.from('pendaftaran_kelas').insert([
-                    { user_id: user.id, kelas_id: kelasId, status: 'Menunggu Konfirmasi' }
-                ]);
-                if (error) {
-                    alert("Gagal mendaftar kelas: " + error.message);
-                } else {
-                    alert("Berhasil mendaftar ke kelas! Menunggu konfirmasi admin.");
-                }
+            const hitungUsia = (tahunLahir) => {
+                if (!tahunLahir) return '-';
+                const tahunAktif = new Date().getFullYear();
+                const usia = tahunAktif - parseInt(tahunLahir);
+                return isNaN(usia) ? '-' : `${usia} Tahun`;
             };
 
             if (loading) {
@@ -392,7 +475,6 @@
 
             return (
                 <div className="min-h-screen flex bg-gray-100">
-                    {/* Sidebar dengan Logo Simbol Profesional SVG */}
                     <aside className="w-64 bg-emerald-900 text-white flex flex-col shadow-xl">
                         <div className="p-5 border-b border-emerald-800 flex items-center gap-3">
                             <img src="./AYO BELAJAR TAJWID.png" className="w-10 h-10 rounded-xl bg-white p-1" alt="Logo" />
@@ -422,35 +504,6 @@
                                     <button onClick={() => setActiveTab('finance')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'finance' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
                                         <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                                         Keuangan & Gaji
-                                    </button>
-                                </>
-                            )}
-
-                            {role === 'teacher' && (
-                                <>
-                                    <button onClick={() => setActiveTab('dashboard')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'dashboard' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
-                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                                        Dashboard Guru
-                                    </button>
-                                    <button onClick={() => setActiveTab('students')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'students' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
-                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                        List Murid & Pembayaran
-                                    </button>
-                                    <button onClick={() => setActiveTab('reports')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'reports' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
-                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                        Catatan & Laporan Bulanan
-                                    </button>
-                                    <button onClick={() => setActiveTab('salary')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'salary' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
-                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                        Status Pencairan Gaji
-                                    </button>
-                                    <button onClick={() => setActiveTab('chat')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'chat' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
-                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                        Chat dengan Peserta
-                                    </button>
-                                    <button onClick={() => setActiveTab('settings')} className={`w-full text-left px-4 py-3 rounded-xl transition flex items-center gap-3 ${activeTab === 'settings' ? 'bg-emerald-700 text-white shadow-md' : 'text-emerald-100 hover:bg-emerald-800'}`}>
-                                        <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                        Pengaturan Akun
                                     </button>
                                 </>
                             )}
@@ -499,9 +552,6 @@
                                 {activeTab === 'users' && 'Data Pengguna Terdaftar'}
                                 {activeTab === 'classes' && 'Manajemen Kelas & Guru'}
                                 {activeTab === 'finance' && 'Keuangan & Gaji'}
-                                {activeTab === 'students' && 'List Murid & Pembayaran'}
-                                {activeTab === 'reports' && 'Catatan & Laporan Bulanan'}
-                                {activeTab === 'salary' && 'Status Pencairan Gaji'}
                                 {activeTab === 'available_classes' && 'Kelas Tersedia'}
                                 {activeTab === 'enroll' && 'Pendaftaran & Kelas Saya'}
                                 {activeTab === 'payment' && 'Status Pembayaran Bulanan'}
@@ -514,16 +564,14 @@
                             </div>
                         </header>
 
-                        <main className="flex-1 p-8 overflow-y-auto">
+                        <main className="flex-1 p-8 overflow-y-auto space-y-6">
+                            {/* ================= ADMIN VIEW ================= */}
                             {role === 'admin' && activeTab === 'dashboard' && (
                                 <div className="space-y-6">
                                     <div className="bg-gradient-to-r from-emerald-600 to-teal-800 text-white p-8 rounded-3xl shadow-lg flex items-center justify-between">
                                         <div>
-                                            <h2 className="text-3xl font-extrabold mb-2">Panel Kendali Admin</h2>
+                                            <h2 className="text-3xl font-extrabold mb-2">Selamat Datang, Ahlan Wa Sahlan {userProfile?.full_name || 'Admin Utama'}</h2>
                                             <p className="text-emerald-100 text-sm max-w-xl">Mengontrol seluruh aktivitas guru, peserta aktif, kelas pembelajaran, laporan, dan rekapitulasi keuangan secara real-time.</p>
-                                        </div>
-                                        <div className="hidden md:flex w-16 h-16 rounded-2xl bg-white/10 items-center justify-center text-3xl">
-                                            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -555,6 +603,50 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    {/* Tabel Konfirmasi Pendaftaran di Admin */}
+                                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-4">
+                                        <h3 className="font-extrabold text-lg text-gray-800">Persetujuan Pendaftaran Kelas & Bukti Pembayaran</h3>
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-left text-sm">
+                                                <thead>
+                                                    <tr className="border-b bg-gray-50/70 text-gray-500 text-xs uppercase tracking-wider">
+                                                        <th className="p-4">Peserta</th>
+                                                        <th className="p-4">Kelas</th>
+                                                        <th className="p-4">Bukti Bayar</th>
+                                                        <th className="p-4">Status</th>
+                                                        <th className="p-4">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-gray-100">
+                                                    {pendaftaranList.map((p, i) => (
+                                                        <tr key={i} className="hover:bg-gray-50/50 transition">
+                                                            <td className="p-4 font-bold text-gray-800">{p.profiles?.full_name || p.user_id}</td>
+                                                            <td className="p-4 text-gray-600">{p.kelas?.nama_kelas || '-'}</td>
+                                                            <td className="p-4">
+                                                                {p.bukti_bayar_url ? (
+                                                                    <a href={p.bukti_bayar_url} target="_blank" rel="noreferrer" className="text-emerald-600 font-semibold underline text-xs">Lihat Bukti</a>
+                                                                ) : (
+                                                                    <span className="text-gray-400 text-xs">Belum upload</span>
+                                                                )}
+                                                            </td>
+                                                            <td className="p-4">
+                                                                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${p.status === 'Disetujui' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                                                                    {p.status}
+                                                                </span>
+                                                            </td>
+                                                            <td className="p-4 flex gap-2">
+                                                                {p.status !== 'Disetujui' && (
+                                                                    <button onClick={() => handleStatusPendaftaran(p.id, 'Disetujui')} className="bg-emerald-600 text-white px-3 py-1 rounded-xl text-xs font-bold">Setujui</button>
+                                                                )}
+                                                                <button onClick={() => handleStatusPendaftaran(p.id, 'Ditolak')} className="bg-red-500 text-white px-3 py-1 rounded-xl text-xs font-bold">Tolak</button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
 
@@ -567,9 +659,10 @@
                                                 <tr className="border-b bg-gray-50/70 text-gray-500 text-xs uppercase tracking-wider">
                                                     <th className="p-4">Nama Lengkap</th>
                                                     <th className="p-4">Email</th>
-                                                    <th className="p-4">Peran (Role)</th>
+                                                    <th className="p-4">Peran</th>
                                                     <th className="p-4">WhatsApp</th>
                                                     <th className="p-4">Gender</th>
+                                                    <th className="p-4">Usia Aktual</th>
                                                     <th className="p-4">Domisili</th>
                                                 </tr>
                                             </thead>
@@ -579,12 +672,13 @@
                                                         <td className="p-4 font-bold text-gray-800">{u.full_name || '-'}</td>
                                                         <td className="p-4 text-gray-600">{u.email}</td>
                                                         <td className="p-4">
-                                                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : u.role === 'teacher' ? 'bg-teal-100 text-teal-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                                                            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-emerald-100 text-emerald-700">
                                                                 {u.role}
                                                             </span>
                                                         </td>
                                                         <td className="p-4 text-gray-600">{u.whatsapp || '-'}</td>
                                                         <td className="p-4 text-gray-600">{u.gender || '-'}</td>
+                                                        <td className="p-4 font-semibold text-emerald-800">{hitungUsia(u.birth_year)}</td>
                                                         <td className="p-4 text-gray-600">{u.city ? `${u.city}, ${u.province}` : '-'}</td>
                                                     </tr>
                                                 ))}
@@ -599,12 +693,12 @@
                                     <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
                                         <div>
                                             <h3 className="font-extrabold text-xl text-gray-800">Buat Kelas Pembelajaran Baru</h3>
-                                            <p className="text-gray-500 text-sm">Formulir lengkap pembuatan kelas reguler atau privat untuk peserta.</p>
+                                            <p className="text-gray-500 text-sm">Formulir lengkap pembuatan kelas reguler atau privat dengan upload file langsung.</p>
                                         </div>
                                         <form onSubmit={handleCreateClass} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Nama Kelas</label>
-                                                <input type="text" required value={namaKelas} onChange={e => setNamaKelas(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm focus:ring-2 focus:ring-emerald-500" placeholder="Contoh: Tahsin Dasar Ikhwan" />
+                                                <input type="text" required value={namaKelas} onChange={e => setNamaKelas(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="Contoh: Tahsin Dasar" />
                                             </div>
                                             <div>
                                                 <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Jenis Kelas</label>
@@ -615,17 +709,17 @@
                                             </div>
                                             <div className="md:col-span-2">
                                                 <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Deskripsi Kelas</label>
-                                                <textarea rows="2" required value={deskripsiKelas} onChange={e => setDeskripsiKelas(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="Deskripsi singkat mengenai kelas..."></textarea>
+                                                <textarea rows="2" required value={deskripsiKelas} onChange={e => setDeskripsiKelas(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="Deskripsi singkat..."></textarea>
                                             </div>
                                             <div>
                                                 <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Buku Panduan</label>
                                                 <input type="text" value={bukuPanduan} onChange={e => setBukuPanduan(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="Contoh: Kitab At-Tajwid" />
                                             </div>
                                             <div>
-                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Terbuka Untuk (Gender)</label>
+                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Terbuka Untuk</label>
                                                 <select value={targetGender} onChange={e => setTargetGender(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm bg-white">
-                                                    <option value="Ikhwan">Ikhwan (Laki-laki)</option>
-                                                    <option value="Akhwat">Akhwat (Perempuan)</option>
+                                                    <option value="Ikhwan">Ikhwan</option>
+                                                    <option value="Akhwat">Akhwat</option>
                                                     <option value="Umum">Umum</option>
                                                 </select>
                                             </div>
@@ -634,7 +728,7 @@
                                                 <input type="text" value={rentangUsia} onChange={e => setRentangUsia(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="17 - 40 Tahun" />
                                             </div>
                                             <div>
-                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Jadwal (Hari / Waktu)</label>
+                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Jadwal</label>
                                                 <input type="text" value={jadwalKelas} onChange={e => setJadwalKelas(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="Sabtu / 16.00 WIB" />
                                             </div>
                                             <div>
@@ -646,38 +740,41 @@
                                                 <input type="text" value={investasi} onChange={e => setInvestasi(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="Rp 150.000 / bulan" />
                                             </div>
                                             <div>
-                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">URL Poster / Gambar</label>
-                                                <input type="text" value={posterUrl} onChange={e => setPosterUrl(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="https://..." />
+                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Upload Poster Kelas</label>
+                                                <input type="file" accept="image/*" onChange={e => setPosterFile(e.target.files[0])} className="w-full px-3 py-2 rounded-xl border text-sm bg-white" />
                                             </div>
                                             <div>
-                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">URL Thumbnail</label>
-                                                <input type="text" value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="https://..." />
+                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Upload Thumbnail</label>
+                                                <input type="file" accept="image/*" onChange={e => setThumbnailFile(e.target.files[0])} className="w-full px-3 py-2 rounded-xl border text-sm bg-white" />
                                             </div>
                                             <div className="md:col-span-2">
-                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">URL QRIS Pembayaran</label>
-                                                <input type="text" value={qrisUrl} onChange={e => setQrisUrl(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border text-sm" placeholder="https://..." />
+                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Upload QRIS Pembayaran</label>
+                                                <input type="file" accept="image/*" onChange={e => setQrisFile(e.target.files[0])} className="w-full px-3 py-2 rounded-xl border text-sm bg-white" />
                                             </div>
                                             <div className="md:col-span-2">
-                                                <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm transition shadow-md">
-                                                    Terbitkan Kelas Baru
+                                                <button type="submit" disabled={uploading} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm transition shadow-md">
+                                                    {uploading ? 'Mengunggah File & Menerbitkan...' : 'Terbitkan Kelas Baru'}
                                                 </button>
                                             </div>
                                         </form>
                                     </div>
 
+                                    {/* List Kelas */}
                                     <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-4">
-                                        <h3 className="font-bold text-lg text-gray-800">Daftar Kelas Aktif di Sistem</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <h3 className="font-bold text-lg text-gray-800">Daftar Kelas Aktif</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             {kelasList.map((cls, idx) => (
-                                                <div key={idx} className="border border-gray-200 rounded-2xl p-5 space-y-3 bg-gray-50/50">
+                                                <div key={idx} className="border border-gray-200 rounded-3xl p-6 space-y-4 bg-gray-50/50 shadow-sm">
+                                                    {cls.thumbnail_url && (
+                                                        <img src={cls.thumbnail_url} alt="Thumbnail" className="w-full h-40 object-cover rounded-2xl border" />
+                                                    )}
                                                     <div className="flex justify-between items-start">
-                                                        <h4 className="font-extrabold text-base text-gray-800">{cls.nama_kelas}</h4>
-                                                        <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">{cls.jenis}</span>
+                                                        <h4 className="font-extrabold text-lg text-emerald-900">{cls.nama_kelas}</h4>
+                                                        <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">{cls.jenis}</span>
                                                     </div>
                                                     <p className="text-gray-600 text-xs">{cls.deskripsi}</p>
-                                                    <div className="text-xs text-gray-500 space-y-1 pt-2 border-t border-gray-200">
+                                                    <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
                                                         <div>📅 <strong>Jadwal:</strong> {cls.jadwal} ({cls.frekuensi})</div>
-                                                        <div>👥 <strong>Target:</strong> {cls.target_gender} ({cls.rentang_usia})</div>
                                                         <div>💰 <strong>Investasi:</strong> {cls.investasi}</div>
                                                     </div>
                                                 </div>
@@ -687,11 +784,12 @@
                                 </div>
                             )}
 
+                            {/* ================= STUDENT VIEW ================= */}
                             {role === 'student' && activeTab === 'dashboard' && (
                                 <div className="space-y-6">
-                                    <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-8 rounded-3xl shadow-lg">
-                                        <h2 className="text-3xl font-extrabold mb-2">Dashboard Peserta (Siswa)</h2>
-                                        <p className="text-emerald-100 text-sm max-w-xl">Selamat datang di pusat belajar tajwid interaktif. Pilih kelas terbaik Anda dan pantau perkembangan belajar bersama pengajar profesional.</p>
+                                    <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-8 rounded-3xl shadow-lg space-y-2">
+                                        <h2 className="text-3xl font-extrabold">Selamat Datang, Ahlan Wa Sahlan {userProfile?.full_name || 'Peserta'}</h2>
+                                        <p className="text-emerald-100 text-sm">Pusat belajar tajwid interaktif. Usia Anda saat ini: <strong className="text-white underline">{hitungUsia(userProfile?.birth_year)}</strong></p>
                                     </div>
                                 </div>
                             )}
@@ -700,12 +798,15 @@
                                 <div className="space-y-6">
                                     <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                                         <h3 className="font-extrabold text-xl text-gray-800 mb-1">Pilihan Kelas Tersedia</h3>
-                                        <p className="text-gray-500 text-sm">Pilih dan daftarkan diri Anda ke kelas tajwid yang disediakan oleh admin.</p>
+                                        <p className="text-gray-500 text-sm">Pilih kelas dan lakukan konfirmasi pembayaran melalui QRIS yang disediakan.</p>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {kelasList.map((cls, idx) => (
                                             <div key={idx} className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
                                                 <div className="space-y-3">
+                                                    {cls.thumbnail_url && (
+                                                        <img src={cls.thumbnail_url} alt="Poster" className="w-full h-48 object-cover rounded-2xl border" />
+                                                    )}
                                                     <div className="flex justify-between items-start">
                                                         <h4 className="font-extrabold text-lg text-emerald-900">{cls.nama_kelas}</h4>
                                                         <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">{cls.jenis}</span>
@@ -714,15 +815,47 @@
                                                     <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
                                                         <div>📖 <strong>Buku:</strong> {cls.buku_panduan || '-'}</div>
                                                         <div>📅 <strong>Jadwal:</strong> {cls.jadwal} ({cls.frekuensi})</div>
-                                                        <div>👥 <strong>Target:</strong> {cls.target_gender}</div>
-                                                        <div>💰 <strong>Investasi:</strong> {cls.investasi}</div>
+                                                        <div>💰 <strong>Investasi:</strong> <strong className="text-emerald-700">{cls.investasi}</strong></div>
                                                     </div>
                                                 </div>
-                                                <button onClick={() => handleDaftarKelas(cls.id)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm transition shadow-sm">
-                                                    Daftar ke Kelas Ini
+                                                <button onClick={() => setSelectedClassForEnroll(cls)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm transition shadow-sm">
+                                                    Daftar & Konfirmasi Pembayaran
                                                 </button>
                                             </div>
                                         ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Modal Konfirmasi Pembayaran Peserta */}
+                            {selectedClassForEnroll && (
+                                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                                    <div className="bg-white rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl">
+                                        <h3 className="font-extrabold text-xl text-emerald-900">Konfirmasi Pendaftaran & Pembayaran</h3>
+                                        <div className="space-y-2 text-sm text-gray-600">
+                                            <p>Anda akan mendaftar ke kelas: <strong className="text-gray-800">{selectedClassForEnroll.nama_kelas}</strong></p>
+                                            <p>Total Investasi: <strong className="text-emerald-700">{selectedClassForEnroll.investasi}</strong></p>
+                                        </div>
+                                        
+                                        {selectedClassForEnroll.qris_url ? (
+                                            <div className="text-center space-y-2">
+                                                <p className="text-xs font-bold text-gray-500 uppercase">Scan QRIS Pembayaran di Bawah Ini:</p>
+                                                <img src={selectedClassForEnroll.qris_url} alt="QRIS" className="w-48 h-48 mx-auto object-contain border rounded-xl" />
+                                            </div>
+                                        ) : (
+                                            <div className="p-3 bg-amber-50 text-amber-700 text-xs rounded-xl">Silakan transfer sesuai nominal investasi ke rekening resmi lembaga.</div>
+                                        )}
+
+                                        <form onSubmit={handleKirimPendaftaran} className="space-y-4">
+                                            <div>
+                                                <label className="block text-xs font-bold text-gray-600 mb-1 uppercase">Upload Bukti Transfer / Pembayaran</label>
+                                                <input type="file" required accept="image/*" onChange={e => setBuktiBayarFile(e.target.files[0])} className="w-full px-3 py-2 rounded-xl border text-sm bg-white" />
+                                            </div>
+                                            <div className="flex gap-3">
+                                                <button type="button" onClick={() => setSelectedClassForEnroll(null)} className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-bold text-sm">Batal</button>
+                                                <button type="submit" disabled={uploading} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm">{uploading ? 'Mengirim...' : 'Kirim Bukti Bayar'}</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             )}
@@ -737,13 +870,8 @@
                                     <div className="border-t pt-4 space-y-4">
                                         <div className="bg-red-50 border border-red-200 rounded-2xl p-6 space-y-3">
                                             <h4 className="font-bold text-red-700 text-sm">Zona Bahaya (Hapus Akun)</h4>
-                                            <p className="text-xs text-gray-600">
-                                                Tindakan ini akan menghapus seluruh data profil dan akses akun Anda dari sistem secara permanen.
-                                            </p>
-                                            <button 
-                                                onClick={handleDeleteAccount}
-                                                className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-sm"
-                                            >
+                                            <p className="text-xs text-gray-600">Tindakan ini akan menghapus seluruh data profil dan akses akun Anda dari sistem.</p>
+                                            <button onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-sm">
                                                 Hapus Akun Saya
                                             </button>
                                         </div>
@@ -763,7 +891,7 @@
             );
         }
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+        ReactDOM.createRoot(root).render(<App />);
     </script>
 </body>
 </html>
