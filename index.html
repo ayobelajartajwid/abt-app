@@ -256,22 +256,17 @@
             };
 
             // Fitur Kirim Email Notifikasi via SMTP Admin
-           const handleSendEmail = async (e) => {
+              const handleSendEmail = (e) => {
                 e.preventDefault();
                 try {
-                    const { data, error } = await supabaseClient.functions.invoke('send-email', {
-                        body: {
-                            to: emailTarget.to,
-                            subject: emailTarget.subject,
-                            body: emailTarget.body
-                        }
-                    });
-            
-                    if (error) throw error;
-                    alert(`Email resmi berhasil terkirim ke: ${emailTarget.to}`);
+                    // Otomatis membuka aplikasi Gmail/Email client resmi dengan template terisi
+                    const mailtoLink = `mailto:${emailTarget.to}?subject=${encodeURIComponent(emailTarget.subject)}&body=${encodeURIComponent(emailTarget.body)}`;
+                    window.open(mailtoLink, '_blank');
+                    
+                    alert(`Membuka draf email resmi untuk dikirimkan ke: ${emailTarget.to}`);
                     setShowEmailModal(false);
                 } catch (err) {
-                    alert("Gagal mengirim email: " + err.message);
+                    alert("Gagal membuka aplikasi email: " + err.message);
                 }
             };
 
