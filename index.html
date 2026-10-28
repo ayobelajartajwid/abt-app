@@ -39,6 +39,14 @@
             }
         }
     </script>
+
+    <!-- Tambahkan di dalam tag <head> -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function(){
+            emailjs.init("PUBLIC_KEY_ANDA"); // Ganti dengan Public Key EmailJS
+        })();
+    </script>
     
     <!-- React, ReactDOM, Babel, & Supabase -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -256,25 +264,26 @@
             };
 
             // Fungsi Kirim Email Menggunakan Supabase Custom SMTP
-            const handleSendEmail = async (e) => {
+            const handleSendEmail = (e) => {
                 e.preventDefault();
                 setUploading(true);
             
-                try {
-                    // Mengirimkan email konfirmasi / pemberitahuan via jalur Supabase Auth Custom SMTP
-                    const { error } = await supabaseClient.auth.resetPasswordForEmail(emailTarget.to, {
-                        redirectTo: window.location.origin,
-                    });
-            
-                    if (error) throw error;
-            
-                    alert(`Email Notifikasi Resmi dari [ayobelajartajwid@gmail.com] berhasil dikirimkan ke: ${emailTarget.to}!`);
+                emailjs.send(
+                    "service_q5fehii",   // Ganti dengan Service ID
+                    "template_j1dpd0n",  // Ganti dengan Template ID
+                    {
+                        to_email: emailTarget.to,
+                        subject: emailTarget.subject,
+                        message: emailTarget.body,
+                    }
+                ).then(() => {
+                    alert(`Email notifikasi berhasil dikirim ke: ${emailTarget.to}!`);
                     setShowEmailModal(false);
-                } catch (err) {
-                    alert("Gagal mengirim email: " + err.message);
-                } finally {
+                }).catch((err) => {
+                    alert("Gagal mengirim email: " + JSON.stringify(err));
+                }).finally(() => {
                     setUploading(false);
-                }
+                });
             };
 
             // Fitur Export Excel
