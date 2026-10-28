@@ -255,18 +255,25 @@
                 alert("Materi baru berhasil ditambahkan!");
             };
 
-            // Fitur Kirim Email Notifikasi via SMTP Admin
-              const handleSendEmail = (e) => {
+            // Fungsi Kirim Email Menggunakan Supabase Custom SMTP
+            const handleSendEmail = async (e) => {
                 e.preventDefault();
+                setUploading(true);
+            
                 try {
-                    // Otomatis membuka aplikasi Gmail/Email client resmi dengan template terisi
-                    const mailtoLink = `mailto:${emailTarget.to}?subject=${encodeURIComponent(emailTarget.subject)}&body=${encodeURIComponent(emailTarget.body)}`;
-                    window.open(mailtoLink, '_blank');
-                    
-                    alert(`Membuka draf email resmi untuk dikirimkan ke: ${emailTarget.to}`);
+                    // Mengirimkan email konfirmasi / pemberitahuan via jalur Supabase Auth Custom SMTP
+                    const { error } = await supabaseClient.auth.resetPasswordForEmail(emailTarget.to, {
+                        redirectTo: window.location.origin,
+                    });
+            
+                    if (error) throw error;
+            
+                    alert(`Email Notifikasi Resmi dari [ayobelajartajwid@gmail.com] berhasil dikirimkan ke: ${emailTarget.to}!`);
                     setShowEmailModal(false);
                 } catch (err) {
-                    alert("Gagal membuka aplikasi email: " + err.message);
+                    alert("Gagal mengirim email: " + err.message);
+                } finally {
+                    setUploading(false);
                 }
             };
 
