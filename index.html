@@ -358,6 +358,43 @@
       #appDashboard .panel-card { padding:17px; }
     }
 
+
+    .app-nav a { gap:12px;min-height:46px; }
+    .app-nav .nav-icon { width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px; }
+    .app-nav .nav-icon svg { width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round; }
+    .app-nav a.active .nav-icon { color:#D2E96A; }
+    .sidebar-toggle { display:none;width:38px;height:38px;border:1px solid #DCE8EC;background:#fff;border-radius:11px;align-items:center;justify-content:center;flex-direction:column;gap:4px;flex:0 0 auto; }
+    .sidebar-toggle span { display:block;width:16px;height:2px;border-radius:3px;background:#075B78; }
+    .app-heading { min-width:0; }
+    .auth-switch { border:0;background:none;color:#087F9B;font-weight:750;padding:0;text-decoration:underline;text-underline-offset:3px; }
+    .login-modal .field input { width:100%;min-height:45px;border:1px solid #DCE8EC;border-radius:11px;padding:11px 13px;font:inherit;font-size:13px;outline:none; }
+    .login-modal .field input:focus { border-color:#087F9B;box-shadow:0 0 0 3px rgba(8,127,155,.11); }
+    .login-modal form .btn { width:100%;margin-top:8px; }
+    .content-editor { display:grid;gap:15px; }
+    .content-editor .field label { display:block;font-size:12px;font-weight:700;color:#355568;margin-bottom:6px; }
+    .content-editor textarea { width:100%;min-height:92px;resize:vertical;border:1px solid #DCE8EC;border-radius:11px;padding:12px;font:inherit;font-size:13px;color:#243746; }
+    .content-editor input { width:100%;border:1px solid #DCE8EC;border-radius:11px;padding:11px 12px;font:inherit;font-size:13px; }
+    .sidebar-scrim { display:none; }
+    @media(max-width:760px) {
+      #appDashboard .app-shell { display:block; }
+      #appDashboard .app-sidebar { position:fixed;z-index:90;left:0;top:0;bottom:0;width:min(290px,84vw);min-height:100dvh;overflow-y:auto;transform:translateX(-105%);transition:transform .24s ease;box-shadow:16px 0 45px rgba(0,35,50,.2);padding:22px 17px; }
+      #appDashboard.sidebar-open .app-sidebar { transform:translateX(0); }
+      #appDashboard .sidebar-scrim { display:block;position:fixed;inset:0;z-index:80;background:rgba(5,35,48,.45);opacity:0;visibility:hidden;transition:.2s; }
+      #appDashboard.sidebar-open .sidebar-scrim { opacity:1;visibility:visible; }
+      #appDashboard .sidebar-toggle { display:flex; }
+      #appDashboard .app-topbar { min-height:72px;padding:12px 15px; }
+      #appDashboard .app-topbar h1 { font-size:18px; }
+      #appDashboard .app-topbar p { font-size:10px; }
+      #appDashboard .app-user-text { display:none; }
+      #appDashboard .app-content { padding:20px 14px 30px; }
+    }
+    @media(max-width:420px) {
+      .nav-actions { gap:6px; }
+      .nav-actions .btn { padding:9px 12px;font-size:11px; }
+      .brand strong { font-size:14px; }
+      .brand span { font-size:8px; }
+    }
+
   </style>
 </head>
 <body>
@@ -371,7 +408,7 @@
         <a href="#beranda">Beranda</a><a href="#program">Program</a><a href="#kelas">Kelas</a><a href="#tentang">Tentang Kami</a><a href="#kontak">Kontak</a>
       </nav>
       <div class="nav-actions">
-        <button class="btn btn-primary" type="button" data-open-login>Login Peserta ↗</button>
+        <button class="btn btn-primary" type="button" data-open-login>Login</button>
         <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">☰</button>
       </div>
     </div>
@@ -381,9 +418,9 @@
     <section class="hero" id="beranda">
       <div class="container hero-grid">
         <div>
-          <div class="eyebrow">Platform belajar Al-Qur'an</div>
-          <h1>Perbaiki Bacaan,<br><em>Indahkan Tilawah.</em></h1>
-          <p class="hero-copy">Belajar tahsin dan tajwid secara terarah bersama pengajar. Mulai dari mengenal makharijul huruf hingga menerapkan kaidah tajwid dalam bacaan Al-Qur'an.</p>
+          <div class="eyebrow" id="publicHeroBadge">Platform belajar Al-Qur'an</div>
+          <h1 id="publicHeroTitle">Perbaiki Bacaan,<br><em>Indahkan Tilawah.</em></h1>
+          <p class="hero-copy" id="publicHeroDescription">Belajar tahsin dan tajwid secara terarah bersama pengajar. Mulai dari mengenal makharijul huruf hingga menerapkan kaidah tajwid dalam bacaan Al-Qur'an.</p>
           <div class="hero-buttons">
             <a class="btn btn-gold" href="#kelas">Jelajahi Kelas <span>→</span></a>
             <a class="btn btn-outline" href="#tentang">Kenali Platform</a>
@@ -457,6 +494,7 @@
 
   <section id="appDashboard" style="display:none;">
     <div class="app-shell">
+      <div class="sidebar-scrim" id="sidebarScrim"></div>
       <aside class="app-sidebar">
         <div class="app-brand">
           <div class="app-brand-mark"><img src="/AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid"></div>
@@ -473,7 +511,8 @@
       </aside>
       <main class="app-main">
         <header class="app-topbar">
-          <div><h1 id="dashboardTitle">Dashboard</h1><p id="dashboardBreadcrumb">Area pengguna / Ringkasan</p></div>
+          <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Buka navigasi" aria-expanded="false"><span></span><span></span><span></span></button>
+          <div class="app-heading"><h1 id="dashboardTitle">Dashboard</h1><p id="dashboardBreadcrumb">Area pengguna / Ringkasan</p></div>
           <div class="app-user"><div class="app-avatar" id="userAvatar">A</div><div class="app-user-text"><strong id="dashboardName">Pengguna</strong><span id="dashboardRole">Peserta</span></div></div>
         </header>
         <div class="app-content" id="dashboardContent" aria-live="polite"></div>
@@ -485,15 +524,22 @@
     <div class="login-modal">
       <button class="modal-close" type="button" id="closeLogin" aria-label="Tutup">×</button>
       <img class="login-logo" src="AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid">
-      <h2 id="loginTitle">Selamat Datang</h2>
-      <p class="sub">Masuk ke akun Ayo Belajar Tajwid Anda</p>
+      <h2 id="loginTitle">Login</h2>
+      <p class="sub" id="authSubtitle">Masuk ke akun Ayo Belajar Tajwid Anda</p>
       <form id="loginForm">
         <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="nama@email.com" autocomplete="username" required></div>
         <div class="field"><label for="password">Password</label><input id="password" type="password" placeholder="Masukkan password" autocomplete="current-password" required></div>
-        <button class="btn btn-primary" type="submit">Masuk ke Dashboard →</button>
+        <button class="btn btn-primary" type="submit">Login →</button>
+      </form>
+      <form id="registerForm" style="display:none">
+        <div class="field"><label for="registerName">Nama lengkap</label><input id="registerName" type="text" placeholder="Nama lengkap" autocomplete="name" required></div>
+        <div class="field"><label for="registerEmail">Email</label><input id="registerEmail" type="email" placeholder="nama@email.com" autocomplete="email" required></div>
+        <div class="field"><label for="registerPassword">Password</label><input id="registerPassword" type="password" placeholder="Minimal 8 karakter" minlength="8" autocomplete="new-password" required></div>
+        <div class="field"><label for="registerPhone">Nomor WhatsApp (opsional)</label><input id="registerPhone" type="tel" placeholder="08xxxxxxxxxx" autocomplete="tel"></div>
+        <button class="btn btn-primary" type="submit">Buat Akun Peserta →</button>
       </form>
       <div class="notice" id="loginNotice" role="status" aria-live="polite"></div>
-      <p class="login-help">Belum memiliki akun? Hubungi administrator kelas.</p>
+      <p class="login-help"><span id="authSwitchText">Belum memiliki akun?</span> <button type="button" class="auth-switch" id="authSwitch">Daftar sekarang</button></p>
     </div>
   </div>
 
@@ -515,12 +561,64 @@
       }
     );
 
+
+    async function applyPublicSiteContent() {
+      const {data,error} = await supabaseClient.from('site_content').select('content_key,content_value');
+      if (error || !data) return;
+      const content = Object.fromEntries(data.map(row=>[row.content_key,row.content_value]));
+      const badge = document.getElementById('publicHeroBadge');
+      const title = document.getElementById('publicHeroTitle');
+      const description = document.getElementById('publicHeroDescription');
+      if (badge && content.hero_badge) badge.textContent = content.hero_badge;
+      if (title && content.hero_title) {
+        // Preserve safe text only; user-entered markup is never injected into the page.
+        title.textContent = content.hero_title;
+      }
+      if (description && content.hero_description) description.textContent = content.hero_description;
+      const aboutTitle = document.querySelector('#tentang h2');
+      const aboutDescription = document.querySelector('#tentang .about-copy');
+      if (aboutTitle && content.about_title) aboutTitle.textContent = content.about_title;
+      if (aboutDescription && content.about_description) aboutDescription.textContent = content.about_description;
+      const whatsapp = content.contact_whatsapp;
+      if (whatsapp) document.querySelectorAll('a[href*="wa.me"]').forEach(a=>a.href='https://wa.me/'+whatsapp.replace(/\D/g,''));
+      if (content.contact_email) document.querySelectorAll('a[href^="mailto:"]').forEach(a=>a.href='mailto:'+content.contact_email);
+    }
+    applyPublicSiteContent();
+
     const menuToggle = document.getElementById('menuToggle');
     const navlinks = document.getElementById('navlinks');
     const modal = document.getElementById('loginModal');
     const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
     const loginNotice = document.getElementById('loginNotice');
     const dashboard = document.getElementById('appDashboard');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarScrim = document.getElementById('sidebarScrim');
+    function setSidebarOpen(open) {
+      dashboard.classList.toggle('sidebar-open', open);
+      if (sidebarToggle) sidebarToggle.setAttribute('aria-expanded', String(open));
+    }
+    sidebarToggle?.addEventListener('click', () => setSidebarOpen(!dashboard.classList.contains('sidebar-open')));
+    sidebarScrim?.addEventListener('click', () => setSidebarOpen(false));
+
+    async function applyPublicSiteContent() {
+      const {data,error} = await supabaseClient.from('site_content').select('content_key,content_value');
+      if (error || !data) return;
+      const values = Object.fromEntries(data.map(row=>[row.content_key,row.content_value]));
+      const badge = document.getElementById('publicHeroBadge');
+      const title = document.getElementById('publicHeroTitle');
+      const description = document.getElementById('publicHeroDescription');
+      if (badge && values.hero_badge) badge.textContent = values.hero_badge;
+      if (title && values.hero_title) title.textContent = values.hero_title;
+      if (description && values.hero_description) description.textContent = values.hero_description;
+      const aboutTitle = document.querySelector('#tentang h2');
+      const aboutText = document.querySelector('#tentang .about-copy');
+      if (aboutTitle && values.about_title) aboutTitle.textContent = values.about_title;
+      if (aboutText && values.about_description) aboutText.textContent = values.about_description;
+      if (values.contact_whatsapp) document.querySelectorAll('a[href*="wa.me"]').forEach(a=>a.href='https://wa.me/'+values.contact_whatsapp.replace(/\D/g,''));
+      if (values.contact_email) document.querySelectorAll('a[href^="mailto:"]').forEach(a=>a.href='mailto:'+values.contact_email);
+    }
+    applyPublicSiteContent();
 
     menuToggle.addEventListener('click', () => navlinks.classList.toggle('open'));
     navlinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => navlinks.classList.remove('open')));
@@ -530,6 +628,22 @@
       modal.classList.add('show');
       document.body.style.overflow = 'hidden';
     }));
+    function openAuth(mode='login') {
+      const registering = mode === 'register';
+      loginForm.style.display = registering ? 'none' : 'block';
+      registerForm.style.display = registering ? 'block' : 'none';
+      document.getElementById('loginTitle').textContent = registering ? 'Daftar Akun' : 'Login';
+      document.getElementById('authSubtitle').textContent = registering ? 'Buat akun peserta Ayo Belajar Tajwid' : 'Masuk ke akun Ayo Belajar Tajwid Anda';
+      document.getElementById('authSwitchText').textContent = registering ? 'Sudah memiliki akun?' : 'Belum memiliki akun?';
+      document.getElementById('authSwitch').textContent = registering ? 'Login di sini' : 'Daftar sekarang';
+      loginNotice.classList.remove('show');
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    document.querySelectorAll('[data-open-login]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();openAuth('login');}));
+    document.querySelectorAll('[data-open-register]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();openAuth('register');}));
+    document.getElementById('authSwitch').addEventListener('click',()=>openAuth(registerForm.style.display==='none'?'register':'login'));
+
 
     function closeModal() {
       modal.classList.remove('show');
@@ -561,7 +675,7 @@
     const roleMenus = {
       super_admin: [
         ['overview','Ringkasan','▦'], ['classes','Manajemen Kelas','▤'],
-        ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['profile','Profil Saya','◎']
+        ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['sitecontent','Konten Landing Page','✦'], ['profile','Profil Saya','◎']
       ],
       admin: [
         ['overview','Ringkasan','▦'], ['classes','Manajemen Kelas','▤'],
@@ -642,7 +756,7 @@
         <div class="stats-grid">${cards}</div>
         <div class="dashboard-grid">
           <section class="panel-card"><h3>Kelas Terbaru</h3><p class="panel-subtitle">Ringkasan kelas di platform</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama Kelas</th><th>Kategori</th><th>Status</th></tr></thead><tbody>${classRows}</tbody></table></div></section>
-          <section class="panel-card"><h3>Akses Cepat</h3><p class="panel-subtitle">Menu yang dapat Anda gunakan</p><div class="quick-links">${(roleMenus[currentRole] || []).filter(m=>m[0]!=='overview').map(m=>`<a class="quick-link" href="${routePath(m[0])}" data-page="${m[0]}"><span>${m[2]}</span>${m[1]}</a>`).join('')}</div></section>
+          <section class="panel-card"><h3>Akses Cepat</h3><p class="panel-subtitle">Menu yang dapat Anda gunakan</p><div class="quick-links">${(roleMenus[currentRole] || []).filter(m=>m[0]!=='overview').map(m=>`<a class="quick-link" href="${routePath(m[0])}" data-page="${m[0]}"><span class="nav-icon">${navIcon(m[0])}</span>${m[1]}</a>`).join('')}</div></section>
         </div>
         <section class="panel-card" style="margin-top:17px"><h3>${currentRole==='peserta'?'Pendaftaran Kelas Saya':'Aktivitas Pendaftaran'}</h3><p class="panel-subtitle">Data terbaru yang dapat diakses oleh akun Anda</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama Kelas</th><th>Status</th></tr></thead><tbody>${enrollmentRows}</tbody></table></div></section>`;
     }
@@ -678,10 +792,58 @@
       </div><p class="panel-subtitle" style="margin:16px 0 0">Untuk perubahan nama, nomor telepon, atau data akun, hubungi administrator platform.</p></section>`;
     }
 
+
+    function navIcon(name) {
+      const icons = {
+        overview:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+        classes:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M4 5.5V22M8 7h8M8 11h8"/>',
+        lessons:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M8 7h8M8 11h8M8 15h5"/>',
+        users:'<path d="M16 20v-1.5a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4V20"/><circle cx="10" cy="7" r="3.5"/><path d="M20 20v-1.5a4 4 0 0 0-2.8-3.8M16.5 3.7a3.5 3.5 0 0 1 0 6.7"/>',
+        profile:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="9" r="3"/><path d="M6.8 18a5.5 5.5 0 0 1 10.4 0"/>',
+        sitecontent:'<path d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'
+      };
+      return `<svg viewBox="0 0 24 24" aria-hidden="true">${icons[name] || icons.overview}</svg>`;
+    }
+    async function loadSiteContentEditor() {
+      if (currentRole !== 'super_admin') return '<div class="app-alert">Halaman ini hanya dapat diakses Super Admin.</div>';
+      const defaults = {hero_title:'Perbaiki Bacaan, Indahkan Tilawah.',hero_description:'Belajar tahsin dan tajwid secara terarah bersama pengajar.',hero_badge:'Platform belajar Al-Qur’an',about_title:'Tentang Ayo Belajar Tajwid',about_description:'Platform pembelajaran tahsin dan tajwid secara terarah.',contact_whatsapp:'',contact_email:''};
+      const {data,error} = await supabaseClient.from('site_content').select('content_key,content_value');
+      const values = {...defaults};
+      if (!error && data) data.forEach(row=>values[row.content_key]=row.content_value);
+      const warning = error ? '<div class="app-alert">Tabel site_content belum dibuat. Jalankan SQL_site_content_setup.sql yang disertakan dalam paket pembaruan.</div>' : '';
+      return `${warning}<section class="panel-card"><h3>Pengelolaan Konten Landing Page</h3><p class="panel-subtitle">Ubah teks utama yang tampil pada halaman publik. Perubahan disimpan ke Supabase.</p>
+      <form class="content-editor" id="siteContentForm">
+      <div class="field"><label for="contentHeroTitle">Judul utama</label><textarea id="contentHeroTitle" required>${safeText(values.hero_title)}</textarea></div>
+      <div class="field"><label for="contentHeroDescription">Deskripsi utama</label><textarea id="contentHeroDescription" required>${safeText(values.hero_description)}</textarea></div>
+      <div class="field"><label for="contentHeroBadge">Label kecil</label><input id="contentHeroBadge" value="${safeText(values.hero_badge)}"></div>
+      <div class="field"><label for="contentAboutTitle">Judul Tentang Kami</label><input id="contentAboutTitle" value="${safeText(values.about_title)}"></div>
+      <div class="field"><label for="contentAboutDescription">Deskripsi Tentang Kami</label><textarea id="contentAboutDescription">${safeText(values.about_description)}</textarea></div>
+      <div class="field"><label for="contentWhatsapp">Nomor WhatsApp (628...)</label><input id="contentWhatsapp" value="${safeText(values.contact_whatsapp)}"></div>
+      <div class="field"><label for="contentEmail">Email kontak</label><input id="contentEmail" type="email" value="${safeText(values.contact_email)}"></div>
+      <div><button class="app-button" type="submit">Simpan Perubahan</button> <button class="app-button secondary" type="button" id="previewLanding">Pratinjau Landing Page</button></div>
+      <div class="notice" id="siteContentNotice" role="status"></div></form></section>`;
+    }
+    document.addEventListener('submit', async event => {
+      if (event.target?.id !== 'siteContentForm') return;
+      event.preventDefault();
+      const f=event.target;
+      const rows=[
+        ['hero_title',f.contentHeroTitle.value.trim()],['hero_description',f.contentHeroDescription.value.trim()],
+        ['hero_badge',f.contentHeroBadge.value.trim()],['about_title',f.contentAboutTitle.value.trim()],
+        ['about_description',f.contentAboutDescription.value.trim()],['contact_whatsapp',f.contentWhatsapp.value.trim()],
+        ['contact_email',f.contentEmail.value.trim()]
+      ].map(([content_key,content_value])=>({content_key,content_value,updated_by:currentUser.id}));
+      const {error}=await supabaseClient.from('site_content').upsert(rows,{onConflict:'content_key'});
+      const n=document.getElementById('siteContentNotice');
+      n.textContent=error?'Gagal menyimpan: '+error.message:'Konten landing page berhasil disimpan.';
+      n.classList.add('show');n.style.background=error?'#fff0ed':'#E7F4F6';n.style.color=error?'#8b3020':'#075B78';
+    });
+    document.addEventListener('click',event=>{if(event.target?.id==='previewLanding')window.open('/','_blank','noopener');});
+
     async function renderDashboardPage(page) {
       const nav = document.getElementById('appNavigation');
-      nav.innerHTML = (roleMenus[currentRole] || []).map(m=>`<a href="${routePath(m[0])}" data-page="${m[0]}" class="${page===m[0]?'active':''}"><span class="nav-icon">${m[2]}</span>${m[1]}</a>`).join('');
-      nav.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();navigate(a.dataset.page);}));
+      nav.innerHTML = (roleMenus[currentRole] || []).map(m=>`<a href="${routePath(m[0])}" data-page="${m[0]}" class="${page===m[0]?'active':''}"><span class="nav-icon">${navIcon(m[0])}</span>${m[1]}</a>`).join('');
+      nav.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setSidebarOpen(false);navigate(a.dataset.page);}));
       document.getElementById('dashboardTitle').textContent = page==='overview' ? roleConfig[currentRole].title : (roleMenus[currentRole].find(m=>m[0]===page)?.[1] || 'Dashboard');
       document.getElementById('dashboardBreadcrumb').textContent = `Area pengguna / ${page==='overview'?'Ringkasan':(roleMenus[currentRole].find(m=>m[0]===page)?.[1] || page)}`;
       const content = document.getElementById('dashboardContent');
@@ -692,6 +854,7 @@
         else if (page==='classes') result = await loadClasses();
         else if (page==='lessons') result = await loadLessons();
         else if (page==='users') result = await loadUsers();
+        else if (page==='sitecontent') result = await loadSiteContentEditor();
         else if (page==='profile') result = loadProfile();
         else result = `<div class="app-alert">Halaman tidak ditemukan.</div>`;
         content.innerHTML = `<div class="page-heading"><div><h2>${page==='overview'?'Ringkasan Aktivitas':safeText(document.getElementById('dashboardTitle').textContent)}</h2><p>Informasi terbaru dari platform Ayo Belajar Tajwid.</p></div>${page!=='overview'?'<button class="app-button secondary" data-page="overview">Kembali ke ringkasan</button>':''}</div>${result}`;
@@ -708,6 +871,7 @@
       currentUser=user; currentProfile=profile; currentRole=profile.role;
       closeModal();
       setAppMode(true);
+      setSidebarOpen(false);
       document.getElementById('dashboardName').textContent = profile.full_name || user.email;
       document.getElementById('dashboardRole').textContent = roleConfig[currentRole].label;
       document.getElementById('userAvatar').textContent = (profile.full_name || user.email || 'A').trim().charAt(0).toUpperCase();
@@ -742,6 +906,25 @@
         submitButton.disabled=false;
         submitButton.textContent='Masuk ke Dashboard →';
       }
+    });
+
+
+    registerForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const button=registerForm.querySelector('button[type="submit"]');
+      const fullName=document.getElementById('registerName').value.trim();
+      const email=document.getElementById('registerEmail').value.trim();
+      const password=document.getElementById('registerPassword').value;
+      const phone=document.getElementById('registerPhone').value.trim();
+      if(password.length<8){showLoginMessage('Password minimal 8 karakter.');return;}
+      button.disabled=true;button.textContent='Membuat akun…';loginNotice.classList.remove('show');
+      try {
+        const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName,phone}}});
+        if(error)throw error;
+        if(data.session&&data.user){await openUserDashboard(data.user);}
+        else {registerForm.reset();openAuth('login');showLoginMessage('Pendaftaran berhasil. Periksa email untuk verifikasi, lalu login.',false);}
+      } catch(error){showLoginMessage(error.message||'Pendaftaran belum berhasil.');}
+      finally{button.disabled=false;button.textContent='Buat Akun Peserta →';}
     });
 
     document.getElementById('logoutButton').addEventListener('click', async () => {
