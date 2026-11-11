@@ -262,6 +262,102 @@
     .login-modal { border:1px solid #DCE8EC; }
     .modal-close { background:#E7F4F6;color:#075B78; }
 
+
+    /* Dashboard typography, spacing and refined KPI cards */
+    #appDashboard {
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      letter-spacing: -0.012em;
+      color: #243746;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    #appDashboard .app-topbar { min-height:86px; padding:18px clamp(22px,3.2vw,42px); }
+    #appDashboard .app-topbar h1 {
+      font-size:23px; line-height:1.25; letter-spacing:-.045em;
+      font-weight:750; color:#06445F;
+    }
+    #appDashboard .app-topbar p { font-size:12.5px; line-height:1.5; margin-top:5px; }
+    #appDashboard .app-content { padding:clamp(24px,3.2vw,42px); }
+    #appDashboard .page-heading { margin-bottom:24px; }
+    #appDashboard .page-heading h2 {
+      font-size:22px; line-height:1.3; letter-spacing:-.035em;
+      font-weight:750; color:#06445F;
+    }
+    #appDashboard .page-heading p { font-size:13px; line-height:1.6; margin-top:6px; }
+    #appDashboard .welcome-panel {
+      padding:30px 34px; margin-bottom:25px; min-height:122px;
+      display:flex; flex-direction:column; justify-content:center;
+      background:linear-gradient(112deg,#06445F 0%,#075B78 54%,#087F9B 100%);
+      box-shadow:0 12px 30px rgba(6,68,95,.13);
+    }
+    #appDashboard .welcome-panel h2 {
+      color:#FFFFFF !important; font-size:24px; line-height:1.3;
+      font-weight:750; letter-spacing:-.035em; margin:0 0 8px;
+      text-shadow:0 1px 2px rgba(0,0,0,.12);
+    }
+    #appDashboard .welcome-panel p {
+      color:#E7F5F7 !important; font-size:14px; line-height:1.65;
+      font-weight:450; max-width:650px;
+    }
+    #appDashboard .welcome-panel:after {
+      border-color:rgba(210,233,106,.28);
+      box-shadow:0 0 0 25px rgba(210,233,106,.06),0 0 0 55px rgba(210,233,106,.035);
+    }
+    #appDashboard .stats-grid {
+      gap:17px; margin-bottom:25px;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+    #appDashboard .stat-card {
+      min-height:126px; padding:21px 22px; align-items:stretch;
+      border:1px solid #DCE8EC; border-radius:16px;
+      box-shadow:0 5px 18px rgba(6,68,95,.045);
+      position:relative; overflow:hidden;
+      transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+    }
+    #appDashboard .stat-card:hover {
+      transform:translateY(-2px); border-color:#B8D7DF;
+      box-shadow:0 10px 24px rgba(6,68,95,.09);
+    }
+    #appDashboard .stat-card-copy { display:flex;flex-direction:column;align-items:flex-start;width:100%; }
+    #appDashboard .stat-card small {
+      color:#617887; font-size:12px; line-height:1.5;
+      font-weight:550; letter-spacing:.005em;
+    }
+    #appDashboard .stat-card strong {
+      color:#06445F; font-size:32px; line-height:1.15;
+      font-weight:760; letter-spacing:-.045em; margin-top:9px;
+    }
+    #appDashboard .stat-accent {
+      display:block; width:34px; height:4px; border-radius:9px;
+      background:#B6D92B; margin-top:auto; padding-top:0;
+    }
+    #appDashboard .dashboard-grid { gap:20px; }
+    #appDashboard .panel-card {
+      padding:23px; border-radius:17px;
+      box-shadow:0 5px 18px rgba(6,68,95,.04);
+    }
+    #appDashboard .panel-card h3 { font-size:16px;line-height:1.4;font-weight:720;color:#06445F; }
+    #appDashboard .panel-subtitle { font-size:12px;line-height:1.6;margin:5px 0 18px;color:#718693; }
+    #appDashboard .app-nav a { font-size:13px;line-height:1.4;padding:12px 13px; }
+    #appDashboard .app-nav-label { font-size:10px;letter-spacing:1.6px;margin-bottom:10px; }
+    #appDashboard .app-user-text { font-size:12px;line-height:1.5; }
+    #appDashboard .app-table th { font-size:10px;letter-spacing:.8px;padding:13px 14px; }
+    #appDashboard .app-table td { font-size:12.5px;line-height:1.5;padding:14px; }
+    @media(max-width:1050px) {
+      #appDashboard .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media(max-width:650px) {
+      #appDashboard .app-content { padding:20px 15px 28px; }
+      #appDashboard .welcome-panel { padding:23px 22px;min-height:unset; }
+      #appDashboard .welcome-panel h2 { font-size:20px; }
+      #appDashboard .welcome-panel p { font-size:13px; }
+      #appDashboard .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
+      #appDashboard .stat-card { min-height:108px;padding:15px; }
+      #appDashboard .stat-card strong { font-size:27px; }
+      #appDashboard .page-heading h2 { font-size:19px; }
+      #appDashboard .panel-card { padding:17px; }
+    }
+
   </style>
 </head>
 <body>
@@ -529,7 +625,7 @@
         ['♧', currentRole === 'peserta' ? 'Pendaftaran Saya' : 'Data Pendaftaran', enrollments],
         ['♙', 'Total Pengguna', users]
       ].filter((item, i) => item[2] !== null || (i === 3 && !isManager));
-      const cards = stats.map(item => `<article class="stat-card"><div class="stat-icon">${item[0]}</div><div><small>${item[1]}</small><strong>${item[2] === null ? '—' : item[2]}</strong></div></article>`).join('');
+      const cards = stats.map(item => `<article class="stat-card"><div class="stat-card-copy"><small>${item[1]}</small><strong>${item[2] === null ? '—' : item[2]}</strong><span class="stat-accent" aria-hidden="true"></span></div></article>`).join('');
       const [classResult, enrollmentResult] = await Promise.all([
         supabaseClient.from('classes').select('id,title,status,category,level').order('created_at',{ascending:false}).limit(5),
         currentRole === 'peserta'
