@@ -154,6 +154,69 @@
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; } .footer-grid > div:first-child { grid-column: 1/-1; }
       .copyright { flex-direction: column; }
     }
+
+    /* Dashboard application */
+    body.app-mode { background: #f3f7f4; }
+    #appDashboard { min-height:100vh; background:#f3f7f4; padding:0 !important; color:var(--ink); }
+    .app-shell { min-height:100vh; display:grid; grid-template-columns:260px minmax(0,1fr); }
+    .app-sidebar { background:#064e3b; color:#fff; padding:26px 18px; display:flex; flex-direction:column; gap:26px; }
+    .app-brand { display:flex; align-items:center; gap:11px; padding:0 9px 22px; border-bottom:1px solid rgba(255,255,255,.15); }
+    .app-brand-mark { width:42px;height:42px;border-radius:13px;background:#fff;display:grid;place-items:center;color:#087a55;font-weight:900;font-size:19px; }
+    .app-brand strong { display:block;font-size:15px;line-height:1.25; }
+    .app-brand small { display:block;color:#c3ded2;font-size:10px;letter-spacing:1.4px;margin-top:4px; }
+    .app-nav-label { color:#9fc8b7;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:0 12px;margin-bottom:8px; }
+    .app-nav { display:grid;gap:5px; }
+    .app-nav a { display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:11px;color:#dcece4;font-size:13px;font-weight:600;transition:.2s; }
+    .app-nav a:hover,.app-nav a.active { background:rgba(255,255,255,.14);color:#fff; }
+    .app-nav .nav-icon { width:20px;text-align:center;font-size:16px; }
+    .sidebar-bottom { margin-top:auto;border-top:1px solid rgba(255,255,255,.15);padding:18px 8px 0;color:#b8d6c8;font-size:11px; }
+    .app-main { min-width:0; }
+    .app-topbar { min-height:78px;background:#fff;border-bottom:1px solid #e5ece7;padding:15px clamp(18px,3vw,38px);display:flex;align-items:center;justify-content:space-between;gap:16px; }
+    .app-topbar h1 { font-size:20px;margin:0;color:#123d30; }
+    .app-topbar p { margin:3px 0 0;color:#78877f;font-size:12px; }
+    .app-user { display:flex;align-items:center;gap:11px; }
+    .app-avatar { width:38px;height:38px;border-radius:50%;background:#e5f2eb;color:#087a55;display:grid;place-items:center;font-weight:800; }
+    .app-user-text { font-size:12px;line-height:1.3; }
+    .app-user-text strong { display:block;color:#234338; }
+    .app-user-text span { color:#7b8982;font-size:11px; }
+    .app-content { padding:clamp(18px,3vw,36px);max-width:1500px;margin:auto; }
+    .welcome-panel { background:linear-gradient(120deg,#07543f,#087a55);color:white;border-radius:20px;padding:25px 28px;margin-bottom:23px;position:relative;overflow:hidden; }
+    .welcome-panel:after { content:"";position:absolute;width:210px;height:210px;border:1px solid rgba(255,255,255,.13);border-radius:50%;right:-40px;top:-90px;box-shadow:0 0 0 25px rgba(255,255,255,.035),0 0 0 55px rgba(255,255,255,.025); }
+    .welcome-panel h2 { margin:0 0 6px;font-size:22px;position:relative;z-index:1; }
+    .welcome-panel p { margin:0;color:#d6eee3;font-size:13px;position:relative;z-index:1; }
+    .stats-grid { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:23px; }
+    .stat-card,.panel-card { background:#fff;border:1px solid #e5ece7;border-radius:16px;padding:19px;box-shadow:0 5px 20px rgba(8,66,46,.035); }
+    .stat-card { display:flex;align-items:center;gap:14px;min-height:105px; }
+    .stat-icon { width:43px;height:43px;border-radius:13px;background:#eaf5ef;display:grid;place-items:center;font-size:19px; }
+    .stat-card small { color:#7b8982;font-size:11px;display:block; }
+    .stat-card strong { color:#123d30;font-size:25px;line-height:1.25;display:block;margin-top:3px; }
+    .dashboard-grid { display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,1fr);gap:17px; }
+    .panel-card h3 { margin:0 0 5px;color:#164534;font-size:15px; }
+    .panel-subtitle { margin:0 0 17px;color:#849189;font-size:11px; }
+    .quick-links { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
+    .quick-link { border:1px solid #e5ece7;border-radius:12px;padding:14px;color:#24513f;font-size:12px;font-weight:700;display:flex;align-items:center;gap:10px;background:#fbfdfb; }
+    .quick-link:hover { border-color:#9ac9b0;background:#f2faf5; }
+    .table-wrap { overflow:auto; }
+    .app-table { width:100%;border-collapse:collapse;font-size:12px;min-width:480px; }
+    .app-table th { text-align:left;color:#839087;font-size:10px;letter-spacing:.7px;text-transform:uppercase;background:#f7faf8;padding:11px 12px; }
+    .app-table td { padding:13px 12px;border-bottom:1px solid #edf1ee;color:#43564d; }
+    .status-pill { display:inline-block;padding:4px 9px;border-radius:30px;background:#eaf5ef;color:#087a55;font-size:10px;font-weight:800; }
+    .empty-state { text-align:center;padding:28px 15px;color:#849189;font-size:12px; }
+    .page-heading { display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:20px; }
+    .page-heading h2 { margin:0;color:#164534;font-size:21px; }
+    .page-heading p { margin:4px 0 0;color:#839087;font-size:12px; }
+    .app-button { border:0;border-radius:10px;background:#087a55;color:#fff;padding:10px 15px;font-size:12px;font-weight:700; }
+    .app-button:hover { background:#064e3b; }
+    .app-button.secondary { background:#eaf5ef;color:#087a55; }
+    .profile-grid { display:grid;grid-template-columns:1fr 1fr;gap:13px; }
+    .profile-item { padding:14px;border:1px solid #e8efea;border-radius:12px; }
+    .profile-item small { display:block;color:#87948c;font-size:10px;margin-bottom:4px; }
+    .profile-item strong { color:#264b3c;font-size:13px;overflow-wrap:anywhere; }
+    .app-logout { border:1px solid rgba(255,255,255,.25);background:transparent;color:white;border-radius:9px;padding:9px 12px;font-size:11px;font-weight:700;margin-top:10px; }
+    .app-alert { background:#fff8e5;border:1px solid #f0dfaa;color:#795e16;padding:12px 14px;border-radius:11px;font-size:12px;margin-bottom:16px; }
+    @media(max-width:900px) { .app-shell{grid-template-columns:215px minmax(0,1fr)}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-grid{grid-template-columns:1fr} }
+    @media(max-width:650px) { .app-shell{grid-template-columns:1fr}.app-sidebar{padding:13px 14px;gap:12px}.app-brand{padding:0 5px 12px}.app-nav-label,.sidebar-bottom{display:none}.app-nav{display:flex;overflow-x:auto;padding-bottom:3px}.app-nav a{white-space:nowrap;padding:9px 11px;font-size:11px}.app-nav .nav-icon{display:none}.app-topbar{min-height:66px}.app-topbar h1{font-size:17px}.app-user-text{display:none}.stats-grid{gap:9px}.stat-card{padding:13px;min-height:85px;gap:9px}.stat-icon{width:35px;height:35px}.stat-card strong{font-size:21px}.welcome-panel{padding:21px}.welcome-panel h2{font-size:19px}.profile-grid{grid-template-columns:1fr}.quick-links{grid-template-columns:1fr} }
+
   </style>
 </head>
 <body>
@@ -251,21 +314,29 @@
   </footer>
 
 
-  <section id="appDashboard" style="display:none;min-height:100vh;background:#f4f8f5;padding:28px 0;">
-    <div class="container">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:#fff;border:1px solid #e5ece7;border-radius:18px;padding:20px 24px;margin-bottom:22px;">
-        <div>
-          <div class="kicker">Area pengguna</div>
-          <h2 id="dashboardTitle" style="margin:4px 0;font-size:26px;">Dashboard</h2>
-          <p id="dashboardIdentity" style="margin:0;color:#687871;font-size:13px;"></p>
+  <section id="appDashboard" style="display:none;">
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <div class="app-brand">
+          <div class="app-brand-mark">ت</div>
+          <div><strong>Ayo Belajar Tajwid</strong><small>LEARNING PLATFORM</small></div>
         </div>
-        <button class="btn btn-primary" id="logoutButton" type="button">Keluar</button>
-      </div>
-      <div style="background:#fff;border:1px solid #e5ece7;border-radius:18px;padding:25px;">
-        <h3 style="color:#064e3b;margin-top:0;">Selamat datang di Ayo Belajar Tajwid</h3>
-        <p id="dashboardDescription" style="color:#687871;font-size:14px;margin-bottom:0;"></p>
-        <p style="color:#687871;font-size:12px;margin:18px 0 0;">Dashboard ini merupakan fondasi awal. Modul pengelolaan kelas, materi, dan pengguna akan ditambahkan pada tahap berikutnya.</p>
-      </div>
+        <div>
+          <div class="app-nav-label">MENU UTAMA</div>
+          <nav class="app-nav" id="appNavigation"></nav>
+        </div>
+        <div class="sidebar-bottom">
+          <div>Platform Pembelajaran Al-Qur'an</div>
+          <button class="app-logout" id="logoutButton" type="button">Keluar dari akun ↗</button>
+        </div>
+      </aside>
+      <main class="app-main">
+        <header class="app-topbar">
+          <div><h1 id="dashboardTitle">Dashboard</h1><p id="dashboardBreadcrumb">Area pengguna / Ringkasan</p></div>
+          <div class="app-user"><div class="app-avatar" id="userAvatar">A</div><div class="app-user-text"><strong id="dashboardName">Pengguna</strong><span id="dashboardRole">Peserta</span></div></div>
+        </header>
+        <div class="app-content" id="dashboardContent" aria-live="polite"></div>
+      </main>
     </div>
   </section>
 
@@ -280,7 +351,7 @@
         <div class="field"><label for="password">Password</label><input id="password" type="password" placeholder="Masukkan password" autocomplete="current-password" required></div>
         <button class="btn btn-primary" type="submit">Masuk ke Dashboard →</button>
       </form>
-      <div class="notice show" id="loginNotice">Tampilan login sudah disiapkan. Autentikasi akan diaktifkan setelah konfigurasi Supabase selesai.</div>
+      <div class="notice" id="loginNotice" role="status" aria-live="polite"></div>
       <p class="login-help">Belum memiliki akun? Hubungi administrator kelas.</p>
     </div>
   </div>
@@ -336,54 +407,177 @@
     }
 
     const roleConfig = {
-      super_admin: {
-        title: 'Dashboard Super Admin',
-        description: 'Anda masuk sebagai Super Admin dan memiliki akses pengelolaan seluruh platform.'
-      },
-      admin: {
-        title: 'Dashboard Admin',
-        description: 'Anda masuk sebagai Admin dan dapat mengelola operasional platform sesuai kewenangan.'
-      },
-      pengajar: {
-        title: 'Dashboard Pengajar',
-        description: 'Anda masuk sebagai Pengajar. Area pengelolaan kelas dan pembelajaran akan tersedia di sini.'
-      },
-      peserta: {
-        title: 'Dashboard Peserta',
-        description: 'Anda masuk sebagai Peserta. Kelas dan materi yang Anda ikuti akan tersedia di sini.'
-      }
+      super_admin: { label: 'Super Admin', title: 'Dashboard Super Admin', intro: 'Kelola platform Ayo Belajar Tajwid secara menyeluruh.' },
+      admin: { label: 'Admin', title: 'Dashboard Admin', intro: 'Pantau operasional kelas, materi, dan peserta pembelajaran.' },
+      pengajar: { label: 'Pengajar', title: 'Dashboard Pengajar', intro: 'Kelola aktivitas mengajar, kelas, dan materi pembelajaran.' },
+      peserta: { label: 'Peserta', title: 'Dashboard Peserta', intro: 'Lanjutkan perjalanan belajar tahsin dan tajwid Anda.' }
     };
 
-    async function openUserDashboard(user) {
-      const { data: profile, error } = await supabaseClient
-        .from('profiles')
-        .select('full_name, role')
-        .eq('id', user.id)
-        .single();
+    let currentUser = null;
+    let currentProfile = null;
+    let currentRole = null;
 
-      if (error || !profile) {
-        throw new Error('Profil pengguna tidak ditemukan. Pastikan trigger pembuatan profil sudah berhasil. ' + (error?.message || ''));
-      }
+    const roleMenus = {
+      super_admin: [
+        ['overview','Ringkasan','▦'], ['classes','Manajemen Kelas','▤'],
+        ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['profile','Profil Saya','◎']
+      ],
+      admin: [
+        ['overview','Ringkasan','▦'], ['classes','Manajemen Kelas','▤'],
+        ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['profile','Profil Saya','◎']
+      ],
+      pengajar: [
+        ['overview','Ringkasan','▦'], ['classes','Kelas Saya','▤'],
+        ['lessons','Materi Pembelajaran','▣'], ['profile','Profil Saya','◎']
+      ],
+      peserta: [
+        ['overview','Ringkasan','▦'], ['classes','Kelas Saya','▤'],
+        ['lessons','Materi Belajar','▣'], ['profile','Profil Saya','◎']
+      ]
+    };
 
-      const config = roleConfig[profile.role];
-      if (!config) throw new Error('Role akun tidak dikenali. Hubungi administrator.');
-
-      closeModal();
-      document.querySelector('header.topbar').style.display = 'none';
-      document.querySelector('main').style.display = 'none';
-      document.querySelector('footer').style.display = 'none';
-      dashboard.style.display = 'block';
-      document.getElementById('dashboardTitle').textContent = config.title;
-      document.getElementById('dashboardIdentity').textContent =
-        (profile.full_name || user.email) + ' · ' + profile.role.replace('_', ' ');
-      document.getElementById('dashboardDescription').textContent = config.description;
+    function safeText(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+    function routePath(page = 'overview') {
+      const base = '/dashboard/' + currentRole;
+      return page === 'overview' ? base : base + '/' + page;
+    }
+    function navigate(page = 'overview', replace = false) {
+      const allowed = (roleMenus[currentRole] || []).map(item => item[0]);
+      if (!allowed.includes(page)) page = 'overview';
+      const url = routePath(page);
+      if (replace) history.replaceState({page}, '', url);
+      else if (location.pathname !== url) history.pushState({page}, '', url);
+      renderDashboardPage(page);
+    }
+    function parsePageFromPath() {
+      const parts = location.pathname.split('/').filter(Boolean);
+      return parts[2] || 'overview';
+    }
+    function setAppMode(active) {
+      document.body.classList.toggle('app-mode', active);
+      dashboard.style.display = active ? 'block' : 'none';
+      document.querySelector('header.topbar').style.display = active ? 'none' : '';
+      document.querySelector('body > main').style.display = active ? 'none' : '';
+      document.querySelector('body > footer').style.display = active ? 'none' : '';
     }
 
+    async function countRows(table, queryBuilder) {
+      let q = supabaseClient.from(table).select('*', {count:'exact', head:true});
+      if (queryBuilder) q = queryBuilder(q);
+      const {count, error} = await q;
+      if (error) return null;
+      return count ?? 0;
+    }
+    async function loadOverview() {
+      const isManager = ['super_admin','admin'].includes(currentRole);
+      const [classes, lessons, enrollments, users] = await Promise.all([
+        countRows('classes', q => currentRole === 'pengajar' ? q.eq('instructor_id', currentUser.id) : q),
+        countRows('lessons'),
+        countRows('enrollments', q => currentRole === 'peserta' ? q.eq('student_id', currentUser.id) : q),
+        isManager ? countRows('profiles') : Promise.resolve(null)
+      ]);
+      const stats = [
+        ['▤', isManager ? 'Total Kelas' : currentRole === 'pengajar' ? 'Kelas Diampu' : 'Kelas Tersedia', classes],
+        ['▣', 'Materi Pembelajaran', lessons],
+        ['♧', currentRole === 'peserta' ? 'Pendaftaran Saya' : 'Data Pendaftaran', enrollments],
+        ['♙', 'Total Pengguna', users]
+      ].filter((item, i) => item[2] !== null || (i === 3 && !isManager));
+      const cards = stats.map(item => `<article class="stat-card"><div class="stat-icon">${item[0]}</div><div><small>${item[1]}</small><strong>${item[2] === null ? '—' : item[2]}</strong></div></article>`).join('');
+      const [classResult, enrollmentResult] = await Promise.all([
+        supabaseClient.from('classes').select('id,title,status,category,level').order('created_at',{ascending:false}).limit(5),
+        currentRole === 'peserta'
+          ? supabaseClient.from('enrollments').select('id,status,classes(title)').eq('student_id',currentUser.id).order('enrollment_date',{ascending:false}).limit(5)
+          : supabaseClient.from('enrollments').select('id,status,classes(title)').order('enrollment_date',{ascending:false}).limit(5)
+      ]);
+      const classRows = !classResult.error && classResult.data?.length
+        ? classResult.data.map(c => `<tr><td><strong>${safeText(c.title)}</strong></td><td>${safeText(c.category || c.level || '—')}</td><td><span class="status-pill">${safeText(c.status || 'tersedia')}</span></td></tr>`).join('')
+        : `<tr><td colspan="3"><div class="empty-state">Belum ada data kelas yang dapat ditampilkan.</div></td></tr>`;
+      const enrollmentRows = !enrollmentResult.error && enrollmentResult.data?.length
+        ? enrollmentResult.data.map(e => `<tr><td>${safeText(e.classes?.title || 'Kelas')}</td><td><span class="status-pill">${safeText(e.status)}</span></td></tr>`).join('')
+        : `<tr><td colspan="2"><div class="empty-state">Belum ada aktivitas pendaftaran.</div></td></tr>`;
+      return `<section class="welcome-panel"><h2>Assalamu'alaikum, ${safeText(currentProfile.full_name || currentUser.email)}!</h2><p>${roleConfig[currentRole].intro}</p></section>
+        <div class="stats-grid">${cards}</div>
+        <div class="dashboard-grid">
+          <section class="panel-card"><h3>Kelas Terbaru</h3><p class="panel-subtitle">Ringkasan kelas di platform</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama Kelas</th><th>Kategori</th><th>Status</th></tr></thead><tbody>${classRows}</tbody></table></div></section>
+          <section class="panel-card"><h3>Akses Cepat</h3><p class="panel-subtitle">Menu yang dapat Anda gunakan</p><div class="quick-links">${(roleMenus[currentRole] || []).filter(m=>m[0]!=='overview').map(m=>`<a class="quick-link" href="${routePath(m[0])}" data-page="${m[0]}"><span>${m[2]}</span>${m[1]}</a>`).join('')}</div></section>
+        </div>
+        <section class="panel-card" style="margin-top:17px"><h3>${currentRole==='peserta'?'Pendaftaran Kelas Saya':'Aktivitas Pendaftaran'}</h3><p class="panel-subtitle">Data terbaru yang dapat diakses oleh akun Anda</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama Kelas</th><th>Status</th></tr></thead><tbody>${enrollmentRows}</tbody></table></div></section>`;
+    }
+
+    async function loadClasses() {
+      let query = supabaseClient.from('classes').select('id,title,description,category,level,status,start_date,end_date,schedule').order('created_at',{ascending:false});
+      if (currentRole === 'pengajar') query = query.eq('instructor_id',currentUser.id);
+      const {data,error} = await query;
+      if (error) return `<div class="app-alert">Data kelas belum dapat dimuat: ${safeText(error.message)}</div>`;
+      if (!data?.length) return `<div class="panel-card empty-state">Belum ada kelas yang tersedia untuk akun ini.</div>`;
+      return `<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${data.map(c=>`<article class="panel-card"><span class="status-pill">${safeText(c.status)}</span><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ') || 'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description || 'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.schedule || 'Jadwal menyusul')}</small></article>`).join('')}</div>`;
+    }
+    async function loadLessons() {
+      let query = supabaseClient.from('lessons').select('id,title,description,order_number,is_published,class_id,classes(title)').order('order_number',{ascending:true}).limit(100);
+      const {data,error} = await query;
+      if (error) return `<div class="app-alert">Materi belum dapat dimuat: ${safeText(error.message)}</div>`;
+      if (!data?.length) return `<div class="panel-card empty-state">Belum ada materi pembelajaran yang diterbitkan.</div>`;
+      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Materi</th><th>Kelas</th><th>Urutan</th><th>Status</th></tr></thead><tbody>${data.map(l=>`<tr><td><strong>${safeText(l.title)}</strong><br><small>${safeText(l.description || '')}</small></td><td>${safeText(l.classes?.title || '—')}</td><td>${safeText(l.order_number ?? '—')}</td><td><span class="status-pill">${l.is_published?'Terbit':'Draft'}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+    }
+    async function loadUsers() {
+      if (!['super_admin','admin'].includes(currentRole)) return `<div class="app-alert">Anda tidak memiliki akses ke halaman ini.</div>`;
+      const {data,error} = await supabaseClient.from('profiles').select('full_name,role,created_at').order('created_at',{ascending:false}).limit(100);
+      if (error) return `<div class="app-alert">Data pengguna belum dapat dimuat: ${safeText(error.message)}</div>`;
+      if (!data?.length) return `<div class="panel-card empty-state">Belum ada data pengguna.</div>`;
+      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Peran</th><th>Bergabung</th></tr></thead><tbody>${data.map(u=>`<tr><td><strong>${safeText(u.full_name || 'Tanpa nama')}</strong></td><td>${safeText(roleConfig[u.role]?.label || u.role)}</td><td>${u.created_at?new Date(u.created_at).toLocaleDateString('id-ID'):'—'}</td></tr>`).join('')}</tbody></table></div></div>`;
+    }
+    function loadProfile() {
+      return `<section class="panel-card"><h3>Informasi Akun</h3><p class="panel-subtitle">Informasi profil yang terhubung dengan akun Anda</p><div class="profile-grid">
+        <div class="profile-item"><small>Nama Lengkap</small><strong>${safeText(currentProfile.full_name || 'Belum diisi')}</strong></div>
+        <div class="profile-item"><small>Email</small><strong>${safeText(currentUser.email)}</strong></div>
+        <div class="profile-item"><small>Peran</small><strong>${safeText(roleConfig[currentRole].label)}</strong></div>
+        <div class="profile-item"><small>Bergabung</small><strong>${new Date(currentUser.created_at).toLocaleDateString('id-ID')}</strong></div>
+      </div><p class="panel-subtitle" style="margin:16px 0 0">Untuk perubahan nama, nomor telepon, atau data akun, hubungi administrator platform.</p></section>`;
+    }
+
+    async function renderDashboardPage(page) {
+      const nav = document.getElementById('appNavigation');
+      nav.innerHTML = (roleMenus[currentRole] || []).map(m=>`<a href="${routePath(m[0])}" data-page="${m[0]}" class="${page===m[0]?'active':''}"><span class="nav-icon">${m[2]}</span>${m[1]}</a>`).join('');
+      nav.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();navigate(a.dataset.page);}));
+      document.getElementById('dashboardTitle').textContent = page==='overview' ? roleConfig[currentRole].title : (roleMenus[currentRole].find(m=>m[0]===page)?.[1] || 'Dashboard');
+      document.getElementById('dashboardBreadcrumb').textContent = `Area pengguna / ${page==='overview'?'Ringkasan':(roleMenus[currentRole].find(m=>m[0]===page)?.[1] || page)}`;
+      const content = document.getElementById('dashboardContent');
+      content.innerHTML = `<div class="empty-state">Memuat data...</div>`;
+      try {
+        let result;
+        if (page==='overview') result = await loadOverview();
+        else if (page==='classes') result = await loadClasses();
+        else if (page==='lessons') result = await loadLessons();
+        else if (page==='users') result = await loadUsers();
+        else if (page==='profile') result = loadProfile();
+        else result = `<div class="app-alert">Halaman tidak ditemukan.</div>`;
+        content.innerHTML = `<div class="page-heading"><div><h2>${page==='overview'?'Ringkasan Aktivitas':safeText(document.getElementById('dashboardTitle').textContent)}</h2><p>Informasi terbaru dari platform Ayo Belajar Tajwid.</p></div>${page!=='overview'?'<button class="app-button secondary" data-page="overview">Kembali ke ringkasan</button>':''}</div>${result}`;
+        content.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();navigate(a.dataset.page);}));
+      } catch (err) {
+        content.innerHTML = `<div class="app-alert">Terjadi kendala saat memuat halaman: ${safeText(err.message)}</div>`;
+      }
+    }
+
+    async function openUserDashboard(user) {
+      const {data:profile,error} = await supabaseClient.from('profiles').select('id,full_name,phone,role,created_at').eq('id',user.id).single();
+      if (error || !profile) throw new Error('Profil pengguna tidak ditemukan. ' + (error?.message || ''));
+      if (!roleConfig[profile.role]) throw new Error('Role akun tidak dikenali. Hubungi administrator.');
+      currentUser=user; currentProfile=profile; currentRole=profile.role;
+      closeModal();
+      setAppMode(true);
+      document.getElementById('dashboardName').textContent = profile.full_name || user.email;
+      document.getElementById('dashboardRole').textContent = roleConfig[currentRole].label;
+      document.getElementById('userAvatar').textContent = (profile.full_name || user.email || 'A').trim().charAt(0).toUpperCase();
+      const roleSegment = '/dashboard/' + currentRole;
+      if (!location.pathname.startsWith(roleSegment)) history.replaceState({page:'overview'},'',roleSegment);
+      navigate(parsePageFromPath(), true);
+    }
     function showPublicWebsite() {
-      dashboard.style.display = 'none';
-      document.querySelector('header.topbar').style.display = '';
-      document.querySelector('main').style.display = '';
-      document.querySelector('footer').style.display = '';
+      currentUser=null; currentProfile=null; currentRole=null;
+      setAppMode(false);
+      if (location.pathname.startsWith('/dashboard')) history.replaceState({},'', '/');
     }
 
     loginForm.addEventListener('submit', async event => {
@@ -394,21 +588,18 @@
       submitButton.disabled = true;
       submitButton.textContent = 'Memeriksa akun…';
       loginNotice.classList.remove('show');
-
       try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
         if (error) throw error;
         await openUserDashboard(data.user);
       } catch (error) {
         showPublicWebsite();
         showLoginMessage(error.message || 'Login gagal. Periksa email dan password Anda.');
-        // Jika autentikasi berhasil tetapi pembacaan profil gagal, tutup sesi agar
-        // pengguna tidak tertinggal dalam keadaan login tanpa dashboard yang valid.
-        const { data: sessionData } = await supabaseClient.auth.getSession();
+        const {data:sessionData} = await supabaseClient.auth.getSession();
         if (sessionData.session) await supabaseClient.auth.signOut();
       } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Masuk ke Dashboard →';
+        submitButton.disabled=false;
+        submitButton.textContent='Masuk ke Dashboard →';
       }
     });
 
@@ -417,26 +608,33 @@
       showPublicWebsite();
       loginForm.reset();
     });
-
-    // Pulihkan sesi yang masih aktif saat halaman dibuka atau dimuat ulang.
+    window.addEventListener('popstate', async () => {
+      if (!currentUser) return;
+      const segment = '/dashboard/' + currentRole;
+      if (!location.pathname.startsWith(segment)) { navigate('overview',true); return; }
+      await renderDashboardPage(parsePageFromPath());
+    });
     (async function restoreSession() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) return;
-      try {
-        await openUserDashboard(session.user);
-      } catch (error) {
-        console.error('Gagal memuat dashboard:', error);
-        await supabaseClient.auth.signOut();
-        showPublicWebsite();
+      const {data:{session}} = await supabaseClient.auth.getSession();
+      if (!session) {
+        // Direct visit to a protected URL without a session returns to the public homepage.
+        if (location.pathname.startsWith('/dashboard')) history.replaceState({},'','/');
+        return;
       }
+      try { await openUserDashboard(session.user); }
+      catch(error) { console.error('Gagal memuat dashboard:',error); await supabaseClient.auth.signOut(); showPublicWebsite(); }
     })();
-
-    // Sinkronkan UI ketika status autentikasi berubah.
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT' || !session) showPublicWebsite();
+    supabaseClient.auth.onAuthStateChange((event,session) => {
+      if (event==='SIGNED_OUT' || !session) showPublicWebsite();
     });
 
     document.getElementById('year').textContent = new Date().getFullYear();
+    // Public routes: keep the current single-file architecture while giving pages clean URLs.
+    if (location.pathname === '/login') {
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    window.addEventListener('keydown', event => { if (event.key === 'Escape') closeModal(); });
   </script>
 </body>
 </html>
