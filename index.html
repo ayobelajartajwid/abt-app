@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#075B78">
-  <link rel="icon" type="image/png" href="/AYO%20BELAJAR%20TAJWID.png">
-  <link rel="apple-touch-icon" href="/AYO%20BELAJAR%20TAJWID.png">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ayobelajartajwid/abt-app/main/AYO%20BELAJAR%20TAJWID.png?v=2">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ayobelajartajwid/abt-app/main/AYO%20BELAJAR%20TAJWID.png?v=2">
   <meta name="description" content="Ayo Belajar Tajwid — platform pembelajaran tahsin dan tajwid secara terarah, mudah, dan bertahap.">
   <title>Ayo Belajar Tajwid | Belajar Al-Qur'an dengan Baik</title>
   <style>
@@ -395,13 +395,53 @@
       .brand span { font-size:8px; }
     }
 
+
+    .topbar-actions{display:flex;align-items:center;gap:10px;min-width:0}
+    .topbar-profile{display:flex;align-items:center;gap:10px;border:0;background:transparent;text-align:left;padding:5px 8px;border-radius:13px;cursor:pointer;min-width:0}
+    .topbar-profile:hover{background:#F1F7F8}
+    .topbar-profile .app-avatar{width:42px;height:42px;flex:0 0 42px}
+    .topbar-icon-btn,.topbar-logout{height:42px;border:1px solid #DCE8EC;background:#fff;color:#315064;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 12px}
+    .topbar-icon-btn{width:42px;padding:0}
+    .topbar-icon-btn svg,.topbar-logout svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .theme-moon{display:none}
+    .topbar-logout{color:#B54747;border-color:#F3DADA;background:#FFF8F8;font-size:12px;font-weight:750}
+    .topbar-logout:hover{background:#FDEEEE}
+    .class-create-card{margin-bottom:18px}
+    .class-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .class-form-grid .field{min-width:0}
+    .class-form-grid .field.full{grid-column:1/-1}
+    .class-form-grid label{display:block;font-size:12px;font-weight:750;color:#355568;margin-bottom:6px}
+    .class-form-grid input,.class-form-grid select,.class-form-grid textarea{width:100%;min-height:43px;border:1px solid #DCE8EC;border-radius:11px;padding:10px 12px;font:inherit;font-size:13px;background:#fff;color:#243746}
+    .class-form-grid textarea{min-height:82px;resize:vertical}
+    .class-form-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:15px}
+    #appDashboard.theme-dark{--ink:#E6EEF2;background:#101E27;color:#E6EEF2}
+    #appDashboard.theme-dark .app-main,#appDashboard.theme-dark .app-content{background:#101E27}
+    #appDashboard.theme-dark .app-topbar,#appDashboard.theme-dark .panel-card,#appDashboard.theme-dark .stat-card{background:#172A35;border-color:#29434F;color:#E6EEF2}
+    #appDashboard.theme-dark .app-topbar h1,#appDashboard.theme-dark .panel-card h3,#appDashboard.theme-dark .stat-card strong{color:#EAF5F7}
+    #appDashboard.theme-dark .app-topbar p,#appDashboard.theme-dark .panel-subtitle,#appDashboard.theme-dark .app-user-text span{color:#A9C0CA}
+    #appDashboard.theme-dark .topbar-icon-btn,#appDashboard.theme-dark .topbar-profile{background:#203945;border-color:#345563;color:#EAF5F7}
+    #appDashboard.theme-dark .topbar-logout{background:#39272B;border-color:#694047;color:#FFC5C5}
+    #appDashboard.theme-dark .class-form-grid input,#appDashboard.theme-dark .class-form-grid select,#appDashboard.theme-dark .class-form-grid textarea{background:#10232D;border-color:#345563;color:#EAF5F7}
+    #appDashboard.theme-dark .app-table th{background:#203945;color:#DCEBF0}
+    #appDashboard.theme-dark .app-table td{border-color:#29434F;color:#D6E4E9}
+    @media(max-width:650px){
+      #appDashboard .topbar-actions{gap:6px}
+      #appDashboard .topbar-profile{padding:3px}
+      #appDashboard .topbar-profile .app-avatar{width:36px;height:36px;flex-basis:36px}
+      #appDashboard .topbar-logout{width:40px;padding:0;font-size:0}
+      #appDashboard .topbar-logout svg{width:18px}
+      #appDashboard .topbar-icon-btn{width:38px;height:38px}
+      #appDashboard .class-form-grid{grid-template-columns:1fr}
+      #appDashboard .class-form-grid .field.full{grid-column:auto}
+    }
+
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="container nav">
       <a class="brand" href="#beranda" aria-label="Ayo Belajar Tajwid">
-        <img src="AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid">
+        <img src="https://raw.githubusercontent.com/ayobelajartajwid/abt-app/main/AYO%20BELAJAR%20TAJWID.png?v=2" alt="Logo Ayo Belajar Tajwid">
         <div><strong>Ayo Belajar Tajwid</strong><span>Belajar · Memperbaiki · Mengamalkan</span></div>
       </a>
       <nav class="navlinks" id="navlinks">
@@ -428,7 +468,7 @@
           <div class="hero-note"><b>●</b> Pembelajaran terstruktur <span>·</span> Materi bertahap <span>·</span> Pendampingan pengajar</div>
         </div>
         <div class="hero-art">
-          <div class="art-glow"><img src="AYO%20BELAJAR%20TAJWID.png" alt="Identitas Ayo Belajar Tajwid"></div>
+          <div class="art-glow"><img src="https://raw.githubusercontent.com/ayobelajartajwid/abt-app/main/AYO%20BELAJAR%20TAJWID.png?v=2" alt="Identitas Ayo Belajar Tajwid"></div>
           <div class="floating-tag tag-one">مِنَ الْقُرْآنِ نَبْدَأُ</div>
           <div class="floating-tag tag-two">Belajar dengan terarah ✦</div>
         </div>
@@ -459,7 +499,7 @@
 
     <section class="section" id="tentang">
       <div class="container about-grid">
-        <div class="about-mark"><img src="AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid"></div>
+        <div class="about-mark"><img src="https://raw.githubusercontent.com/ayobelajartajwid/abt-app/main/AYO%20BELAJAR%20TAJWID.png?v=2" alt="Logo Ayo Belajar Tajwid"></div>
         <div class="about-copy"><div class="kicker">Tentang kami</div><h2>Ikhtiar menghadirkan pembelajaran tajwid yang mudah diakses</h2><p>Ayo Belajar Tajwid merupakan platform pembelajaran yang berfokus pada tahsin dan ilmu tajwid. Kami ingin membantu masyarakat mempelajari cara membaca Al-Qur'an dengan benar melalui materi yang tersusun dan proses belajar yang terarah.</p><p>Website ini dikembangkan sebagai ruang belajar digital yang menghubungkan peserta, pengajar, dan pengelola kelas dalam satu platform.</p><div class="checks"><div class="check">Materi pembelajaran terarah</div><div class="check">Akses kelas secara online</div><div class="check">Pendampingan pengajar</div><div class="check">Evaluasi perkembangan belajar</div></div><a class="btn btn-primary" href="#kelas">Lihat Program</a></div>
       </div>
     </section>
@@ -483,7 +523,7 @@
   <footer>
     <div class="container">
       <div class="footer-grid">
-        <div><div class="footer-brand"><img src="AYO%20BELAJAR%20TAJWID.png" alt=""><strong>Ayo Belajar Tajwid</strong></div><p>Platform pembelajaran tahsin dan tajwid untuk membantu memperbaiki bacaan Al-Qur'an secara terarah.</p></div>
+        <div><div class="footer-brand"><img src="https://raw.githubusercontent.com/ayobelajartajwid/abt-app/main/AYO%20BELAJAR%20TAJWID.png?v=2" alt=""><strong>Ayo Belajar Tajwid</strong></div><p>Platform pembelajaran tahsin dan tajwid untuk membantu memperbaiki bacaan Al-Qur'an secara terarah.</p></div>
         <div><h4>NAVIGASI</h4><div class="footer-links"><a href="#beranda">Beranda</a><a href="#program">Program</a><a href="#kelas">Kelas</a><a href="#tentang">Tentang Kami</a></div></div>
         <div><h4>AKUN</h4><div class="footer-links"><a href="#" data-open-login>Login Peserta</a><a href="#kontak">Hubungi Kami</a></div></div>
       </div>
@@ -497,7 +537,7 @@
       <div class="sidebar-scrim" id="sidebarScrim"></div>
       <aside class="app-sidebar">
         <div class="app-brand">
-          <div class="app-brand-mark"><img src="/AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid"></div>
+          <div class="app-brand-mark"><img src="https://raw.githubusercontent.com/ayobelajartajwid/abt-app/main/AYO%20BELAJAR%20TAJWID.png?v=2" alt="Logo Ayo Belajar Tajwid"></div>
           <div><strong>Ayo Belajar Tajwid</strong><small>LEARNING PLATFORM</small></div>
         </div>
         <div>
@@ -513,7 +553,19 @@
         <header class="app-topbar">
           <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Buka navigasi" aria-expanded="false"><span></span><span></span><span></span></button>
           <div class="app-heading"><h1 id="dashboardTitle">Dashboard</h1><p id="dashboardBreadcrumb">Area pengguna / Ringkasan</p></div>
-          <div class="app-user"><div class="app-avatar" id="userAvatar">A</div><div class="app-user-text"><strong id="dashboardName">Pengguna</strong><span id="dashboardRole">Peserta</span></div></div>
+          <div class="topbar-actions">
+            <button class="topbar-icon-btn" id="themeToggle" type="button" aria-label="Ubah tema" title="Ubah tema">
+              <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+              <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"/></svg>
+            </button>
+            <button class="topbar-profile" id="topbarProfile" type="button" title="Buka profil">
+              <span class="app-avatar" id="userAvatar">A</span>
+              <span class="app-user-text"><strong id="dashboardName">Pengguna</strong><span id="dashboardRole">Peserta</span></span>
+            </button>
+            <button class="topbar-logout" id="topbarLogout" type="button" aria-label="Keluar">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5m5 5H3m9-9h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg><span>Keluar</span>
+            </button>
+          </div>
         </header>
         <div class="app-content" id="dashboardContent" aria-live="polite"></div>
       </main>
@@ -523,7 +575,7 @@
   <div class="modal-backdrop" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
     <div class="login-modal">
       <button class="modal-close" type="button" id="closeLogin" aria-label="Tutup">×</button>
-      <img class="login-logo" src="AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid">
+      <img class="login-logo" src="https://raw.githubusercontent.com/ayobelajartajwid/abt-app/main/AYO%20BELAJAR%20TAJWID.png?v=2" alt="Logo Ayo Belajar Tajwid">
       <h2 id="loginTitle">Login</h2>
       <p class="sub" id="authSubtitle">Masuk ke akun Ayo Belajar Tajwid Anda</p>
       <form id="loginForm">
@@ -592,6 +644,23 @@
     const registerForm = document.getElementById('registerForm');
     const loginNotice = document.getElementById('loginNotice');
     const dashboard = document.getElementById('appDashboard');
+
+    const themeToggle=document.getElementById('themeToggle');
+    const topbarProfile=document.getElementById('topbarProfile');
+    const topbarLogout=document.getElementById('topbarLogout');
+    function applyDashboardTheme(theme){
+      dashboard.classList.toggle('theme-dark',theme==='dark');
+      localStorage.setItem('abt_dashboard_theme',theme);
+      if(themeToggle){
+        themeToggle.querySelector('.theme-sun').style.display=theme==='dark'?'none':'block';
+        themeToggle.querySelector('.theme-moon').style.display=theme==='dark'?'block':'none';
+      }
+    }
+    applyDashboardTheme(localStorage.getItem('abt_dashboard_theme')||'light');
+    themeToggle?.addEventListener('click',()=>applyDashboardTheme(dashboard.classList.contains('theme-dark')?'light':'dark'));
+    topbarProfile?.addEventListener('click',()=>navigate('profile'));
+    topbarLogout?.addEventListener('click',()=>document.getElementById('logoutButton').click());
+
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebarScrim = document.getElementById('sidebarScrim');
     function setSidebarOpen(open) {
@@ -762,13 +831,62 @@
     }
 
     async function loadClasses() {
-      let query = supabaseClient.from('classes').select('id,title,description,category,level,status,start_date,end_date,schedule').order('created_at',{ascending:false});
+      let query = supabaseClient.from('classes').select('id,title,description,category,level,status,start_date,end_date,schedule,capacity,instructor_id').order('created_at',{ascending:false});
       if (currentRole === 'pengajar') query = query.eq('instructor_id',currentUser.id);
       const {data,error} = await query;
       if (error) return `<div class="app-alert">Data kelas belum dapat dimuat: ${safeText(error.message)}</div>`;
-      if (!data?.length) return `<div class="panel-card empty-state">Belum ada kelas yang tersedia untuk akun ini.</div>`;
-      return `<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${data.map(c=>`<article class="panel-card"><span class="status-pill">${safeText(c.status)}</span><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ') || 'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description || 'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.schedule || 'Jadwal menyusul')}</small></article>`).join('')}</div>`;
+      let createPanel='';
+      if(currentRole==='super_admin'){
+        const {data:teachers}=await supabaseClient.from('profiles').select('id,full_name').eq('role','pengajar').order('full_name');
+        const teacherOptions=(teachers||[]).map(t=>`<option value="${t.id}">${safeText(t.full_name||'Pengajar')}</option>`).join('');
+        createPanel=`<section class="panel-card class-create-card">
+          <h3>Buat Kelas Baru</h3><p class="panel-subtitle">Buat program pembelajaran baru dan atur informasi kelas.</p>
+          <form id="createClassForm">
+            <div class="class-form-grid">
+              <div class="field"><label for="newClassTitle">Nama kelas *</label><input id="newClassTitle" required maxlength="120" placeholder="Contoh: Tahsin Metode Asy-Syafi'i"></div>
+              <div class="field"><label for="newClassCategory">Kategori program</label><input id="newClassCategory" placeholder="Contoh: Tahsin Intensif"></div>
+              <div class="field"><label for="newClassLevel">Tingkat</label><select id="newClassLevel"><option value="">Pilih tingkat</option><option>Pemula</option><option>Menengah</option><option>Lanjutan</option><option>Umum</option></select></div>
+              <div class="field"><label for="newClassCapacity">Kuota peserta</label><input id="newClassCapacity" type="number" min="1" placeholder="Contoh: 30"></div>
+              <div class="field"><label for="newClassStart">Tanggal mulai</label><input id="newClassStart" type="date"></div>
+              <div class="field"><label for="newClassEnd">Tanggal selesai</label><input id="newClassEnd" type="date"></div>
+              <div class="field full"><label for="newClassSchedule">Jadwal pembelajaran</label><input id="newClassSchedule" placeholder="Contoh: Selasa & Rabu, 20.00–21.00 WIB"></div>
+              <div class="field full"><label for="newClassDescription">Deskripsi kelas</label><textarea id="newClassDescription" placeholder="Jelaskan tujuan, materi, dan gambaran kelas..."></textarea></div>
+              <div class="field"><label for="newClassInstructor">Pengajar (opsional)</label><select id="newClassInstructor"><option value="">Belum ditentukan</option>${teacherOptions}</select></div>
+              <div class="field"><label for="newClassStatus">Status publikasi</label><select id="newClassStatus"><option value="draft">Draft</option><option value="published">Publikasikan</option></select></div>
+            </div>
+            <div class="class-form-actions"><button class="app-button" type="submit">＋ Buat Kelas</button><span class="form-feedback" id="createClassFeedback" role="status"></span></div>
+          </form></section>`;
+      }
+      const cards=data?.length?`<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${data.map(c=>`<article class="panel-card"><span class="status-pill">${safeText(c.status)}</span><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description||'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.schedule||'Jadwal menyusul')} · Kuota: ${c.capacity??'—'}</small></article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas yang tersedia. ${currentRole==='super_admin'?'Gunakan formulir di atas untuk membuat kelas pertama.':''}</div>`;
+      return createPanel+cards;
     }
+
+    document.addEventListener('submit',async event=>{
+      if(event.target?.id!=='createClassForm') return;
+      event.preventDefault();
+      if(currentRole!=='super_admin') return;
+      const form=event.target,button=form.querySelector('button[type="submit"]'),feedback=document.getElementById('createClassFeedback');
+      const title=document.getElementById('newClassTitle').value.trim();
+      const slug=title.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      const payload={
+        title,slug,
+        description:document.getElementById('newClassDescription').value.trim(),
+        category:document.getElementById('newClassCategory').value.trim()||null,
+        level:document.getElementById('newClassLevel').value||null,
+        capacity:document.getElementById('newClassCapacity').value?Number(document.getElementById('newClassCapacity').value):null,
+        start_date:document.getElementById('newClassStart').value||null,
+        end_date:document.getElementById('newClassEnd').value||null,
+        schedule:document.getElementById('newClassSchedule').value.trim()||null,
+        instructor_id:document.getElementById('newClassInstructor').value||null,
+        status:document.getElementById('newClassStatus').value,
+        created_by:currentUser.id
+      };
+      button.disabled=true;button.textContent='Menyimpan...';feedback.textContent='';
+      const {error}=await supabaseClient.from('classes').insert(payload);
+      if(error){feedback.textContent='Gagal membuat kelas: '+error.message;feedback.style.color='#B54747';}
+      else {feedback.textContent='Kelas berhasil dibuat.';feedback.style.color='#087F9B';form.reset();await renderDashboardPage('classes');}
+      button.disabled=false;button.textContent='＋ Buat Kelas';
+    });
     async function loadLessons() {
       let query = supabaseClient.from('lessons').select('id,title,description,order_number,is_published,class_id,classes(title)').order('order_number',{ascending:true}).limit(100);
       const {data,error} = await query;
