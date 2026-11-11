@@ -250,6 +250,25 @@
     </div>
   </footer>
 
+
+  <section id="appDashboard" style="display:none;min-height:100vh;background:#f4f8f5;padding:28px 0;">
+    <div class="container">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:#fff;border:1px solid #e5ece7;border-radius:18px;padding:20px 24px;margin-bottom:22px;">
+        <div>
+          <div class="kicker">Area pengguna</div>
+          <h2 id="dashboardTitle" style="margin:4px 0;font-size:26px;">Dashboard</h2>
+          <p id="dashboardIdentity" style="margin:0;color:#687871;font-size:13px;"></p>
+        </div>
+        <button class="btn btn-primary" id="logoutButton" type="button">Keluar</button>
+      </div>
+      <div style="background:#fff;border:1px solid #e5ece7;border-radius:18px;padding:25px;">
+        <h3 style="color:#064e3b;margin-top:0;">Selamat datang di Ayo Belajar Tajwid</h3>
+        <p id="dashboardDescription" style="color:#687871;font-size:14px;margin-bottom:0;"></p>
+        <p style="color:#687871;font-size:12px;margin:18px 0 0;">Dashboard ini merupakan fondasi awal. Modul pengelolaan kelas, materi, dan pengguna akan ditambahkan pada tahap berikutnya.</p>
+      </div>
+    </div>
+  </section>
+
   <div class="modal-backdrop" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
     <div class="login-modal">
       <button class="modal-close" type="button" id="closeLogin" aria-label="Tutup">×</button>
@@ -266,24 +285,157 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // Konfigurasi frontend Supabase. Publishable key boleh berada di frontend;
+    // jangan pernah menaruh service_role/secret key di file ini.
+    const SUPABASE_URL = 'https://jtdzdeeilftswxosaelk.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_endm1Xf1tBGwZmoqAViZAA_zIOlzoLd';
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
+    );
+
     const menuToggle = document.getElementById('menuToggle');
     const navlinks = document.getElementById('navlinks');
     const modal = document.getElementById('loginModal');
+    const loginForm = document.getElementById('loginForm');
+    const loginNotice = document.getElementById('loginNotice');
+    const dashboard = document.getElementById('appDashboard');
+
     menuToggle.addEventListener('click', () => navlinks.classList.toggle('open'));
     navlinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => navlinks.classList.remove('open')));
+
     document.querySelectorAll('[data-open-login]').forEach(button => button.addEventListener('click', event => {
-      event.preventDefault(); modal.classList.add('show'); document.body.style.overflow = 'hidden';
+      event.preventDefault();
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
     }));
-    function closeModal() { modal.classList.remove('show'); document.body.style.overflow = ''; }
+
+    function closeModal() {
+      modal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
     document.getElementById('closeLogin').addEventListener('click', closeModal);
     modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
     document.addEventListener('keydown', event => { if (event.key === 'Escape') closeModal(); });
-    document.getElementById('loginForm').addEventListener('submit', event => {
+
+    function showLoginMessage(message, isError = true) {
+      loginNotice.textContent = message;
+      loginNotice.classList.add('show');
+      loginNotice.style.background = isError ? '#fff0ed' : '#eaf5ef';
+      loginNotice.style.borderColor = isError ? '#f0c5bb' : '#b8ddc7';
+      loginNotice.style.color = isError ? '#8b3020' : '#07543f';
+    }
+
+    const roleConfig = {
+      super_admin: {
+        title: 'Dashboard Super Admin',
+        description: 'Anda masuk sebagai Super Admin dan memiliki akses pengelolaan seluruh platform.'
+      },
+      admin: {
+        title: 'Dashboard Admin',
+        description: 'Anda masuk sebagai Admin dan dapat mengelola operasional platform sesuai kewenangan.'
+      },
+      pengajar: {
+        title: 'Dashboard Pengajar',
+        description: 'Anda masuk sebagai Pengajar. Area pengelolaan kelas dan pembelajaran akan tersedia di sini.'
+      },
+      peserta: {
+        title: 'Dashboard Peserta',
+        description: 'Anda masuk sebagai Peserta. Kelas dan materi yang Anda ikuti akan tersedia di sini.'
+      }
+    };
+
+    async function openUserDashboard(user) {
+      const { data: profile, error } = await supabaseClient
+        .from('profiles')
+        .select('full_name, role')
+        .eq('id', user.id)
+        .single();
+
+      if (error || !profile) {
+        throw new Error('Profil pengguna tidak ditemukan. Pastikan trigger pembuatan profil sudah berhasil. ' + (error?.message || ''));
+      }
+
+      const config = roleConfig[profile.role];
+      if (!config) throw new Error('Role akun tidak dikenali. Hubungi administrator.');
+
+      closeModal();
+      document.querySelector('header.topbar').style.display = 'none';
+      document.querySelector('main').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      dashboard.style.display = 'block';
+      document.getElementById('dashboardTitle').textContent = config.title;
+      document.getElementById('dashboardIdentity').textContent =
+        (profile.full_name || user.email) + ' · ' + profile.role.replace('_', ' ');
+      document.getElementById('dashboardDescription').textContent = config.description;
+    }
+
+    function showPublicWebsite() {
+      dashboard.style.display = 'none';
+      document.querySelector('header.topbar').style.display = '';
+      document.querySelector('main').style.display = '';
+      document.querySelector('footer').style.display = '';
+    }
+
+    loginForm.addEventListener('submit', async event => {
       event.preventDefault();
-      document.getElementById('loginNotice').classList.add('show');
-      document.getElementById('loginNotice').textContent = 'Login belum dihubungkan ke Supabase. Form ini belum mengirim atau menyimpan data akun.';
+      const submitButton = loginForm.querySelector('button[type="submit"]');
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      submitButton.disabled = true;
+      submitButton.textContent = 'Memeriksa akun…';
+      loginNotice.classList.remove('show');
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        await openUserDashboard(data.user);
+      } catch (error) {
+        showPublicWebsite();
+        showLoginMessage(error.message || 'Login gagal. Periksa email dan password Anda.');
+        // Jika autentikasi berhasil tetapi pembacaan profil gagal, tutup sesi agar
+        // pengguna tidak tertinggal dalam keadaan login tanpa dashboard yang valid.
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+        if (sessionData.session) await supabaseClient.auth.signOut();
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Masuk ke Dashboard →';
+      }
     });
+
+    document.getElementById('logoutButton').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      showPublicWebsite();
+      loginForm.reset();
+    });
+
+    // Pulihkan sesi yang masih aktif saat halaman dibuka atau dimuat ulang.
+    (async function restoreSession() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) return;
+      try {
+        await openUserDashboard(session.user);
+      } catch (error) {
+        console.error('Gagal memuat dashboard:', error);
+        await supabaseClient.auth.signOut();
+        showPublicWebsite();
+      }
+    })();
+
+    // Sinkronkan UI ketika status autentikasi berubah.
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) showPublicWebsite();
+    });
+
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
