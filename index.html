@@ -1031,47 +1031,76 @@
     }
     async function loadUsers() {
       if (!['super_admin','admin'].includes(currentRole)) return `<div class="app-alert">Anda tidak memiliki akses ke halaman ini.</div>`;
-      const {data,error} = await supabaseClient.from('profiles').select('full_name,role,created_at').order('created_at',{ascending:false}).limit(100);
+      const {data,error} = await supabaseClient.from('profiles').select('id,full_name,role,created_at,username').order('created_at',{ascending:false}).limit(100);
       if (error) return `<div class="app-alert">Data pengguna belum dapat dimuat: ${safeText(error.message)}</div>`;
       if (!data?.length) return `<div class="panel-card empty-state">Belum ada data pengguna.</div>`;
-      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Peran</th><th>Bergabung</th></tr></thead><tbody>${data.map(u=>`<tr><td><strong>${safeText(u.full_name || 'Tanpa nama')}</strong></td><td>${safeText(roleConfig[u.role]?.label || u.role)}</td><td>${u.created_at?new Date(u.created_at).toLocaleDateString('id-ID'):'—'}</td></tr>`).join('')}</tbody></table></div></div>`;
+      const actions=currentRole==='super_admin';
+      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Username</th><th>Peran</th><th>Bergabung</th>${actions?'<th>Aksi</th>':''}</tr></thead><tbody>${data.map(u=>`<tr><td><strong>${safeText(u.full_name || 'Tanpa nama')}</strong></td><td>${safeText(u.username||'—')}</td><td>${safeText(roleConfig[u.role]?.label || u.role)}</td><td>${u.created_at?new Date(u.created_at).toLocaleDateString('id-ID'):'—'}</td>${actions?`<td><div class="class-form-actions"><button type="button" class="app-button secondary" data-edit-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||'')}">Edit</button><button type="button" class="app-button" style="background:#fff0f0;color:#b42318;border:1px solid #f3caca" data-delete-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||u.username||'akun ini')}">Hapus</button></div></td>`:''}</tr>`).join('')}</tbody></table></div><p class="panel-subtitle" style="margin-top:12px">Super Admin dapat mengubah nama lengkap atau menghapus akun secara permanen.</p></div>`;
     }
     function loadProfile() {
-      return `<section class="panel-card"><h3>Informasi Akun</h3><p class="panel-subtitle">Informasi profil yang terhubung dengan akun Anda</p><div class="profile-grid">
-        <div class="profile-item"><small>Nama Lengkap</small><strong>${safeText(currentProfile.full_name || 'Belum diisi')}</strong></div>
-        <div class="profile-item"><small>Username</small><strong>${safeText(currentProfile.username || '—')}</strong></div>
-        <div class="profile-item"><small>Email kontak</small><strong>${safeText(currentProfile.contact_email||'Belum diisi')}</strong></div>
-        <div class="profile-item"><small>Nomor WhatsApp</small><strong>${safeText(currentProfile.phone||'—')}</strong></div>
-        <div class="profile-item"><small>Jenis Kelamin</small><strong>${safeText(currentProfile.gender||'—')}</strong></div>
-        <div class="profile-item"><small>Alamat</small><strong>${safeText([currentProfile.address,currentProfile.city,currentProfile.province].filter(Boolean).join(', ')||'—')}</strong></div>
-        <div class="profile-item"><small>Tahun Kelahiran</small><strong>${safeText(currentProfile.birth_year||'—')}</strong></div>
-        <div class="profile-item"><small>Usia</small><strong>${currentProfile.birth_year?new Date().getFullYear()-Number(currentProfile.birth_year)+' tahun':'—'}</strong></div>
-        <div class="profile-item"><small>Peran</small><strong>${safeText(roleConfig[currentRole].label)}</strong></div>
-      </div></section>
+      const p=currentProfile||{};
+      return `<section class="panel-card"><h3>Edit Profil Saya</h3><p class="panel-subtitle">Perbarui informasi profil Anda. Username dan peran akun tidak dapat diubah dari halaman ini.</p>
+        <form id="editOwnProfileForm"><div class="class-form-grid">
+          <div class="field"><label for="profileFullName">Nama lengkap *</label><input id="profileFullName" maxlength="120" required value="${safeText(p.full_name||'')}"></div>
+          <div class="field"><label>Username</label><input value="${safeText(p.username||'')}" disabled></div>
+          <div class="field"><label for="profileContactEmail">Email kontak (opsional)</label><input id="profileContactEmail" type="email" value="${safeText(p.contact_email||'')}"></div>
+          <div class="field"><label for="profilePhone">Nomor WhatsApp</label><input id="profilePhone" value="${safeText(p.phone||'')}" maxlength="30"></div>
+          <div class="field"><label for="profileGender">Jenis kelamin</label><select id="profileGender"><option value="">Pilih</option><option value="Laki-laki" ${p.gender==='Laki-laki'?'selected':''}>Laki-laki</option><option value="Perempuan" ${p.gender==='Perempuan'?'selected':''}>Perempuan</option></select></div>
+          <div class="field"><label for="profileBirthYear">Tahun kelahiran</label><input id="profileBirthYear" type="number" min="1920" max="${new Date().getFullYear()}" value="${safeText(p.birth_year||'')}"></div>
+          <div class="field"><label for="profileProvince">Provinsi</label><input id="profileProvince" value="${safeText(p.province||'')}"></div>
+          <div class="field"><label for="profileCity">Kabupaten/Kota</label><input id="profileCity" value="${safeText(p.city||'')}"></div>
+          <div class="field full"><label for="profileAddress">Alamat</label><textarea id="profileAddress">${safeText(p.address||'')}</textarea></div>
+        </div><div class="class-form-actions"><button class="app-button" type="submit">Simpan Perubahan Profil</button><span id="profileEditFeedback" role="status"></span></div></form></section>
       <section class="panel-card password-panel"><h3>Keamanan Akun</h3><p class="panel-subtitle">Perbarui password akun Anda. Password dikelola oleh Supabase Auth dan tidak dapat dibaca Admin.</p>
-        <form id="changePasswordForm">
-          <div class="field"><label for="newPassword">Password baru (minimal 8 karakter)</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" required></div>
-          <div class="field"><label for="confirmNewPassword">Konfirmasi password baru</label><input id="confirmNewPassword" type="password" minlength="8" autocomplete="new-password" required></div>
-          <button class="app-button" type="submit">Simpan Password Baru</button><span id="passwordChangeFeedback" role="status" style="margin-left:10px"></span>
-        </form>
+        <form id="changePasswordForm"><div class="field"><label for="newPassword">Password baru (minimal 8 karakter)</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" required></div><div class="field"><label for="confirmNewPassword">Konfirmasi password baru</label><input id="confirmNewPassword" type="password" minlength="8" autocomplete="new-password" required></div><button class="app-button" type="submit">Simpan Password Baru</button><span id="passwordChangeFeedback" role="status" style="margin-left:10px"></span></form>
       </section>`;
     }
 
     document.addEventListener('submit',async event=>{
+      if(event.target?.id==='editOwnProfileForm'){
+        event.preventDefault();
+        const feedback=document.getElementById('profileEditFeedback');
+        const year=document.getElementById('profileBirthYear').value;
+        const payload={p_full_name:document.getElementById('profileFullName').value.trim(),p_contact_email:document.getElementById('profileContactEmail').value.trim().toLowerCase()||null,p_phone:document.getElementById('profilePhone').value.trim()||null,p_gender:document.getElementById('profileGender').value||null,p_address:document.getElementById('profileAddress').value.trim()||null,p_province:document.getElementById('profileProvince').value.trim()||null,p_city:document.getElementById('profileCity').value.trim()||null,p_birth_year:year?Number(year):null};
+        if(!payload.p_full_name){feedback.textContent='Nama lengkap wajib diisi.';return;}
+        if(payload.p_birth_year&&(!Number.isInteger(payload.p_birth_year)||payload.p_birth_year<1920||payload.p_birth_year>new Date().getFullYear())){feedback.textContent='Tahun kelahiran tidak valid.';return;}
+        feedback.textContent='Menyimpan...';
+        const {error}=await supabaseClient.rpc('update_my_profile',payload);
+        if(error){feedback.textContent='Gagal menyimpan: '+error.message;return;}
+        currentProfile={...currentProfile,full_name:payload.p_full_name,contact_email:payload.p_contact_email,phone:payload.p_phone,gender:payload.p_gender,address:payload.p_address,province:payload.p_province,city:payload.p_city,birth_year:payload.p_birth_year};
+        feedback.textContent='Profil berhasil diperbarui.';
+        document.getElementById('dashboardName').textContent=currentProfile.full_name;
+        document.getElementById('userAvatar').textContent=currentProfile.full_name.trim().charAt(0).toUpperCase();
+        return;
+      }
       if(event.target?.id!=='changePasswordForm') return;
       event.preventDefault();
-      const newPass=document.getElementById('newPassword').value;
-      const confirmPass=document.getElementById('confirmNewPassword').value;
-      const feedback=document.getElementById('passwordChangeFeedback');
+      const newPass=document.getElementById('newPassword').value, confirmPass=document.getElementById('confirmNewPassword').value, feedback=document.getElementById('passwordChangeFeedback');
       if(newPass.length<8){feedback.textContent='Password baru minimal 8 karakter.';feedback.style.color='#B54747';return;}
       if(newPass!==confirmPass){feedback.textContent='Konfirmasi password tidak sama.';feedback.style.color='#B54747';return;}
       feedback.textContent='Memproses...';feedback.style.color='inherit';
       const {error}=await supabaseClient.auth.updateUser({password:newPass});
       if(error){feedback.textContent='Gagal mengubah password: '+error.message;feedback.style.color='#B54747';return;}
-      document.getElementById('changePasswordForm').reset();
-      feedback.textContent='Password berhasil diperbarui.';feedback.style.color='#087A55';
+      document.getElementById('changePasswordForm').reset();feedback.textContent='Password berhasil diperbarui.';feedback.style.color='#087A55';
     });
-
+    document.addEventListener('click',async event=>{
+      const editButton=event.target.closest('[data-edit-user]');
+      if(editButton){
+        const nextName=prompt('Ubah nama lengkap pengguna:',editButton.dataset.userName||'');
+        if(nextName===null)return;
+        if(!nextName.trim()){alert('Nama lengkap wajib diisi.');return;}
+        const {error}=await supabaseClient.rpc('superadmin_update_user_name',{p_user_id:editButton.dataset.editUser,p_full_name:nextName.trim()});
+        if(error){alert('Gagal mengubah pengguna: '+error.message);return;}
+        await renderDashboardPage('users');return;
+      }
+      const deleteButton=event.target.closest('[data-delete-user]');
+      if(deleteButton){
+        if(!confirm(`Yakin ingin menghapus ${deleteButton.dataset.userName||'akun ini'}? Tindakan ini permanen.`))return;
+        const {error}=await supabaseClient.rpc('superadmin_delete_user',{p_user_id:deleteButton.dataset.deleteUser});
+        if(error){alert('Gagal menghapus akun: '+error.message);return;}
+        alert('Akun berhasil dihapus.');await renderDashboardPage('users');
+      }
+    });
 
     function navIcon(name) {
       const icons = {
