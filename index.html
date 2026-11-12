@@ -450,6 +450,10 @@
     .password-panel input{width:100%;min-height:43px;border:1px solid #DCE8EC;border-radius:10px;padding:10px 12px;font:inherit}
     .password-panel button{margin-top:10px}
 
+
+    [hidden]{display:none!important}.builder-list{display:grid;gap:12px;margin:16px 0}.builder-item{border:1px solid #dce8ec;border-radius:14px;padding:14px;background:#fff;display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:start}.builder-item.dragging{opacity:.45;border-style:dashed}.builder-handle{cursor:grab;font-size:22px;color:#087f9b;user-select:none;padding:6px}.builder-item input,.builder-item textarea,.teacher-form input,.teacher-form select{width:100%;border:1px solid #dce8ec;border-radius:9px;padding:10px;font:inherit;margin:5px 0 9px}.builder-item textarea{min-height:65px}.builder-actions{display:flex;gap:8px;flex-wrap:wrap}.builder-help{font-size:12px;color:#718078}.teacher-code{padding:14px;border-radius:12px;background:#eaf7f3;border:1px solid #b8dfd1;margin-top:12px;overflow-wrap:anywhere}.teacher-code code{font-size:18px;font-weight:800;letter-spacing:1px;color:#075b78}.class-thumb-preview{width:100%;max-height:140px;object-fit:cover;border-radius:10px}
+    #appDashboard.theme-dark .builder-item{background:#10232d;border-color:#345563}#appDashboard.theme-dark .builder-item input,#appDashboard.theme-dark .builder-item textarea,#appDashboard.theme-dark .teacher-form input{background:#10232d;color:#eaf5f7;border-color:#345563}
+
   </style>
 </head>
 <body>
@@ -471,7 +475,7 @@
   </header>
 
   <main>
-    <section class="hero" id="beranda">
+    <section class="hero" id="beranda" data-landing-section="hero">
       <div class="container hero-grid">
         <div>
           <div class="eyebrow" id="publicHeroBadge">Platform belajar Al-Qur'an</div>
@@ -491,7 +495,7 @@
       </div>
     </section>
 
-    <section class="section" id="program">
+    <section class="section" id="program" data-landing-section="program">
       <div class="container">
         <div class="section-head"><div class="kicker">Mengapa belajar bersama kami?</div><h2>Belajar dengan arah yang jelas</h2><p>Proses belajar dirancang agar peserta memahami kaidah, melatih ketepatan pelafalan, dan memperbaiki kualitas bacaan secara bertahap.</p></div>
         <div class="features">
@@ -502,7 +506,7 @@
       </div>
     </section>
 
-    <section class="section section-soft" id="kelas">
+    <section class="section section-soft" id="kelas" data-landing-section="classes">
       <div class="container">
         <div class="section-head"><div class="kicker">Program pembelajaran</div><h2>Temukan kelas yang tepat</h2><p>Pilih program sesuai kebutuhan dan kemampuan bacaan Anda. Informasi kelas dapat diperbarui oleh pengelola platform.</p></div>
         <div class="course-grid">
@@ -513,14 +517,14 @@
       </div>
     </section>
 
-    <section class="section" id="tentang">
+    <section class="section" id="tentang" data-landing-section="about">
       <div class="container about-grid">
         <div class="about-mark"><img src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid"></div>
         <div class="about-copy"><div class="kicker">Tentang kami</div><h2>Ikhtiar menghadirkan pembelajaran tajwid yang mudah diakses</h2><p>Ayo Belajar Tajwid merupakan platform pembelajaran yang berfokus pada tahsin dan ilmu tajwid. Kami ingin membantu masyarakat mempelajari cara membaca Al-Qur'an dengan benar melalui materi yang tersusun dan proses belajar yang terarah.</p><p>Website ini dikembangkan sebagai ruang belajar digital yang menghubungkan peserta, pengajar, dan pengelola kelas dalam satu platform.</p><div class="checks"><div class="check">Materi pembelajaran terarah</div><div class="check">Akses kelas secara online</div><div class="check">Pendampingan pengajar</div><div class="check">Evaluasi perkembangan belajar</div></div><a class="btn btn-primary" href="#kelas">Lihat Program</a></div>
       </div>
     </section>
 
-    <section class="section section-soft">
+    <section class="section section-soft" data-landing-section="steps">
       <div class="container">
         <div class="section-head"><div class="kicker">Mulai belajar</div><h2>Langkah belajar yang sederhana</h2><p>Alur peserta dirancang agar mudah dipahami sejak pertama kali mengunjungi platform.</p></div>
         <div class="steps">
@@ -531,7 +535,7 @@
       </div>
     </section>
 
-    <section class="cta" id="kontak">
+    <section class="cta" id="kontak" data-landing-section="cta">
       <div class="container cta-inner"><div><h2>Siap memperbaiki bacaan Al-Qur'an?</h2><p>Mulailah ikhtiar belajar tahsin dan tajwid bersama Ayo Belajar Tajwid.</p></div><a class="btn btn-gold" href="mailto:info@ayobelajartajwid.com">Hubungi Kami ↗</a></div>
     </section>
   </main>
@@ -603,6 +607,7 @@
         <div class="field"><label for="registerName">Nama Lengkap *</label><input id="registerName" type="text" autocomplete="name" required></div>
         <div class="field"><label for="registerUsername">Username *</label><input id="registerUsername" type="text" minlength="4" maxlength="24" pattern="[A-Za-z0-9._-]+" placeholder="Contoh: ahmad123" required></div>
         <div class="field"><label for="registerEmail">Email aktif *</label><input id="registerEmail" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="teacherInviteCode">Kode undangan pengajar (isi jika menerima undangan)</label><input id="teacherInviteCode" type="text" autocomplete="off" placeholder="Kosongkan jika mendaftar sebagai peserta"></div>
         <div class="field"><label for="registerPassword">Buat Password *</label><input id="registerPassword" type="password" minlength="8" autocomplete="new-password" required placeholder="Minimal 8 karakter"></div>
         <div class="field"><label for="registerPasswordConfirm">Konfirmasi Password *</label><input id="registerPasswordConfirm" type="password" minlength="8" autocomplete="new-password" required placeholder="Ulangi password"></div>
         <div class="field"><label for="registerGender">Jenis Kelamin *</label><select id="registerGender" required><option value="">Pilih jenis kelamin</option><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
@@ -827,7 +832,7 @@
     const roleMenus = {
       super_admin: [
         ['overview','Ringkasan','▦'], ['classes','Manajemen Kelas','▤'],
-        ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['sitecontent','Konten Landing Page','✦'], ['profile','Profil Saya','◎']
+        ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['teachers','Manajemen Pengajar','♟'], ['sitecontent','Editor Landing Page','✦'], ['profile','Profil Saya','◎']
       ],
       admin: [
         ['overview','Ringkasan','▦'], ['classes','Manajemen Kelas','▤'],
@@ -914,7 +919,7 @@
     }
 
     async function loadClasses() {
-      let query = supabaseClient.from('classes').select('id,title,description,category,level,status,start_date,end_date,schedule,capacity,instructor_id').order('created_at',{ascending:false});
+      let query = supabaseClient.from('classes').select('id,title,description,category,level,status,start_date,end_date,schedule,capacity,instructor_id,thumbnail_url,payment_type,price_amount,duration_text').order('created_at',{ascending:false});
       if (currentRole === 'pengajar') query = query.eq('instructor_id',currentUser.id);
       const {data,error} = await query;
       if (error) return `<div class="app-alert">Data kelas belum dapat dimuat: ${safeText(error.message)}</div>`;
@@ -927,7 +932,11 @@
           <form id="createClassForm">
             <div class="class-form-grid">
               <div class="field"><label for="newClassTitle">Nama kelas *</label><input id="newClassTitle" required maxlength="120" placeholder="Contoh: Tahsin Metode Asy-Syafi'i"></div>
-              <div class="field"><label for="newClassCategory">Kategori program</label><input id="newClassCategory" placeholder="Contoh: Tahsin Intensif"></div>
+              <div class="field"><label for="newClassCategory">Kategori kelas *</label><select id="newClassCategory" required><option value="">Pilih kategori</option><option value="Privat">Privat</option><option value="Reguler">Reguler</option><option value="Langganan">Langganan</option></select></div>
+              <div class="field"><label for="newClassPayment">Skema biaya *</label><select id="newClassPayment" required><option value="">Pilih skema biaya</option><option value="one_time">1x bayar</option><option value="monthly">Bulanan</option><option value="custom_package">Paket khusus</option></select></div>
+              <div class="field"><label for="newClassPrice">Nominal biaya (Rp)</label><input id="newClassPrice" type="number" min="0" step="1000" placeholder="Contoh: 350000"></div>
+              <div class="field"><label for="newClassDuration">Lama pembelajaran *</label><input id="newClassDuration" required maxlength="80" placeholder="Contoh: 4 bulan / 16 pertemuan"></div>
+              <div class="field"><label for="newClassThumbnail">URL thumbnail</label><input id="newClassThumbnail" type="url" placeholder="https://.../thumbnail.jpg"></div>
               <div class="field"><label for="newClassLevel">Tingkat</label><select id="newClassLevel"><option value="">Pilih tingkat</option><option>Pemula</option><option>Menengah</option><option>Lanjutan</option><option>Umum</option></select></div>
               <div class="field"><label for="newClassCapacity">Kuota peserta</label><input id="newClassCapacity" type="number" min="1" placeholder="Contoh: 30"></div>
               <div class="field"><label for="newClassStart">Tanggal mulai</label><input id="newClassStart" type="date"></div>
@@ -940,7 +949,7 @@
             <div class="class-form-actions"><button class="app-button" type="submit">＋ Buat Kelas</button><span class="form-feedback" id="createClassFeedback" role="status"></span></div>
           </form></section>`;
       }
-      const cards=data?.length?`<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${data.map(c=>`<article class="panel-card"><span class="status-pill">${safeText(c.status)}</span><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description||'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.schedule||'Jadwal menyusul')} · Kuota: ${c.capacity??'—'}</small></article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas yang tersedia. ${currentRole==='super_admin'?'Gunakan formulir di atas untuk membuat kelas pertama.':''}</div>`;
+      const cards=data?.length?`<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${data.map(c=>`<article class="panel-card">${c.thumbnail_url?`<img src="${safeText(c.thumbnail_url)}" alt="Thumbnail ${safeText(c.title)}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:12px">`:''}<span class="status-pill">${safeText(c.status)}</span><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description||'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.duration_text||'Durasi menyusul')} · ${safeText(c.payment_type||'Biaya menyusul')} · Kuota: ${c.capacity??'—'}</small></article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas yang tersedia. ${currentRole==='super_admin'?'Gunakan formulir di atas untuk membuat kelas pertama.':''}</div>`;
       return createPanel+cards;
     }
 
@@ -954,7 +963,11 @@
       const payload={
         title,slug,
         description:document.getElementById('newClassDescription').value.trim(),
-        category:document.getElementById('newClassCategory').value.trim()||null,
+        category:document.getElementById('newClassCategory').value,
+        payment_type:document.getElementById('newClassPayment').value,
+        price_amount:document.getElementById('newClassPrice').value?Number(document.getElementById('newClassPrice').value):null,
+        duration_text:document.getElementById('newClassDuration').value.trim(),
+        thumbnail_url:document.getElementById('newClassThumbnail').value.trim()||null,
         level:document.getElementById('newClassLevel').value||null,
         capacity:document.getElementById('newClassCapacity').value?Number(document.getElementById('newClassCapacity').value):null,
         start_date:document.getElementById('newClassStart').value||null,
@@ -1026,48 +1039,101 @@
         overview:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
         classes:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M4 5.5V22M8 7h8M8 11h8"/>',
         lessons:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M8 7h8M8 11h8M8 15h5"/>',
+        teachers:'<path d="M16 20v-1.5a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4V20"/><circle cx="10" cy="7" r="3.5"/><path d="M20 20v-1.5a4 4 0 0 0-2.8-3.8M16.5 3.7a3.5 3.5 0 0 1 0 6.7"/>',
         users:'<path d="M16 20v-1.5a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4V20"/><circle cx="10" cy="7" r="3.5"/><path d="M20 20v-1.5a4 4 0 0 0-2.8-3.8M16.5 3.7a3.5 3.5 0 0 1 0 6.7"/>',
         profile:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="9" r="3"/><path d="M6.8 18a5.5 5.5 0 0 1 10.4 0"/>',
         sitecontent:'<path d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'
       };
       return `<svg viewBox="0 0 24 24" aria-hidden="true">${icons[name] || icons.overview}</svg>`;
     }
-    async function loadSiteContentEditor() {
-      if (currentRole !== 'super_admin') return '<div class="app-alert">Halaman ini hanya dapat diakses Super Admin.</div>';
-      const defaults = {hero_title:'Perbaiki Bacaan, Indahkan Tilawah.',hero_description:'Belajar tahsin dan tajwid secara terarah bersama pengajar.',hero_badge:'Platform belajar Al-Qur’an',about_title:'Tentang Ayo Belajar Tajwid',about_description:'Platform pembelajaran tahsin dan tajwid secara terarah.',contact_whatsapp:'',contact_email:''};
-      const {data,error} = await supabaseClient.from('site_content').select('content_key,content_value');
-      const values = {...defaults};
-      if (!error && data) data.forEach(row=>values[row.content_key]=row.content_value);
-      const warning = error ? '<div class="app-alert">Tabel site_content belum dibuat. Jalankan SQL_site_content_setup.sql yang disertakan dalam paket pembaruan.</div>' : '';
-      return `${warning}<section class="panel-card"><h3>Pengelolaan Konten Landing Page</h3><p class="panel-subtitle">Ubah teks utama yang tampil pada halaman publik. Perubahan disimpan ke Supabase.</p>
-      <form class="content-editor" id="siteContentForm">
-      <div class="field"><label for="contentHeroTitle">Judul utama</label><textarea id="contentHeroTitle" required>${safeText(values.hero_title)}</textarea></div>
-      <div class="field"><label for="contentHeroDescription">Deskripsi utama</label><textarea id="contentHeroDescription" required>${safeText(values.hero_description)}</textarea></div>
-      <div class="field"><label for="contentHeroBadge">Label kecil</label><input id="contentHeroBadge" value="${safeText(values.hero_badge)}"></div>
-      <div class="field"><label for="contentAboutTitle">Judul Tentang Kami</label><input id="contentAboutTitle" value="${safeText(values.about_title)}"></div>
-      <div class="field"><label for="contentAboutDescription">Deskripsi Tentang Kami</label><textarea id="contentAboutDescription">${safeText(values.about_description)}</textarea></div>
-      <div class="field"><label for="contentWhatsapp">Nomor WhatsApp (628...)</label><input id="contentWhatsapp" value="${safeText(values.contact_whatsapp)}"></div>
-      <div class="field"><label for="contentEmail">Email kontak</label><input id="contentEmail" type="email" value="${safeText(values.contact_email)}"></div>
-      <div><button class="app-button" type="submit">Simpan Perubahan</button> <button class="app-button secondary" type="button" id="previewLanding">Pratinjau Landing Page</button></div>
-      <div class="notice" id="siteContentNotice" role="status"></div></form></section>`;
+    const LANDING_DEFAULTS = [
+      {key:'hero',label:'Hero / Beranda',title:'Perbaiki Bacaan, Indahkan Tilawah.',description:'Belajar tahsin dan tajwid secara terarah bersama pengajar.',visible:true},
+      {key:'program',label:'Keunggulan Program',title:'Belajar dengan arah yang jelas',description:'Proses belajar dirancang agar peserta memahami kaidah, melatih ketepatan pelafalan, dan memperbaiki kualitas bacaan secara bertahap.',visible:true},
+      {key:'classes',label:'Daftar Kelas',title:'Temukan kelas yang tepat',description:'Pilih program sesuai kebutuhan dan kemampuan bacaan Anda.',visible:true},
+      {key:'about',label:'Tentang Kami',title:'Ikhtiar menghadirkan pembelajaran tajwid yang mudah diakses',description:'Ayo Belajar Tajwid merupakan platform pembelajaran yang berfokus pada tahsin dan ilmu tajwid.',visible:true},
+      {key:'steps',label:'Langkah Belajar',title:'Langkah belajar yang sederhana',description:'Alur peserta dirancang agar mudah dipahami sejak pertama kali mengunjungi platform.',visible:true},
+      {key:'cta',label:'Ajakan / Kontak',title:'Siap memperbaiki bacaan Al-Qur\'an?',description:'Mulailah ikhtiar belajar tahsin dan tajwid bersama Ayo Belajar Tajwid.',visible:true}
+    ];
+    async function getLandingConfig(){
+      const {data,error}=await supabaseClient.from('landing_page_config').select('config').eq('id',1).maybeSingle();
+      if(error) return {sections:LANDING_DEFAULTS};
+      const stored=data?.config?.sections;
+      if(!Array.isArray(stored)) return {sections:LANDING_DEFAULTS};
+      const merged=LANDING_DEFAULTS.map(d=>({...d,...(stored.find(x=>x.key===d.key)||{})}));
+      return {sections:[...stored.filter(x=>!LANDING_DEFAULTS.some(d=>d.key===x.key)),...merged].sort((a,b)=>(a.order??999)-(b.order??999))};
     }
-    document.addEventListener('submit', async event => {
-      if (event.target?.id !== 'siteContentForm') return;
-      event.preventDefault();
-      const f=event.target;
-      const rows=[
-        ['hero_title',f.contentHeroTitle.value.trim()],['hero_description',f.contentHeroDescription.value.trim()],
-        ['hero_badge',f.contentHeroBadge.value.trim()],['about_title',f.contentAboutTitle.value.trim()],
-        ['about_description',f.contentAboutDescription.value.trim()],['contact_whatsapp',f.contentWhatsapp.value.trim()],
-        ['contact_email',f.contentEmail.value.trim()]
-      ].map(([content_key,content_value])=>({content_key,content_value,updated_by:currentUser.id}));
-      const {error}=await supabaseClient.from('site_content').upsert(rows,{onConflict:'content_key'});
-      const n=document.getElementById('siteContentNotice');
-      n.textContent=error?'Gagal menyimpan: '+error.message:'Konten landing page berhasil disimpan.';
-      n.classList.add('show');n.style.background=error?'#fff0ed':'#E7F4F6';n.style.color=error?'#8b3020':'#075B78';
-    });
-    document.addEventListener('click',event=>{if(event.target?.id==='previewLanding')window.open('/','_blank','noopener');});
+    async function applyLandingConfig(){
+      const config=await getLandingConfig();
+      const main=document.querySelector('body > main');
+      if(!main) return;
+      const nodes=new Map([...main.querySelectorAll('[data-landing-section]')].map(el=>[el.dataset.landingSection,el]));
+      config.sections.forEach((item,index)=>{
+        const el=nodes.get(item.key);if(!el)return;
+        el.hidden=item.visible===false;
+        const h=el.querySelector('h1,h2');if(h&&item.title)h.textContent=item.title;
+        const p=el.querySelector('.hero-copy,.section-head p,.about-copy p,.cta-inner p');if(p&&item.description)p.textContent=item.description;
+        el.style.order=String(index);
+        main.appendChild(el);
+      });
+    }
+    applyLandingConfig();
 
+    async function applyPublicClasses(){
+      const grid=document.querySelector('#kelas .course-grid');if(!grid)return;
+      const {data,error}=await supabaseClient.from('classes').select('id,title,description,category,duration_text,payment_type,price_amount,thumbnail_url').eq('status','published').order('created_at',{ascending:false}).limit(12);
+      if(error||!data?.length)return;
+      grid.innerHTML=data.map(c=>`<article class="course">${c.thumbnail_url?`<div class="course-top"><img src="${safeText(c.thumbnail_url)}" alt="${safeText(c.title)}" style="width:100%;height:170px;object-fit:cover"></div>`:`<div class="course-top"><span class="badge">${safeText(c.category||'PROGRAM')}</span></div>`}<div class="course-body"><h3>${safeText(c.title)}</h3><p>${safeText(c.description||'Program pembelajaran Ayo Belajar Tajwid.')}</p><div class="course-meta"><span>${safeText(c.duration_text||'Durasi menyusul')}</span><span>${safeText(c.category||'Kelas')}</span></div><p><strong>${c.price_amount?new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(c.price_amount):'Hubungi kami'}</strong> · ${safeText(({one_time:'1x bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||c.payment_type||'')}</p><a class="course-link" href="#kontak">Tanyakan program →</a></div></article>`).join('');
+    }
+    applyPublicClasses();
+
+    async function loadSiteContentEditor(){
+      if(currentRole!=='super_admin')return '<div class="app-alert">Halaman ini hanya dapat diakses Super Admin.</div>';
+      const config=await getLandingConfig();
+      const cards=config.sections.map((x,i)=>`<article class="builder-item" draggable="true" data-builder-key="${safeText(x.key)}"><div class="builder-handle" title="Seret untuk mengurutkan">⠿</div><div><strong>${safeText(x.label||x.key)}</strong><label class="builder-help"><input type="checkbox" data-builder-visible ${x.visible!==false?'checked':''}> Tampilkan bagian ini</label><label class="builder-help">Judul / headline</label><input data-builder-title value="${safeText(x.title||'')}"><label class="builder-help">Deskripsi</label><textarea data-builder-description>${safeText(x.description||'')}</textarea></div><div class="builder-actions"><button type="button" class="app-button secondary" data-move-up>↑</button><button type="button" class="app-button secondary" data-move-down>↓</button></div></article>`).join('');
+      return `<section class="panel-card"><h3>Visual Landing Page Builder</h3><p class="panel-subtitle">Atur urutan dengan drag-and-drop, ubah judul/deskripsi, dan aktifkan/nonaktifkan bagian. Semua perubahan disimpan sebagai konfigurasi JSON di Supabase, bukan di file HTML.</p><div class="builder-list" id="landingBuilderList">${cards}</div><div class="builder-actions"><button class="app-button" id="saveLandingBuilder">Simpan & Publikasikan</button><button class="app-button secondary" id="resetLandingBuilder">Kembalikan Default</button><button class="app-button secondary" id="previewLanding">Pratinjau</button></div><div class="notice" id="landingBuilderNotice" role="status"></div><p class="builder-help">Catatan: versi uji coba mengedit urutan, visibilitas, judul, dan deskripsi bagian utama. Struktur visual dasar tetap ditentukan oleh template HTML.</p></section>
+      <section class="panel-card" style="margin-top:16px"><h3>Kontak Landing Page</h3><p class="panel-subtitle">Pengaturan kontak disimpan pada tabel site_content lama.</p><form id="siteContentForm"><div class="field"><label>Nomor WhatsApp (628...)</label><input id="contentWhatsapp" placeholder="628..."></div><div class="field"><label>Email kontak</label><input id="contentEmail" type="email" placeholder="info@... "></div><button class="app-button" type="submit">Simpan Kontak</button><div class="notice" id="siteContentNotice"></div></form></section>`;
+    }
+    document.addEventListener('click',async event=>{
+      const list=document.getElementById('landingBuilderList');if(!list)return;
+      const item=event.target.closest('.builder-item');if(!item)return;
+      if(event.target.closest('[data-move-up]')){const prev=item.previousElementSibling;if(prev)list.insertBefore(item,prev);}
+      if(event.target.closest('[data-move-down]')){const next=item.nextElementSibling;if(next)list.insertBefore(next,item);}
+    });
+    let draggedBuilderItem=null;
+    document.addEventListener('dragstart',e=>{const item=e.target.closest('.builder-item');if(!item)return;draggedBuilderItem=item;item.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    document.addEventListener('dragend',e=>{e.target.closest('.builder-item')?.classList.remove('dragging');draggedBuilderItem=null;});
+    document.addEventListener('dragover',e=>{const target=e.target.closest('.builder-item');if(!target||!draggedBuilderItem||target===draggedBuilderItem)return;e.preventDefault();const r=target.getBoundingClientRect();const after=e.clientY>r.top+r.height/2;target.parentNode.insertBefore(draggedBuilderItem,after?target.nextSibling:target);});
+    document.addEventListener('click',async event=>{
+      if(event.target?.id==='saveLandingBuilder'){
+        const button=event.target;button.disabled=true;button.textContent='Menyimpan...';
+        const sections=[...document.querySelectorAll('#landingBuilderList .builder-item')].map((el,order)=>({key:el.dataset.builderKey,label:el.querySelector('strong').textContent,title:el.querySelector('[data-builder-title]').value.trim(),description:el.querySelector('[data-builder-description]').value.trim(),visible:el.querySelector('[data-builder-visible]').checked,order}));
+        const {error}=await supabaseClient.from('landing_page_config').upsert({id:1,config:{sections},updated_by:currentUser.id,updated_at:new Date().toISOString()},{onConflict:'id'});
+        const n=document.getElementById('landingBuilderNotice');n.textContent=error?'Gagal menyimpan: '+error.message:'Landing page berhasil disimpan dan dipublikasikan.';n.classList.add('show');n.style.color=error?'#a33':'#087f55';button.disabled=false;button.textContent='Simpan & Publikasikan';if(!error)applyLandingConfig();
+      }
+      if(event.target?.id==='resetLandingBuilder'){
+        const {error}=await supabaseClient.from('landing_page_config').upsert({id:1,config:{sections:LANDING_DEFAULTS},updated_by:currentUser.id},{onConflict:'id'});if(error)alert(error.message);else navigate('sitecontent');
+      }
+      if(event.target?.id==='previewLanding')window.open('/','_blank','noopener');
+    });
+    document.addEventListener('submit',async event=>{
+      if(event.target?.id!=='siteContentForm')return;event.preventDefault();const f=event.target;
+      const rows=[['contact_whatsapp',f.contentWhatsapp.value.trim()],['contact_email',f.contentEmail.value.trim()]].map(([content_key,content_value])=>({content_key,content_value,updated_by:currentUser.id}));
+      const {error}=await supabaseClient.from('site_content').upsert(rows,{onConflict:'content_key'});const n=document.getElementById('siteContentNotice');n.textContent=error?'Gagal menyimpan: '+error.message:'Kontak berhasil disimpan.';n.classList.add('show');
+    });
+    async function loadTeacherManager(){
+      if(currentRole!=='super_admin')return '<div class="app-alert">Hanya Super Admin yang dapat membuat undangan pengajar.</div>';
+      const {data,error}=await supabaseClient.from('teacher_invites').select('id,email,full_name,created_at,expires_at,redeemed_at').order('created_at',{ascending:false}).limit(50);
+      const rows=error?`<tr><td colspan="4">${safeText(error.message)} — pastikan SQL ABT V10 sudah dijalankan.</td></tr>`:(data||[]).map(x=>`<tr><td>${safeText(x.full_name)}</td><td>${safeText(x.email)}</td><td>${x.redeemed_at?'Sudah digunakan':'Menunggu aktivasi'}</td><td>${new Date(x.expires_at).toLocaleDateString('id-ID')}</td></tr>`).join('')||'<tr><td colspan="4">Belum ada undangan.</td></tr>';
+      return `<section class="panel-card"><h3>Buat Akun Pengajar</h3><p class="panel-subtitle">Buat undangan khusus untuk guru. Demi menjaga keamanan, Super Admin tidak membuat atau mengetahui password guru. Guru menyelesaikan aktivasi sendiri dengan email, kode undangan, dan password pribadi.</p><form id="teacherInviteForm" class="teacher-form"><div class="class-form-grid"><div class="field"><label>Nama lengkap pengajar *</label><input id="inviteTeacherName" required maxlength="120"></div><div class="field"><label>Email pengajar *</label><input id="inviteTeacherEmail" type="email" required></div></div><button class="app-button" type="submit">＋ Buat Undangan Pengajar</button><span id="teacherInviteFeedback" class="form-feedback"></span></form><div id="teacherInviteResult"></div></section><section class="panel-card" style="margin-top:16px"><h3>Daftar Undangan Pengajar</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Email</th><th>Status</th><th>Kedaluwarsa</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+    }
+    document.addEventListener('submit',async event=>{
+      if(event.target?.id!=='teacherInviteForm')return;event.preventDefault();const f=event.target;const fb=document.getElementById('teacherInviteFeedback');fb.textContent='Membuat undangan...';
+      const {data,error}=await supabaseClient.rpc('create_teacher_invite',{p_email:document.getElementById('inviteTeacherEmail').value.trim().toLowerCase(),p_full_name:document.getElementById('inviteTeacherName').value.trim()});
+      if(error){fb.textContent='Gagal: '+error.message;return;}
+      const code=data?.invite_code||data?.[0]?.invite_code;if(!code){fb.textContent='Undangan dibuat tetapi kode tidak diterima. Periksa fungsi SQL.';return;}
+      document.getElementById('teacherInviteResult').innerHTML=`<div class="teacher-code"><strong>Undangan berhasil dibuat</strong><p>Kirim kode ini kepada pengajar. Kode hanya ditampilkan sekarang.</p><code id="teacherInviteCodeValue">${safeText(code)}</code><p>Email: ${safeText(document.getElementById('inviteTeacherEmail').value.trim())}</p><button class="app-button secondary" type="button" id="copyTeacherInvite">Salin Kode</button><p class="builder-help">Pengajar membuka website → Daftar → mengisi data → memasukkan kode undangan ini → membuat password sendiri.</p></div>`;fb.textContent='';f.reset();
+    });
+    document.addEventListener('click',async e=>{if(e.target?.id==='copyTeacherInvite'){await navigator.clipboard.writeText(document.getElementById('teacherInviteCodeValue').textContent);e.target.textContent='Tersalin';}});
     async function renderDashboardPage(page) {
       const nav = document.getElementById('appNavigation');
       nav.innerHTML = (roleMenus[currentRole] || []).map(m=>`<a href="${routePath(m[0])}" data-page="${m[0]}" class="${page===m[0]?'active':''}"><span class="nav-icon">${navIcon(m[0])}</span>${m[1]}</a>`).join('');
@@ -1083,6 +1149,7 @@
         else if (page==='lessons') result = await loadLessons();
         else if (page==='users') result = await loadUsers();
         else if (page==='sitecontent') result = await loadSiteContentEditor();
+        else if (page==='teachers') result = await loadTeacherManager();
         else if (page==='profile') result = loadProfile();
         else result = `<div class="app-alert">Halaman tidak ditemukan.</div>`;
         content.innerHTML = `<div class="page-heading"><div><h2>${page==='overview'?'Ringkasan Aktivitas':safeText(document.getElementById('dashboardTitle').textContent)}</h2><p>Informasi terbaru dari platform Ayo Belajar Tajwid.</p></div>${page!=='overview'?'<button class="app-button secondary" data-page="overview">Kembali ke ringkasan</button>':''}</div>${result}`;
@@ -1156,7 +1223,7 @@
         const {data,error}=await supabaseClient.auth.signUp({
           email,
           password,
-          options:{data:{full_name:fullName,username,gender,province,province_code:provinceCode,city,address,phone,birth_year:birthYear}}
+          options:{data:{full_name:fullName,username,gender,province,province_code:provinceCode,city,address,phone,birth_year:birthYear,teacher_invite_code:document.getElementById('teacherInviteCode').value.trim()||null}}
         });
         if(error) throw error;
         registerForm.reset();registerAge.value='';registerCity.disabled=true;
