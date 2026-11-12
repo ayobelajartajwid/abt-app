@@ -637,6 +637,7 @@
       {
         auth: {
           persistSession: true,
+          storage: window.sessionStorage, // sesi autentikasi terpisah per tab browser
           autoRefreshToken: true,
           detectSessionInUrl: true
         }
@@ -918,6 +919,22 @@
         <section class="panel-card" style="margin-top:17px"><h3>${currentRole==='peserta'?'Pendaftaran Kelas Saya':'Aktivitas Pendaftaran'}</h3><p class="panel-subtitle">Data terbaru yang dapat diakses oleh akun Anda</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama Kelas</th><th>Status</th></tr></thead><tbody>${enrollmentRows}</tbody></table></div></section>`;
     }
 
+    // Ubah berbagai format tautan berbagi Google Drive menjadi URL gambar yang dapat ditampilkan.
+    function normalizeThumbnailUrl(input) {
+      const raw = (input || '').trim();
+      if (!raw) return null;
+      try {
+        const u = new URL(raw);
+        if (u.hostname === 'drive.google.com' || u.hostname === 'docs.google.com') {
+          let id = u.searchParams.get('id');
+          const match = u.pathname.match(/\/file\/d\/([^/]+)/);
+          if (!id && match) id = match[1];
+          if (id) return `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w1200`;
+        }
+        return raw;
+      } catch (_) { return raw; }
+    }
+
     async function loadClasses() {
       let query = supabaseClient.from('classes').select('id,title,description,category,level,status,start_date,end_date,schedule,capacity,instructor_id,thumbnail_url,payment_type,price_amount,duration_text').order('created_at',{ascending:false});
       if (currentRole === 'pengajar') query = query.eq('instructor_id',currentUser.id);
@@ -936,7 +953,7 @@
               <div class="field"><label for="newClassPayment">Skema biaya *</label><select id="newClassPayment" required><option value="">Pilih skema biaya</option><option value="one_time">1x bayar</option><option value="monthly">Bulanan</option><option value="custom_package">Paket khusus</option></select></div>
               <div class="field"><label for="newClassPrice">Nominal biaya (Rp)</label><input id="newClassPrice" type="number" min="0" step="1000" placeholder="Contoh: 350000"></div>
               <div class="field"><label for="newClassDuration">Lama pembelajaran *</label><input id="newClassDuration" required maxlength="80" placeholder="Contoh: 4 bulan / 16 pertemuan"></div>
-              <div class="field"><label for="newClassThumbnail">URL thumbnail</label><input id="newClassThumbnail" type="url" placeholder="https://.../thumbnail.jpg"></div>
+              <div class="field"><label for="newClassThumbnail">Link thumbnail Google Drive</label><input id="newClassThumbnail" type="url" placeholder="Tempel link berbagi Google Drive"><small class="field-help">Atur akses file Google Drive menjadi “Siapa saja yang memiliki link — Viewer”.</small></div>
               <div class="field"><label for="newClassLevel">Tingkat</label><select id="newClassLevel"><option value="">Pilih tingkat</option><option>Pemula</option><option>Menengah</option><option>Lanjutan</option><option>Umum</option></select></div>
               <div class="field"><label for="newClassCapacity">Kuota peserta</label><input id="newClassCapacity" type="number" min="1" placeholder="Contoh: 30"></div>
               <div class="field"><label for="newClassStart">Tanggal mulai</label><input id="newClassStart" type="date"></div>
@@ -949,7 +966,7 @@
             <div class="class-form-actions"><button class="app-button" type="submit">＋ Buat Kelas</button><span class="form-feedback" id="createClassFeedback" role="status"></span></div>
           </form></section>`;
       }
-      const cards=data?.length?`<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${data.map(c=>`<article class="panel-card">${c.thumbnail_url?`<img src="${safeText(c.thumbnail_url)}" alt="Thumbnail ${safeText(c.title)}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:12px">`:''}<span class="status-pill">${safeText(c.status)}</span><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description||'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.duration_text||'Durasi menyusul')} · ${safeText(c.payment_type||'Biaya menyusul')} · Kuota: ${c.capacity??'—'}</small></article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas yang tersedia. ${currentRole==='super_admin'?'Gunakan formulir di atas untuk membuat kelas pertama.':''}</div>`;
+      const cards=data?.length?`<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${data.map(c=>`<article class="panel-card">${c.thumbnail_url?`<img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Thumbnail ${safeText(c.title)}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:12px">`:''}<span class="status-pill">${safeText(c.status)}</span><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description||'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.duration_text||'Durasi menyusul')} · ${safeText(c.payment_type||'Biaya menyusul')} · Kuota: ${c.capacity??'—'}</small></article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas yang tersedia. ${currentRole==='super_admin'?'Gunakan formulir di atas untuk membuat kelas pertama.':''}</div>`;
       return createPanel+cards;
     }
 
@@ -967,7 +984,7 @@
         payment_type:document.getElementById('newClassPayment').value,
         price_amount:document.getElementById('newClassPrice').value?Number(document.getElementById('newClassPrice').value):null,
         duration_text:document.getElementById('newClassDuration').value.trim(),
-        thumbnail_url:document.getElementById('newClassThumbnail').value.trim()||null,
+        thumbnail_url:normalizeThumbnailUrl(document.getElementById('newClassThumbnail').value),
         level:document.getElementById('newClassLevel').value||null,
         capacity:document.getElementById('newClassCapacity').value?Number(document.getElementById('newClassCapacity').value):null,
         start_date:document.getElementById('newClassStart').value||null,
@@ -1081,8 +1098,9 @@
     async function applyPublicClasses(){
       const grid=document.querySelector('#kelas .course-grid');if(!grid)return;
       const {data,error}=await supabaseClient.from('classes').select('id,title,description,category,duration_text,payment_type,price_amount,thumbnail_url').eq('status','published').order('created_at',{ascending:false}).limit(12);
-      if(error||!data?.length)return;
-      grid.innerHTML=data.map(c=>`<article class="course">${c.thumbnail_url?`<div class="course-top"><img src="${safeText(c.thumbnail_url)}" alt="${safeText(c.title)}" style="width:100%;height:170px;object-fit:cover"></div>`:`<div class="course-top"><span class="badge">${safeText(c.category||'PROGRAM')}</span></div>`}<div class="course-body"><h3>${safeText(c.title)}</h3><p>${safeText(c.description||'Program pembelajaran Ayo Belajar Tajwid.')}</p><div class="course-meta"><span>${safeText(c.duration_text||'Durasi menyusul')}</span><span>${safeText(c.category||'Kelas')}</span></div><p><strong>${c.price_amount?new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(c.price_amount):'Hubungi kami'}</strong> · ${safeText(({one_time:'1x bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||c.payment_type||'')}</p><a class="course-link" href="#kontak">Tanyakan program →</a></div></article>`).join('');
+      if(error){grid.innerHTML='<p class="empty-state">Daftar kelas belum dapat dimuat. Silakan coba beberapa saat lagi.</p>';return;}
+      if(!data?.length){grid.innerHTML='<p class="empty-state">Kelas baru akan ditampilkan di sini setelah dipublikasikan.</p>';return;}
+      grid.innerHTML=data.map(c=>`<article class="course">${c.thumbnail_url?`<div class="course-top"><img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="${safeText(c.title)}" style="width:100%;height:170px;object-fit:cover"></div>`:`<div class="course-top"><span class="badge">${safeText(c.category||'PROGRAM')}</span></div>`}<div class="course-body"><h3>${safeText(c.title)}</h3><p>${safeText(c.description||'Program pembelajaran Ayo Belajar Tajwid.')}</p><div class="course-meta"><span>${safeText(c.duration_text||'Durasi menyusul')}</span><span>${safeText(c.category||'Kelas')}</span></div><p><strong>${c.price_amount?new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(c.price_amount):'Hubungi kami'}</strong> · ${safeText(({one_time:'1x bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||c.payment_type||'')}</p><a class="course-link" href="#kontak">Tanyakan program →</a></div></article>`).join('');
     }
     applyPublicClasses();
 
@@ -1251,7 +1269,9 @@
       if (!location.pathname.startsWith(segment)) { navigate('overview',true); return; }
       await renderDashboardPage(parsePageFromPath());
     });
+    const FORCE_PUBLIC_PREVIEW = new URLSearchParams(location.search).get('preview') === 'public';
     (async function restoreSession() {
+      if (FORCE_PUBLIC_PREVIEW) { showPublicWebsite(); return; }
       const {data:{session}} = await supabaseClient.auth.getSession();
       if (!session) {
         // Direct visit to a protected URL without a session returns to the public homepage.
@@ -1262,6 +1282,7 @@
       catch(error) { console.error('Gagal memuat dashboard:',error); await supabaseClient.auth.signOut(); showPublicWebsite(); }
     })();
     supabaseClient.auth.onAuthStateChange((event,session) => {
+      if (FORCE_PUBLIC_PREVIEW) { showPublicWebsite(); return; }
       if (event==='SIGNED_OUT' || !session) showPublicWebsite();
     });
 
