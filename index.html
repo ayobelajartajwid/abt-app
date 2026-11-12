@@ -599,14 +599,14 @@
       <h2 id="loginTitle">Login</h2>
       <p class="sub" id="authSubtitle">Masuk ke akun Ayo Belajar Tajwid Anda</p>
       <form id="loginForm">
-        <div class="field"><label for="loginUsername">Email</label><input id="loginUsername" type="email" placeholder="Email terdaftar" autocomplete="username" required></div>
+        <div class="field"><label for="loginUsername">Username atau Email</label><input id="loginUsername" type="text" placeholder="Masukkan username atau email" autocomplete="username" required></div>
         <div class="field"><label for="password">Password</label><input id="password" type="password" placeholder="Masukkan password" autocomplete="current-password" required></div>
         <button class="btn btn-primary" type="submit">Login →</button>
       </form>
       <form id="registerForm" style="display:none">
         <div class="field"><label for="registerName">Nama Lengkap *</label><input id="registerName" type="text" autocomplete="name" required></div>
         <div class="field"><label for="registerUsername">Username *</label><input id="registerUsername" type="text" minlength="4" maxlength="24" pattern="[A-Za-z0-9._-]+" placeholder="Contoh: ahmad123" required></div>
-        <div class="field"><label for="registerEmail">Email aktif *</label><input id="registerEmail" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="registerEmail">Email aktif (opsional)</label><input id="registerEmail" type="email" autocomplete="email" placeholder="Boleh dikosongkan"></div>
         <div class="field"><label for="teacherInviteCode">Kode undangan pengajar (isi jika menerima undangan)</label><input id="teacherInviteCode" type="text" autocomplete="off" placeholder="Kosongkan jika mendaftar sebagai peserta"></div>
         <div class="field"><label for="registerPassword">Buat Password *</label><input id="registerPassword" type="password" minlength="8" autocomplete="new-password" required placeholder="Minimal 8 karakter"></div>
         <div class="field"><label for="registerPasswordConfirm">Konfirmasi Password *</label><input id="registerPasswordConfirm" type="password" minlength="8" autocomplete="new-password" required placeholder="Ulangi password"></div>
@@ -1040,7 +1040,7 @@
       return `<section class="panel-card"><h3>Informasi Akun</h3><p class="panel-subtitle">Informasi profil yang terhubung dengan akun Anda</p><div class="profile-grid">
         <div class="profile-item"><small>Nama Lengkap</small><strong>${safeText(currentProfile.full_name || 'Belum diisi')}</strong></div>
         <div class="profile-item"><small>Username</small><strong>${safeText(currentProfile.username || '—')}</strong></div>
-        <div class="profile-item"><small>Email</small><strong>${safeText(currentUser.email||'—')}</strong></div>
+        <div class="profile-item"><small>Email kontak</small><strong>${safeText(currentProfile.contact_email||'Belum diisi')}</strong></div>
         <div class="profile-item"><small>Nomor WhatsApp</small><strong>${safeText(currentProfile.phone||'—')}</strong></div>
         <div class="profile-item"><small>Jenis Kelamin</small><strong>${safeText(currentProfile.gender||'—')}</strong></div>
         <div class="profile-item"><small>Alamat</small><strong>${safeText([currentProfile.address,currentProfile.city,currentProfile.province].filter(Boolean).join(', ')||'—')}</strong></div>
@@ -1200,16 +1200,16 @@
     }
 
     async function openUserDashboard(user) {
-      const {data:profile,error} = await supabaseClient.from('profiles').select('id,full_name,phone,role,created_at,username,gender,address,province,city,birth_year').eq('id',user.id).single();
+      const {data:profile,error} = await supabaseClient.from('profiles').select('id,full_name,phone,role,created_at,username,contact_email,gender,address,province,city,birth_year').eq('id',user.id).single();
       if (error || !profile) throw new Error('Profil pengguna tidak ditemukan. ' + (error?.message || ''));
       if (!roleConfig[profile.role]) throw new Error('Role akun tidak dikenali. Hubungi administrator.');
       currentUser=user; currentProfile=profile; currentRole=profile.role;
       closeModal();
       setAppMode(true);
       setSidebarOpen(false);
-      document.getElementById('dashboardName').textContent = profile.full_name || user.email;
+      document.getElementById('dashboardName').textContent = profile.full_name || profile.username || user.email;
       document.getElementById('dashboardRole').textContent = roleConfig[currentRole].label;
-      document.getElementById('userAvatar').textContent = (profile.full_name || user.email || 'A').trim().charAt(0).toUpperCase();
+      document.getElementById('userAvatar').textContent = (profile.full_name || profile.username || user.email || 'A').trim().charAt(0).toUpperCase();
       const roleSegment = '/dashboard/' + currentRole;
       if (!location.pathname.startsWith(roleSegment)) history.replaceState({page:'overview'},'',roleSegment);
       navigate(parsePageFromPath(), true);
@@ -1223,11 +1223,14 @@
     loginForm.addEventListener('submit', async event => {
       event.preventDefault();
       const submitButton=loginForm.querySelector('button[type="submit"]');
-      const email=document.getElementById('loginUsername').value.trim().toLowerCase();
+      const loginId=document.getElementById('loginUsername').value.trim().toLowerCase();
       const password=document.getElementById('password').value;
       submitButton.disabled=true;submitButton.textContent='Memeriksa akun…';loginNotice.classList.remove('show');
       try{
-        const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+        const {data:resolvedEmail,error:resolveError}=await supabaseClient.rpc('resolve_login_email',{p_login:loginId});
+        if(resolveError) throw resolveError;
+        if(!resolvedEmail) throw new Error('Username/email atau password tidak sesuai.');
+        const {data,error}=await supabaseClient.auth.signInWithPassword({email:resolvedEmail,password});
         if(error) throw error;
         await openUserDashboard(data.user);
       }catch(error){
@@ -1255,15 +1258,17 @@
       const birthYear=Number(registerBirthYear.value);
       const age=new Date().getFullYear()-birthYear;
       if(!/^[a-z0-9._-]{4,24}$/.test(username)){showLoginMessage('Username 4–24 karakter: gunakan huruf, angka, titik, garis bawah, atau tanda hubung.');return;}
+      if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showLoginMessage('Format email tidak valid. Kosongkan jika tidak ingin mengisi email.');return;}
       if(password.length<8){showLoginMessage('Password minimal 8 karakter.');return;}
       if(password!==passwordConfirm){showLoginMessage('Konfirmasi password tidak sama.');return;}
       if(!gender||!provinceCode||!city||!address||!phone||!birthYear||age<5||age>100){showLoginMessage('Lengkapi seluruh data pendaftaran dengan benar.');return;}
       button.disabled=true;button.textContent='Membuat akun…';loginNotice.classList.remove('show');
       try{
+        const internalEmail=`${username}.${crypto.randomUUID()}@login.abt.invalid`;
         const {data,error}=await supabaseClient.auth.signUp({
-          email,
+          email:internalEmail,
           password,
-          options:{data:{full_name:fullName,username,gender,province,province_code:provinceCode,city,address,phone,birth_year:birthYear,teacher_invite_code:document.getElementById('teacherInviteCode').value.trim()||null}}
+          options:{data:{full_name:fullName,username,contact_email:email||null,gender,province,province_code:provinceCode,city,address,phone,birth_year:birthYear,teacher_invite_code:document.getElementById('teacherInviteCode').value.trim()||null}}
         });
         if(error) throw error;
         registerForm.reset();registerAge.value='';registerCity.disabled=true;
@@ -1274,7 +1279,7 @@
           showLoginMessage('Pendaftaran berhasil. Selamat datang di Ayo Belajar Tajwid.',false);
         }else{
           openAuth('login');
-          showLoginMessage('Pendaftaran berhasil. Silakan periksa email untuk konfirmasi akun sebelum login.',false);
+          showLoginMessage('Pendaftaran berhasil. Silakan login menggunakan username dan password.',false);
         }
       }catch(error){showLoginMessage(error.message||'Pendaftaran belum berhasil.');}
       finally{button.disabled=false;button.textContent='Buat Akun Peserta →';}
