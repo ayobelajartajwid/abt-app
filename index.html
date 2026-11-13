@@ -38,6 +38,7 @@
       backdrop-filter: blur(14px); border-bottom: 1px solid rgba(229,236,231,.85);
     }
     .nav { height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand.logo-missing:before{content:"۞";display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#fff;color:#087F9B;font-size:26px;font-weight:900;flex:none}
     .brand { display: flex; align-items: center; gap: 11px; min-width: 210px; }
     .brand img { width: 54px; height: 54px; object-fit: contain; }
     .brand strong { display: block; color: var(--deep); font-size: 16px; line-height: 1.15; letter-spacing: -.3px; }
@@ -454,13 +455,62 @@
     [hidden]{display:none!important}.builder-list{display:grid;gap:12px;margin:16px 0}.builder-item{border:1px solid #dce8ec;border-radius:14px;padding:14px;background:#fff;display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:start}.builder-item.dragging{opacity:.45;border-style:dashed}.builder-handle{cursor:grab;font-size:22px;color:#087f9b;user-select:none;padding:6px}.builder-item input,.builder-item textarea,.teacher-form input,.teacher-form select{width:100%;border:1px solid #dce8ec;border-radius:9px;padding:10px;font:inherit;margin:5px 0 9px}.builder-item textarea{min-height:65px}.builder-actions{display:flex;gap:8px;flex-wrap:wrap}.builder-help{font-size:12px;color:#718078}.teacher-code{padding:14px;border-radius:12px;background:#eaf7f3;border:1px solid #b8dfd1;margin-top:12px;overflow-wrap:anywhere}.teacher-code code{font-size:18px;font-weight:800;letter-spacing:1px;color:#075b78}.class-thumb-preview{width:100%;max-height:140px;object-fit:cover;border-radius:10px}
     #appDashboard.theme-dark .builder-item{background:#10232d;border-color:#345563}#appDashboard.theme-dark .builder-item input,#appDashboard.theme-dark .builder-item textarea,#appDashboard.theme-dark .teacher-form input{background:#10232d;color:#eaf5f7;border-color:#345563}
 
+  
+/* ABT V12 UX enhancement */
+#abtLoading{position:fixed;inset:0;z-index:99999;background:rgba(244,249,249,.94);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+#abtLoading.show{display:flex}.abt-spinner{width:46px;height:46px;border:4px solid #d9e9ed;border-top-color:#087F9B;border-radius:50%;animation:abtspin .8s linear infinite}
+@keyframes abtspin{to{transform:rotate(360deg)}}#abtLoading span{font-size:13px;font-weight:700;color:#075B78}
+.app-sidebar{transition:transform .25s ease,width .25s ease}
+.app-sidebar-toggle{display:none;border:1px solid #dce8ec;background:#fff;color:#075B78;border-radius:10px;width:40px;height:40px;font-size:20px;cursor:pointer}
+.app-shell.sidebar-collapsed{grid-template-columns:76px minmax(0,1fr)}
+.app-shell.sidebar-collapsed .app-sidebar{padding-left:10px;padding-right:10px}
+.app-shell.sidebar-collapsed .app-brand strong,.app-shell.sidebar-collapsed .app-brand small,.app-shell.sidebar-collapsed .app-nav-label,.app-shell.sidebar-collapsed .app-nav a:not(.nav-icon),.app-shell.sidebar-collapsed .sidebar-bottom{display:none}
+.app-shell.sidebar-collapsed .app-nav a{justify-content:center;font-size:0}
+.app-shell.sidebar-collapsed .app-nav .nav-icon{display:block;font-size:18px}
+.course .course-top{aspect-ratio:4/5;overflow:hidden;border-radius:18px 18px 0 0;background:#edf4f4}
+.course .course-top img{width:100%;height:100%;object-fit:cover;display:block}
+.course-detail-view{max-width:1080px;margin:36px auto;padding:0 22px 50px}
+.course-detail-card{background:#fff;border:1px solid #dce8ec;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(5,55,75,.08)}
+.course-detail-image{width:100%;aspect-ratio:4/5;max-height:560px;object-fit:cover;display:block;background:#edf4f4}
+.course-detail-content{padding:clamp(22px,4vw,42px)}
+.course-detail-content h1{color:#075B78;margin:10px 0;font-size:clamp(25px,4vw,38px)}
+.course-detail-description{white-space:pre-line;color:#526875;line-height:1.85}
+.course-detail-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.course-detail-actions .btn{cursor:pointer}
+.abt-loading-inline{padding:40px;text-align:center;color:#69818b}
+.abt-checkout{max-width:760px;margin:30px auto;padding:24px;background:#fff;border:1px solid #dce8ec;border-radius:18px}
+.abt-checkout h2{color:#075B78}
+.abt-checkout .field{margin:14px 0}
+.abt-checkout input,.abt-checkout textarea,.abt-checkout select{width:100%;padding:12px;border:1px solid #dce8ec;border-radius:10px}
+.abt-status{display:inline-block;padding:5px 10px;border-radius:20px;background:#fff3d5;color:#855b00;font-size:12px;font-weight:700}
+@media(max-width:760px){
+ .app-shell{display:block!important}
+ .app-sidebar{position:fixed;z-index:1002;left:0;top:0;bottom:0;width:270px!important;max-width:85vw;transform:translateX(-105%);overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.16)}
+ .app-shell.sidebar-open .app-sidebar{transform:translateX(0)}
+ .app-sidebar-toggle{display:inline-grid;place-items:center}
+ .app-shell.sidebar-collapsed{grid-template-columns:1fr}
+ .app-shell.sidebar-collapsed .app-sidebar{padding:26px 18px}
+ .app-shell.sidebar-collapsed .app-brand strong,.app-shell.sidebar-collapsed .app-brand small,.app-shell.sidebar-collapsed .app-nav-label,.app-shell.sidebar-collapsed .sidebar-bottom{display:block}
+ .app-shell.sidebar-collapsed .app-nav a{justify-content:flex-start;font-size:13px}
+ .app-shell.sidebar-collapsed .app-nav .nav-icon{font-size:16px}
+ .course-detail-view{padding:0 14px;margin:20px auto}
+ .course-detail-image{max-height:420px}
+}
+
+  
+.sidebar-toggle{display:inline-flex!important;flex-direction:column;justify-content:center;gap:4px;width:38px;height:38px;border:1px solid #dce8ec;border-radius:10px;background:#fff;padding:8px;cursor:pointer}
+.sidebar-toggle span{display:block;height:2px;background:#075B78;width:100%;border-radius:2px}
+@media(min-width:761px){.app-shell.sidebar-collapsed{grid-template-columns:76px minmax(0,1fr)}.app-shell.sidebar-collapsed .app-sidebar{padding-left:10px;padding-right:10px}.app-shell.sidebar-collapsed .app-brand strong,.app-shell.sidebar-collapsed .app-brand small,.app-shell.sidebar-collapsed .app-nav-label,.app-shell.sidebar-collapsed .sidebar-bottom{display:none}.app-shell.sidebar-collapsed .app-nav a{justify-content:center;font-size:0}.app-shell.sidebar-collapsed .app-nav .nav-icon{display:block;font-size:18px}}
+@media(max-width:760px){.app-sidebar{position:fixed!important;z-index:1002;left:0;top:0;bottom:0;width:270px!important;max-width:85vw;transform:translateX(-105%);overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.16)}.app-shell.sidebar-open .app-sidebar{transform:translateX(0)}.app-shell .sidebar-scrim{display:none}.app-shell.sidebar-open .sidebar-scrim{display:block;position:fixed;inset:0;background:rgba(4,35,45,.45);z-index:1001}.app-nav{display:grid!important;overflow:visible!important}.app-nav a{white-space:normal!important;font-size:13px!important}.app-nav .nav-icon{display:block!important}}
+
   </style>
 </head>
 <body>
+  <div id="abtLoading" aria-live="polite"><div class="abt-spinner"></div><span>Memuat Ayo Belajar Tajwid...</span></div>
   <header class="topbar">
     <div class="container nav">
       <a class="brand" href="#beranda" aria-label="Ayo Belajar Tajwid">
-        <img src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid">
+        <img src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid" onerror="this.style.display='none';this.parentElement.classList.add('logo-missing')">
         <div><strong>Ayo Belajar Tajwid</strong><span>Belajar · Memperbaiki · Mengamalkan</span></div>
       </a>
       <nav class="navlinks" id="navlinks">
@@ -488,7 +538,7 @@
           <div class="hero-note"><b>●</b> Pembelajaran terstruktur <span>·</span> Materi bertahap <span>·</span> Pendampingan pengajar</div>
         </div>
         <div class="hero-art">
-          <div class="art-glow"><img src="./AYO%20BELAJAR%20TAJWID.png" alt="Identitas Ayo Belajar Tajwid"></div>
+          <div class="art-glow"><img src="./AYO%20BELAJAR%20TAJWID.png" alt="Identitas Ayo Belajar Tajwid" onerror="this.style.display='none'"></div>
           <div class="floating-tag tag-one">مِنَ الْقُرْآنِ نَبْدَأُ</div>
           <div class="floating-tag tag-two">Belajar dengan terarah ✦</div>
         </div>
@@ -519,7 +569,7 @@
 
     <section class="section" id="tentang" data-landing-section="about">
       <div class="container about-grid">
-        <div class="about-mark"><img src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid"></div>
+        <div class="about-mark"><img src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid" onerror="this.style.display='none';this.parentElement.classList.add('logo-missing')"></div>
         <div class="about-copy"><div class="kicker">Tentang kami</div><h2>Ikhtiar menghadirkan pembelajaran tajwid yang mudah diakses</h2><p>Ayo Belajar Tajwid merupakan platform pembelajaran yang berfokus pada tahsin dan ilmu tajwid. Kami ingin membantu masyarakat mempelajari cara membaca Al-Qur'an dengan benar melalui materi yang tersusun dan proses belajar yang terarah.</p><p>Website ini dikembangkan sebagai ruang belajar digital yang menghubungkan peserta, pengajar, dan pengelola kelas dalam satu platform.</p><div class="checks"><div class="check">Materi pembelajaran terarah</div><div class="check">Akses kelas secara online</div><div class="check">Pendampingan pengajar</div><div class="check">Evaluasi perkembangan belajar</div></div><a class="btn btn-primary" href="#kelas">Lihat Program</a></div>
       </div>
     </section>
@@ -557,7 +607,7 @@
       <div class="sidebar-scrim" id="sidebarScrim"></div>
       <aside class="app-sidebar">
         <div class="app-brand">
-          <div class="app-brand-mark"><img src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid"></div>
+          <div class="app-brand-mark"><img src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid" onerror="this.style.display='none';this.parentElement.classList.add('logo-missing')"></div>
           <div><strong>Ayo Belajar Tajwid</strong><small>LEARNING PLATFORM</small></div>
         </div>
         <div>
@@ -643,6 +693,13 @@
         }
       }
     );
+    const abtLoading = document.getElementById('abtLoading');
+    let abtLoadingCount = 0;
+    function showAbtLoading(){abtLoadingCount++;abtLoading?.classList.add('show');}
+    function hideAbtLoading(){abtLoadingCount=Math.max(0,abtLoadingCount-1);if(!abtLoadingCount)abtLoading?.classList.remove('show');}
+    window.addEventListener('beforeunload',()=>abtLoading?.classList.add('show'));
+    window.addEventListener('load',()=>{setTimeout(()=>{abtLoadingCount=0;abtLoading?.classList.remove('show');},250);});
+
 
 
     async function applyPublicSiteContent() {
@@ -756,7 +813,10 @@
       dashboard.classList.toggle('sidebar-open', open);
       if (sidebarToggle) sidebarToggle.setAttribute('aria-expanded', String(open));
     }
-    sidebarToggle?.addEventListener('click', () => setSidebarOpen(!dashboard.classList.contains('sidebar-open')));
+    sidebarToggle?.addEventListener('click', () => {
+      if (window.matchMedia('(max-width:760px)').matches) setSidebarOpen(!dashboard.classList.contains('sidebar-open'));
+      else dashboard.classList.toggle('sidebar-collapsed');
+    });
     sidebarScrim?.addEventListener('click', () => setSidebarOpen(false));
 
     async function applyPublicSiteContent() {
@@ -967,8 +1027,13 @@
           </form></section>`;
       }
       window.abtClassRecords = data || [];
-      const cards=data?.length?`<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${data.map(c=>`<article class="panel-card">${c.thumbnail_url?`<img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Thumbnail ${safeText(c.title)}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:12px" onerror="this.style.display='none'">`:''}<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="status-pill">${safeText(c.status==='published'?'Publikasi':'Draft')}</span>${currentRole==='super_admin'?`<button class="app-button secondary edit-class-btn" type="button" data-class-id="${safeText(c.id)}" style="padding:7px 11px;font-size:11px">✎ Edit kelas</button>`:''}</div><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description||'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.duration_text||'Durasi menyusul')} · ${safeText(c.payment_type||'Biaya menyusul')} · Kuota: ${c.capacity??'—'}</small></article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas yang tersedia. ${currentRole==='super_admin'?'Gunakan formulir di atas untuk membuat kelas pertama.':''}</div>`;
-      return createPanel+cards+`<div id="editClassMount"></div>`;
+      const cards=data?.length?`<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${data.map(c=>`<article class="panel-card">${c.thumbnail_url?`<img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Thumbnail ${safeText(c.title)}" style="width:100%;aspect-ratio:4/5;height:auto;object-fit:cover;border-radius:12px;margin-bottom:12px" onerror="this.style.display='none'">`:''}<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="status-pill">${safeText(c.status==='published'?'Publikasi':'Draft')}</span>${currentRole==='super_admin'?`<button class="app-button secondary edit-class-btn" type="button" data-class-id="${safeText(c.id)}" style="padding:7px 11px;font-size:11px">✎ Edit kelas</button>`:''}</div><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description||'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.duration_text||'Durasi menyusul')} · ${safeText(c.payment_type||'Biaya menyusul')} · Kuota: ${c.capacity??'—'}</small></article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas yang tersedia. ${currentRole==='super_admin'?'Gunakan formulir di atas untuk membuat kelas pertama.':''}</div>`;
+      let paymentPanel='';
+      if(currentRole==='super_admin'||currentRole==='admin'){
+        const {data:payments,error:paymentError}=await supabaseClient.from('class_enrollments').select('id,payment_status,payment_method,payment_reference,created_at,classes(title),profiles:profiles!class_enrollments_student_id_fkey(full_name,username)').order('created_at',{ascending:false}).limit(100);
+        paymentPanel=`<section class="panel-card" style="margin-top:18px"><h3>Konfirmasi Pembayaran & Pendaftaran</h3><p class="panel-subtitle">Periksa konfirmasi peserta dan perbarui status setelah pembayaran diverifikasi.</p>${paymentError?`<div class="app-alert">Jalankan migrasi SQL V12 terlebih dahulu: ${safeText(paymentError.message)}</div>`:!payments?.length?'<p>Belum ada pendaftaran.</p>':`<div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Kelas</th><th>Metode / Catatan</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${payments.map(x=>`<tr><td>${safeText(x.profiles?.full_name||x.profiles?.username||'Peserta')}</td><td>${safeText(x.classes?.title||'—')}</td><td>${safeText(x.payment_method||'—')}<br><small>${safeText(x.payment_reference||'—')}</small></td><td><span class="status-pill">${safeText(x.payment_status)}</span></td><td><select data-payment-status="${safeText(x.id)}"><option value="menunggu_konfirmasi" ${x.payment_status==='menunggu_konfirmasi'?'selected':''}>Menunggu konfirmasi</option><option value="terverifikasi" ${x.payment_status==='terverifikasi'?'selected':''}>Terverifikasi</option><option value="ditolak" ${x.payment_status==='ditolak'?'selected':''}>Ditolak</option></select><button type="button" class="app-button secondary" data-save-payment="${safeText(x.id)}">Simpan</button></td></tr>`).join('')}</tbody></table></div>`}</section>`;
+      }
+      return createPanel+cards+paymentPanel+`<div id="editClassMount"></div>`;
     }
 
     document.addEventListener('click',event=>{
@@ -1146,14 +1211,69 @@
     }
     applyLandingConfig();
 
+
+    function formatRupiah(value){return value==null?'Hubungi Admin':new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(value);}
+    function publicDetailMount(){
+      let el=document.getElementById('abtPublicFlow');
+      if(!el){el=document.createElement('div');el.id='abtPublicFlow';document.body.appendChild(el);}
+      return el;
+    }
+    async function openClassDetail(classId){
+      showAbtLoading();
+      try{
+        const {data:c,error}=await supabaseClient.from('classes').select('id,title,description,category,level,duration_text,payment_type,price_amount,thumbnail_url,schedule,start_date,end_date,capacity').eq('id',classId).eq('status','published').single();
+        if(error||!c)throw new Error('Informasi kelas tidak ditemukan atau belum dipublikasikan.');
+        document.querySelector('body > main').style.display='none';
+        document.querySelector('body > footer').style.display='none';
+        const mount=publicDetailMount();
+        mount.style.display='block';
+        mount.innerHTML=`<div class="course-detail-view"><button class="btn btn-outline" id="abtBackClasses">← Kembali ke daftar kelas</button><article class="course-detail-card" style="margin-top:18px">${c.thumbnail_url?`<img class="course-detail-image" src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="${safeText(c.title)}" onerror="this.style.display='none'">`:''}<div class="course-detail-content"><span class="badge">${safeText(c.category||'Program')}</span><h1>${safeText(c.title)}</h1><p style="color:#66808a">${safeText([c.level,c.duration_text].filter(Boolean).join(' · '))}</p><div class="course-detail-description">${safeText(c.description||'Informasi lengkap kelas akan diperbarui oleh pengelola.')}</div><div class="profile-grid" style="margin-top:20px"><div class="profile-item"><small>Biaya</small><strong>${formatRupiah(c.price_amount)} · ${safeText(({one_time:'Sekali bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||'')}</strong></div><div class="profile-item"><small>Jadwal</small><strong>${safeText(c.schedule||'Diumumkan kemudian')}</strong></div><div class="profile-item"><small>Periode</small><strong>${safeText([c.start_date,c.end_date].filter(Boolean).join(' – ')||c.duration_text||'Informasi menyusul')}</strong></div><div class="profile-item"><small>Kuota</small><strong>${safeText(c.capacity??'Terbatas')}</strong></div></div><div class="course-detail-actions"><button class="btn btn-primary" id="abtEnrollNow" data-class-id="${safeText(c.id)}">Daftar Sekarang</button></div></div></article></div>`;
+        document.getElementById('abtBackClasses').onclick=()=>{history.pushState({},'','/#kelas');mount.style.display='none';document.querySelector('body > main').style.display='';document.querySelector('body > footer').style.display='';document.getElementById('kelas')?.scrollIntoView();};
+        document.getElementById('abtEnrollNow').onclick=()=>beginClassEnrollment(c.id);
+      }catch(e){alert(e.message);history.replaceState({},'','/');}
+      finally{hideAbtLoading();}
+    }
+    async function beginClassEnrollment(classId){
+      sessionStorage.setItem('abt_pending_class_id',String(classId));
+      if(!currentUser){openAuth('login');showLoginMessage('Silakan login atau daftar akun terlebih dahulu untuk melanjutkan pendaftaran.',false);return;}
+      await showEnrollmentCheckout(classId);
+    }
+    async function showEnrollmentCheckout(classId){
+      showAbtLoading();
+      try{
+        const {data:c,error}=await supabaseClient.from('classes').select('id,title,price_amount,payment_type').eq('id',classId).eq('status','published').single();
+        if(error||!c)throw error||new Error('Kelas tidak tersedia.');
+        const mount=publicDetailMount();mount.style.display='block';
+        setAppMode(false);dashboard.style.display='none';
+        document.querySelector('body > main').style.display='none';document.querySelector('body > footer').style.display='none';
+        mount.innerHTML=`<section class="abt-checkout"><button class="btn btn-outline" id="abtCheckoutBack">← Kembali ke kelas</button><h2>Konfirmasi Pendaftaran</h2><p>Anda mendaftar pada kelas <strong>${safeText(c.title)}</strong>.</p><div class="profile-item"><small>Total pembayaran</small><strong>${formatRupiah(c.price_amount)} · ${safeText(c.payment_type||'')}</strong></div><form id="abtPaymentForm"><div class="field"><label>Metode pembayaran *</label><select id="abtPayMethod" required><option value="">Pilih metode</option><option value="transfer_bank">Transfer bank</option><option value="qris">QRIS</option><option value="konfirmasi_admin">Konfirmasi dengan Admin</option></select></div><div class="field"><label>Nomor referensi / catatan pembayaran</label><textarea id="abtPayReference" rows="3" placeholder="Isi nomor referensi transfer atau catatan. Jika belum membayar, tulis 'Menunggu instruksi pembayaran'."></textarea></div><div class="app-alert">Setelah mengirim konfirmasi, status pendaftaran menjadi <strong>Menunggu konfirmasi Admin</strong>. Detail rekening/QRIS harus diperoleh dari kanal resmi Admin.</div><button class="btn btn-primary" type="submit">Kirim Konfirmasi Pendaftaran</button><p id="abtPayFeedback" role="status"></p></form></section>`;
+        document.getElementById('abtCheckoutBack').onclick=()=>openClassDetail(classId);
+        document.getElementById('abtPaymentForm').onsubmit=async ev=>{
+          ev.preventDefault();const fb=document.getElementById('abtPayFeedback');const btn=ev.target.querySelector('button[type=submit]');btn.disabled=true;btn.textContent='Mengirim...';
+          const {error:insertError}=await supabaseClient.from('class_enrollments').insert({class_id:classId,student_id:currentUser.id,payment_method:document.getElementById('abtPayMethod').value,payment_reference:document.getElementById('abtPayReference').value.trim(),payment_status:'menunggu_konfirmasi'});
+          if(insertError){fb.textContent='Belum berhasil: '+insertError.message;fb.style.color='#b42318';btn.disabled=false;btn.textContent='Kirim Konfirmasi Pendaftaran';}
+          else{sessionStorage.removeItem('abt_pending_class_id');fb.textContent='Pendaftaran berhasil dikirim. Silakan menunggu konfirmasi Admin.';fb.style.color='#087F9B';btn.textContent='Terkirim';const done=document.createElement('button');done.type='button';done.className='btn btn-outline';done.textContent='Kembali ke Beranda';done.onclick=()=>{location.href='/';};ev.target.appendChild(done);}
+        };
+      }catch(e){alert('Gagal membuka konfirmasi pendaftaran: '+e.message);}
+      finally{hideAbtLoading();}
+    }
+    async function continuePendingEnrollment(){
+      const id=sessionStorage.getItem('abt_pending_class_id');
+      if(id&&currentUser){await showEnrollmentCheckout(id);}
+    }
     async function applyPublicClasses(){
       const grid=document.querySelector('#kelas .course-grid');if(!grid)return;
       const {data,error}=await supabaseClient.from('classes').select('id,title,description,category,duration_text,payment_type,price_amount,thumbnail_url').eq('status','published').order('created_at',{ascending:false}).limit(12);
       if(error){grid.innerHTML='<p class="empty-state">Daftar kelas belum dapat dimuat. Silakan coba beberapa saat lagi.</p>';return;}
       if(!data?.length){grid.innerHTML='<p class="empty-state">Kelas baru akan ditampilkan di sini setelah dipublikasikan.</p>';return;}
-      grid.innerHTML=data.map(c=>`<article class="course">${c.thumbnail_url?`<div class="course-top"><img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="${safeText(c.title)}" style="width:100%;height:170px;object-fit:cover"></div>`:`<div class="course-top"><span class="badge">${safeText(c.category||'PROGRAM')}</span></div>`}<div class="course-body"><h3>${safeText(c.title)}</h3><p>${safeText(c.description||'Program pembelajaran Ayo Belajar Tajwid.')}</p><div class="course-meta"><span>${safeText(c.duration_text||'Durasi menyusul')}</span><span>${safeText(c.category||'Kelas')}</span></div><p><strong>${c.price_amount?new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(c.price_amount):'Hubungi kami'}</strong> · ${safeText(({one_time:'1x bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||c.payment_type||'')}</p><a class="course-link" href="#kontak">Tanyakan program →</a></div></article>`).join('');
+      grid.innerHTML=data.map(c=>`<article class="course">${c.thumbnail_url?`<div class="course-top"><img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="${safeText(c.title)}" loading="lazy" onerror="this.style.display='none'"></div>`:`<div class="course-top"><span class="badge">${safeText(c.category||'PROGRAM')}</span></div>`}<div class="course-body"><h3>${safeText(c.title)}</h3><p>${safeText((c.description||'Program pembelajaran Ayo Belajar Tajwid.').slice(0,145))}${(c.description||'').length>145?'…':''}</p><div class="course-meta"><span>${safeText(c.duration_text||'Durasi menyusul')}</span><span>${safeText(c.category||'Kelas')}</span></div><p><strong>${formatRupiah(c.price_amount)}</strong> · ${safeText(({one_time:'1x bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||c.payment_type||'')}</p><div class="course-detail-actions"><button class="btn btn-outline" type="button" data-class-detail="${safeText(c.id)}">Selengkapnya</button><button class="btn btn-primary" type="button" data-class-enroll="${safeText(c.id)}">Daftar Sekarang</button></div></div></article>`).join('');
     }
-    applyPublicClasses();
+    document.addEventListener('click',e=>{
+      const detail=e.target.closest('[data-class-detail]');if(detail){history.pushState({},'','/?kelas='+encodeURIComponent(detail.dataset.classDetail));openClassDetail(detail.dataset.classDetail);}
+      const enroll=e.target.closest('[data-class-enroll]');if(enroll)beginClassEnrollment(enroll.dataset.classEnroll);
+    });
+    const classFromUrl=new URLSearchParams(location.search).get('kelas');if(classFromUrl)openClassDetail(classFromUrl);else applyPublicClasses();
+
 
     async function loadSiteContentEditor(){
       if(currentRole!=='super_admin')return '<div class="app-alert">Halaman ini hanya dapat diakses Super Admin.</div>';
@@ -1204,6 +1324,7 @@
     });
     document.addEventListener('click',async e=>{if(e.target?.id==='copyTeacherInvite'){await navigator.clipboard.writeText(document.getElementById('teacherInviteCodeValue').textContent);e.target.textContent='Tersalin';}});
     async function renderDashboardPage(page) {
+      showAbtLoading();
       const nav = document.getElementById('appNavigation');
       nav.innerHTML = (roleMenus[currentRole] || []).map(m=>`<a href="${routePath(m[0])}" data-page="${m[0]}" class="${page===m[0]?'active':''}"><span class="nav-icon">${navIcon(m[0])}</span>${m[1]}</a>`).join('');
       nav.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setSidebarOpen(false);navigate(a.dataset.page);}));
@@ -1225,7 +1346,7 @@
         content.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();navigate(a.dataset.page);}));
       } catch (err) {
         content.innerHTML = `<div class="app-alert">Terjadi kendala saat memuat halaman: ${safeText(err.message)}</div>`;
-      }
+      } finally { hideAbtLoading(); }
     }
 
     async function openUserDashboard(user) {
@@ -1262,6 +1383,7 @@
         const {data,error}=await supabaseClient.auth.signInWithPassword({email:resolvedEmail,password});
         if(error) throw error;
         await openUserDashboard(data.user);
+        await continuePendingEnrollment();
       }catch(error){
         showPublicWebsite();
         showLoginMessage(error.message||'Login gagal. Periksa username/email dan password.');
@@ -1305,6 +1427,7 @@
         if(data.session){
           closeModal();
           await openUserDashboard(data.user);
+          await continuePendingEnrollment();
           showLoginMessage('Pendaftaran berhasil. Selamat datang di Ayo Belajar Tajwid.',false);
         }else{
           openAuth('login');
@@ -1327,6 +1450,7 @@
     });
     const FORCE_PUBLIC_PREVIEW = new URLSearchParams(location.search).get('preview') === 'public';
     (async function restoreSession() {
+      showAbtLoading();
       if (FORCE_PUBLIC_PREVIEW) { showPublicWebsite(); return; }
       const {data:{session}} = await supabaseClient.auth.getSession();
       if (!session) {
@@ -1334,7 +1458,8 @@
         if (location.pathname.startsWith('/dashboard')) history.replaceState({},'','/');
         return;
       }
-      try { await openUserDashboard(session.user); }
+      try { await openUserDashboard(session.user);
+        await continuePendingEnrollment(); }
       catch(error) { console.error('Gagal memuat dashboard:',error); await supabaseClient.auth.signOut(); showPublicWebsite(); }
     })();
     supabaseClient.auth.onAuthStateChange((event,session) => {
