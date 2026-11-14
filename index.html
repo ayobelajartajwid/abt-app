@@ -503,6 +503,18 @@
 @media(min-width:761px){.app-shell.sidebar-collapsed{grid-template-columns:76px minmax(0,1fr)}.app-shell.sidebar-collapsed .app-sidebar{padding-left:10px;padding-right:10px}.app-shell.sidebar-collapsed .app-brand strong,.app-shell.sidebar-collapsed .app-brand small,.app-shell.sidebar-collapsed .app-nav-label,.app-shell.sidebar-collapsed .sidebar-bottom{display:none}.app-shell.sidebar-collapsed .app-nav a{justify-content:center;font-size:0}.app-shell.sidebar-collapsed .app-nav .nav-icon{display:block;font-size:18px}}
 @media(max-width:760px){.app-sidebar{position:fixed!important;z-index:1002;left:0;top:0;bottom:0;width:270px!important;max-width:85vw;transform:translateX(-105%);overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.16)}.app-shell.sidebar-open .app-sidebar{transform:translateX(0)}.app-shell .sidebar-scrim{display:none}.app-shell.sidebar-open .sidebar-scrim{display:block;position:fixed;inset:0;background:rgba(4,35,45,.45);z-index:1001}.app-nav{display:grid!important;overflow:visible!important}.app-nav a{white-space:normal!important;font-size:13px!important}.app-nav .nav-icon{display:block!important}}
 
+
+    .public-account{display:flex;align-items:center;gap:10px}
+    .public-profile-button{display:flex;align-items:center;gap:8px;border:0;background:transparent;color:var(--deep);font-weight:750;padding:5px 8px;border-radius:12px;cursor:pointer}
+    .public-profile-button:hover{background:var(--soft)}
+    .public-avatar{width:38px;height:38px;border-radius:50%;background:#e5f2f5;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+    .public-avatar svg{width:24px;height:24px;fill:none;stroke:#075b78;stroke-width:1.7;stroke-linecap:round}
+    .public-theme-toggle{width:38px;height:38px;border:1px solid var(--line);border-radius:11px;background:var(--paper);color:var(--deep);font-size:21px;cursor:pointer}
+    body.public-dark{--paper:#10232d;--soft:#172f3b;--ink:#e8f1f4;--muted:#a9bdc6;--line:#294653;background:var(--paper);color:var(--ink)}
+    body.public-dark .topbar,body.public-dark footer,body.public-dark .course,body.public-dark .panel-card{background:#142b36;color:var(--ink)}
+    body.public-dark .navlinks a,body.public-dark .brand,body.public-dark .public-profile-button{color:var(--ink)}
+    body.public-dark .public-theme-toggle{background:#142b36;color:var(--ink)}
+    @media(max-width:760px){.public-account{gap:5px}.public-profile-button{font-size:12px}.public-profile-button span:last-child{max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.public-account .btn{padding:8px 10px;font-size:12px}}
   </style>
 </head>
 <body>
@@ -516,9 +528,17 @@
       <nav class="navlinks" id="navlinks">
         <a href="#beranda">Beranda</a><a href="#program">Program</a><a href="#kelas">Kelas</a><a href="#tentang">Tentang Kami</a><a href="#kontak">Kontak</a>
       </nav>
-      <div class="nav-actions">
-        <button class="btn btn-outline" type="button" data-open-register>Daftar</button>
-        <button class="btn btn-primary" type="button" data-open-login>Login</button>
+      <div class="nav-actions" id="publicNavActions">
+        <button class="btn btn-outline" type="button" data-open-register id="publicRegisterBtn">Daftar</button>
+        <button class="btn btn-primary" type="button" data-open-login id="publicLoginBtn">Login</button>
+        <div class="public-account" id="publicAccount" style="display:none">
+          <button class="public-theme-toggle" id="publicThemeToggle" type="button" aria-label="Ganti tema" title="Terang / Gelap">☼</button>
+          <button class="public-profile-button" id="publicProfileButton" type="button" aria-label="Buka dashboard pengguna">
+            <span class="public-avatar" id="publicAvatar" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c.7-4.2 3.5-6.5 8-6.5s7.3 2.3 8 6.5"/></svg></span>
+            <span id="publicProfileName">Pengguna</span>
+          </button>
+          <button class="btn btn-outline" type="button" id="publicLogoutButton">Keluar</button>
+        </div>
         <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">☰</button>
       </div>
     </div>
@@ -889,6 +909,30 @@
     let currentUser = null;
     let currentProfile = null;
     let currentRole = null;
+    const publicAccount=document.getElementById('publicAccount');
+    const publicLoginBtn=document.getElementById('publicLoginBtn');
+    const publicRegisterBtn=document.getElementById('publicRegisterBtn');
+    const publicProfileButton=document.getElementById('publicProfileButton');
+    const publicLogoutButton=document.getElementById('publicLogoutButton');
+    const publicThemeToggle=document.getElementById('publicThemeToggle');
+    function applyPublicTheme(){
+      const dark=localStorage.getItem('abt_public_theme')==='dark';
+      document.body.classList.toggle('public-dark',dark);
+      if(publicThemeToggle)publicThemeToggle.textContent=dark?'☾':'☼';
+    }
+    applyPublicTheme();
+    publicThemeToggle?.addEventListener('click',()=>{localStorage.setItem('abt_public_theme',document.body.classList.contains('public-dark')?'light':'dark');applyPublicTheme();});
+    publicProfileButton?.addEventListener('click',()=>openUserDashboard(currentUser,true));
+    publicLogoutButton?.addEventListener('click',async()=>{await supabaseClient.auth.signOut();showPublicWebsite();});
+    function updatePublicAccountUI(){
+      const logged=!!currentUser;
+      if(publicAccount)publicAccount.style.display=logged?'flex':'none';
+      if(publicLoginBtn)publicLoginBtn.style.display=logged?'none':'';
+      if(publicRegisterBtn)publicRegisterBtn.style.display=logged?'none':'';
+      const name=currentProfile?.full_name||currentProfile?.username||'Pengguna';
+      const label=document.getElementById('publicProfileName');if(label)label.textContent=name;
+    }
+
 
     const roleMenus = {
       super_admin: [
@@ -1349,23 +1393,30 @@
       } finally { hideAbtLoading(); }
     }
 
-    async function openUserDashboard(user) {
+    async function openUserDashboard(user, showDashboard = false) {
+      if(!user) return;
       const {data:profile,error} = await supabaseClient.from('profiles').select('id,full_name,phone,role,created_at,username,contact_email,gender,address,province,city,birth_year').eq('id',user.id).single();
       if (error || !profile) throw new Error('Profil pengguna tidak ditemukan. ' + (error?.message || ''));
       if (!roleConfig[profile.role]) throw new Error('Role akun tidak dikenali. Hubungi administrator.');
       currentUser=user; currentProfile=profile; currentRole=profile.role;
       closeModal();
-      setAppMode(true);
-      setSidebarOpen(false);
-      document.getElementById('dashboardName').textContent = profile.full_name || profile.username || user.email;
-      document.getElementById('dashboardRole').textContent = roleConfig[currentRole].label;
-      document.getElementById('userAvatar').textContent = (profile.full_name || profile.username || user.email || 'A').trim().charAt(0).toUpperCase();
-      const roleSegment = '/dashboard/' + currentRole;
-      if (!location.pathname.startsWith(roleSegment)) history.replaceState({page:'overview'},'',roleSegment);
-      navigate(parsePageFromPath(), true);
+      updatePublicAccountUI();
+      if(showDashboard){
+        setAppMode(true);setSidebarOpen(false);
+        document.getElementById('dashboardName').textContent = profile.full_name || profile.username || user.email;
+        document.getElementById('dashboardRole').textContent = roleConfig[currentRole].label;
+        document.getElementById('userAvatar').textContent = (profile.full_name || profile.username || 'A').trim().charAt(0).toUpperCase();
+        const roleSegment='/dashboard/'+currentRole;
+        if(!location.pathname.startsWith(roleSegment))history.pushState({page:'overview'},'',roleSegment);
+        navigate(parsePageFromPath(),true);
+      }else{
+        setAppMode(false);
+        if(location.pathname.startsWith('/dashboard'))history.replaceState({},'','/');
+      }
     }
     function showPublicWebsite() {
       currentUser=null; currentProfile=null; currentRole=null;
+      updatePublicAccountUI();
       setAppMode(false);
       if (location.pathname.startsWith('/dashboard')) history.replaceState({},'', '/');
     }
@@ -1382,13 +1433,11 @@
         if(!resolvedEmail) throw new Error('Username/email atau password tidak sesuai.');
         const {data,error}=await supabaseClient.auth.signInWithPassword({email:resolvedEmail,password});
         if(error) throw error;
-        await openUserDashboard(data.user);
-        await continuePendingEnrollment();
+        await openUserDashboard(data.user,false);
+        showLoginMessage('Login berhasil. Anda tetap berada di halaman utama. Klik nama atau foto profil untuk membuka dashboard.',false);
+        try{await continuePendingEnrollment();}catch(enrollError){console.error('Login berhasil, tetapi proses pendaftaran belum dapat dilanjutkan:',enrollError);}
       }catch(error){
-        showPublicWebsite();
         showLoginMessage(error.message||'Login gagal. Periksa username/email dan password.');
-        const {data:sessionData}=await supabaseClient.auth.getSession();
-        if(sessionData.session) await supabaseClient.auth.signOut();
       }finally{submitButton.disabled=false;submitButton.textContent='Login →';}
     });
 
@@ -1426,9 +1475,9 @@
         registerCity.innerHTML='<option value="">Pilih provinsi terlebih dahulu</option>';
         if(data.session){
           closeModal();
-          await openUserDashboard(data.user);
-          await continuePendingEnrollment();
-          showLoginMessage('Pendaftaran berhasil. Selamat datang di Ayo Belajar Tajwid.',false);
+          await openUserDashboard(data.user,false);
+          showLoginMessage('Pendaftaran berhasil. Selamat datang! Anda tetap berada di halaman utama.',false);
+          try{await continuePendingEnrollment();}catch(enrollError){console.error('Pendaftaran akun berhasil, kelanjutan pendaftaran kelas tertunda:',enrollError);}
         }else{
           openAuth('login');
           showLoginMessage('Pendaftaran berhasil. Silakan login menggunakan username dan password.',false);
@@ -1445,8 +1494,8 @@
     window.addEventListener('popstate', async () => {
       if (!currentUser) return;
       const segment = '/dashboard/' + currentRole;
-      if (!location.pathname.startsWith(segment)) { navigate('overview',true); return; }
-      await renderDashboardPage(parsePageFromPath());
+      if (location.pathname.startsWith(segment)) { await renderDashboardPage(parsePageFromPath()); }
+      else { setAppMode(false); }
     });
     const FORCE_PUBLIC_PREVIEW = new URLSearchParams(location.search).get('preview') === 'public';
     (async function restoreSession() {
@@ -1458,9 +1507,9 @@
         if (location.pathname.startsWith('/dashboard')) history.replaceState({},'','/');
         return;
       }
-      try { await openUserDashboard(session.user);
-        await continuePendingEnrollment(); }
-      catch(error) { console.error('Gagal memuat dashboard:',error); await supabaseClient.auth.signOut(); showPublicWebsite(); }
+      try { await openUserDashboard(session.user,false);
+        try{await continuePendingEnrollment();}catch(enrollError){console.error('Pendaftaran kelas belum dapat dilanjutkan:',enrollError);} }
+      catch(error) { console.error('Gagal memuat profil pengguna:',error); showPublicWebsite(); }
     })();
     supabaseClient.auth.onAuthStateChange((event,session) => {
       if (FORCE_PUBLIC_PREVIEW) { showPublicWebsite(); return; }
