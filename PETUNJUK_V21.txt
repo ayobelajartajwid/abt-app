@@ -1,0 +1,49 @@
+AYO BELAJAR TAJWID â€” PEMBARUAN V21 PRIVAT & TAGIHAN
+
+Paket ini melanjutkan aplikasi ABT V20. Pertahankan semua file V20, konfigurasi Supabase, dan logo dengan path persis:
+./AYO%20BELAJAR%20TAJWID.png
+
+FITUR V21
+- Admin dan Super Admin dapat membuat, mengedit, dan menerbitkan kelas Privat.
+- Kelas Privat yang diterbitkan tampil di landing page dan menu Peserta > Ikuti Kelas.
+- Pendaftaran Privat muncul di menu Pengajar > Permintaan Kelas Privat.
+- Satu kelas privat kelompok maksimal 5 peserta dan hanya memiliki satu pengajar. Pengajar pertama yang menerima peserta akan mengklaim kelas. Pengajar lain tidak dapat melihat atau mengambil roster kelas tersebut. Sebelum kelas diambil, antrean hanya mengembalikan nama/username dan nomor WhatsApp yang diperlukan untuk memilih; detail pembayaran dan profil lengkap tetap tertutup. Peserta menerima notifikasi siapa pengajar yang ditetapkan.
+- Biaya pendaftaran Privat dibayar satu kali (default Rp50.000). Tagihan pertemuan memakai tarif Admin berikut untuk sesi 60 menit:
+  1 peserta: Rp50.000 per peserta (total kelas Rp50.000)
+  2 peserta: Rp40.000 per peserta (total kelas Rp80.000)
+  3 peserta: Rp35.000 per peserta (total kelas Rp105.000)
+  4 peserta: Rp30.000 per peserta (total kelas Rp120.000)
+  5 peserta: Rp27.500 per peserta (total kelas Rp137.500)
+- Tarif tabel dapat diubah Admin di menu Keuangan. Invoice Privat baru dibuat setelah Admin menyetujui laporan pengajar.
+- Kelas kategori Reguler dengan skema Bulanan menggunakan tarif tetap per peserta. Harga kelas dibekukan saat pendaftaran; perubahan harga kelas berlaku untuk pendaftar baru.
+- Invoice Reguler dibuat otomatis setiap tanggal 1 pukul 00.05 WIB untuk peserta yang status pendaftarannya terverifikasi. Jatuh tempo tanggal 5. Notifikasi muncul di aplikasi. Tombol di menu Keuangan dapat dipakai Admin untuk menerbitkan ulang bulan berjalan; invoice duplikat tidak dibuat.
+- Riwayat harga pendaftaran V20 yang belum memiliki snapshot diisi menggunakan harga kelas saat migrasi dijalankan karena harga saat pendaftaran lama tidak disimpan pada skema sebelumnya.
+
+PEMASANGAN SUPABASE
+1. Buat cadangan database sebelum perubahan skema.
+2. Pastikan paket V20 berjalan dan SQL_ABT_V19_PENGAJAR.sql serta SQL_ABT_V20_INTEGRASI.sql sudah diterapkan.
+3. Di Supabase SQL Editor, jalankan seluruh isi SQL_ABT_V21_PRIVAT_TAGIHAN.sql satu kali. Migrasi membuat tarif awal, snapshot harga pendaftaran, aturan akses pengajar, fungsi klaim peserta, invoice, notifikasi, dan jadwal Supabase Cron.
+4. Pastikan SQL selesai tanpa error. Lihat tabel private_class_rate_tiers berisi lima tingkat tarif dan Cron job bernama abt-v21-regular-monthly-billing.
+5. Jangan menambahkan service_role key ke index.html. Konfigurasi Supabase V20 dipertahankan.
+
+PEMASANGAN GITHUB / VERCEL
+1. Unggah seluruh isi paket ini ke root situs dengan mengganti file yang namanya sama.
+2. Tambahkan SQL_ABT_V21_PRIVAT_TAGIHAN.sql dan PETUNJUK_V21.txt.
+3. Pertahankan AYO BELAJAR TAJWID.png di root dan jangan ubah path logo.
+4. Commit dan push ke branch utama, lalu tunggu deployment selesai. Vercel memakai vercel.json; GitHub Pages memakai 404.html untuk fallback rute dashboard.
+
+UJI ALUR YANG DISARANKAN
+1. Admin membuat kelas Privat dengan biaya pendaftaran Rp50.000, maksimal 5 peserta, dan pengajar dikosongkan. Terbitkan kelas.
+2. Pastikan kelas tampil di landing page dan Peserta > Ikuti Kelas.
+3. Daftarkan peserta dan verifikasi pembayaran pendaftaran sebagai Admin. Pastikan permintaan muncul untuk pengajar.
+4. Login dengan dua akun pengajar. Ambil kelas memakai pengajar pertama, lalu pastikan pengajar kedua mendapat pesan bahwa kelas sudah diambil dan tidak bisa melihat roster kelas itu.
+5. Pastikan peserta melihat notifikasi penetapan pengajar, kelas, jadwal, dan tautan yang diisi pengajar.
+6. Tambahkan sesi privat, kirim laporan bulan sebelumnya, lalu setujui laporan sebagai Admin. Pastikan invoice Privat dihitung dari jumlah sesi Ã— tarif per peserta menurut jumlah peserta aktif.
+7. Buat kelas Reguler dengan tagihan bulanan, daftarkan dan verifikasi peserta. Ubah harga kelas setelah pendaftaran; pastikan invoice tetap menggunakan snapshot harga saat pendaftaran. Periksa tanggal jatuh tempo invoice tanggal 5.
+
+BATASAN / OPERASIONAL
+- Migrasi V21 membuat extension pg_cron dan jadwal otomatis. Jika Supabase menolak pemasangan extension, aktifkan pg_cron di Dashboard Supabase terlebih dahulu lalu jalankan ulang SQL V21.
+- Invoice adalah catatan tagihan. Pembayaran tidak diproses otomatis; Admin tetap memeriksa pembayaran dan menandai invoice lunas.
+- Uji login dan akses terpisah dengan akun Admin, Pengajar, dan Peserta. Jangan menguji klaim kelas menggunakan akun yang sudah memiliki kelas privat aktif.
+- Kelas Privat menggunakan satu pengajar untuk seluruh peserta dalam satu kelas kelompok. Jika nantinya ingin setiap peserta pada kelas yang sama memiliki pengajar berbeda, model kelas dan aturan tarif perlu disesuaikan.
+
