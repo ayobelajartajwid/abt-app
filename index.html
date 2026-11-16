@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#075B78">
   <link rel="icon" type="image/png" sizes="any" href="./AYO%20BELAJAR%20TAJWID.png">
   <link rel="apple-touch-icon" href="./AYO%20BELAJAR%20TAJWID.png">
-  <meta name="description" content="Ayo Belajar Tajwid â€” platform pembelajaran tahsin dan tajwid secara terarah, mudah, dan bertahap.">
+  <meta name="description" content="Ayo Belajar Tajwid &#x2014; platform pembelajaran tahsin dan tajwid secara terarah, mudah, dan bertahap.">
   <title>Ayo Belajar Tajwid | Belajar Al-Qur'an dengan Baik</title>
   <style>
     :root {
@@ -39,7 +39,7 @@
       backdrop-filter: blur(14px); border-bottom: 1px solid rgba(229,236,231,.85);
     }
     .nav { height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .brand.logo-missing:before{content:"Ûž";display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#fff;color:#087F9B;font-size:26px;font-weight:900;flex:none}
+    .brand.logo-missing:before{content:"\6DE ";display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#fff;color:#087F9B;font-size:26px;font-weight:900;flex:none}
     .brand { display: flex; align-items: center; gap: 11px; min-width: 210px; }
     .brand img { width: 54px; height: 54px; object-fit: contain; }
     .brand strong { display: block; color: var(--deep); font-size: 16px; line-height: 1.15; letter-spacing: -.3px; }
@@ -92,7 +92,7 @@
     .course-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
     .course { padding: 0; overflow: hidden; }
     .course-top { min-height: 145px; padding: 24px; background: linear-gradient(135deg, #E7F4F6, #f8f5e7); position: relative; }
-    .course-top:after { content: "Ù‚"; position: absolute; right: 23px; bottom: -17px; color: rgba(8,122,85,.10); font-family: serif; font-size: 120px; line-height: 1; }
+    .course-top:after { content: "\642 "; position: absolute; right: 23px; bottom: -17px; color: rgba(8,122,85,.10); font-family: serif; font-size: 120px; line-height: 1; }
     .badge { display: inline-block; background: rgba(8,122,85,.1); color: var(--deep); padding: 6px 10px; border-radius: 99px; font-size: 10px; font-weight: 800; letter-spacing: .5px; }
     .course-body { padding: 23px; }
     .course-meta { display: flex; flex-wrap: wrap; gap: 13px; color: #78877f; font-size: 11px; margin: 17px 0 20px; }
@@ -105,7 +105,7 @@
     .about-copy p { color: var(--muted); font-size: 14px; }
     .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0 28px; }
     .check { color: var(--deep); font-size: 12px; font-weight: 750; }
-    .check:before { content: "âœ“"; color: var(--emerald); font-weight: 900; margin-right: 8px; }
+    .check:before { content: "\2713 "; color: var(--emerald); font-weight: 900; margin-right: 8px; }
     .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; counter-reset: step; }
     .step { position: relative; }
     .step:before { counter-increment: step; content: "0" counter(step); display: block; color: var(--gold); font-size: 27px; font-weight: 900; margin-bottom: 18px; }
@@ -543,10 +543,130 @@
 .payment-save-feedback{display:block;font-size:11px;margin-top:5px}
 @media(max-width:1050px){.class-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.class-dashboard-grid{grid-template-columns:1fr}.class-dashboard-thumb,.class-dashboard-thumb-placeholder{max-width:190px}.class-manager-toolbar{align-items:stretch}.class-manager-toolbar>.app-button{width:100%}}
+
+/* CSS akun pengajar */
+/* ABT V19 teacher workspace styles follow the existing dashboard palette. */
+.teacher-stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.teacher-dashboard-lower{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}
+.teacher-section-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
+.teacher-section-heading h3{margin:0 0 5px}
+.teacher-section-heading .panel-subtitle{margin:0}
+.teacher-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}
+.teacher-class-card{min-width:0;padding:17px!important}
+.teacher-class-card h3{margin:12px 0 7px;overflow-wrap:anywhere}
+.teacher-class-card p{font-size:13px;line-height:1.6;color:var(--muted,#718078);min-height:42px}
+.teacher-class-meta{font-size:12px;line-height:1.7;color:var(--muted,#718078);margin:10px 0}
+.teacher-class-card a,.teacher-file-link{color:var(--primary,#087f9b);font-weight:750;text-decoration:none}
+.teacher-class-card a:hover,.teacher-file-link:hover{text-decoration:underline}
+.teacher-form-card{border:1px solid var(--border,#dce8e8);background:var(--surface-soft,#f7faf9);border-radius:14px;padding:17px;margin:16px 0}
+.teacher-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.teacher-form-grid>label{display:block;min-width:0;font-size:12px;font-weight:750;color:#355568}
+.teacher-form-grid input:not([type=checkbox]),.teacher-form-grid select,.teacher-form-grid textarea,.teacher-score-form input,.teacher-score-form textarea{display:block;width:100%;min-height:42px;border:1px solid #dce8ec;border-radius:10px;padding:10px 11px;margin-top:6px;background:#fff;color:#243746;font:inherit;font-size:13px;box-sizing:border-box}
+.teacher-form-grid textarea,.teacher-score-form textarea{resize:vertical;min-height:82px}
+.teacher-form-grid input[type=file]{padding:8px;font-size:12px}
+.teacher-span-all{grid-column:1/-1}
+.teacher-check-label{display:flex!important;align-items:center;gap:8px}
+.teacher-check-label input{width:17px;height:17px;accent-color:#087f9b}
+.teacher-form-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:13px}
+.teacher-feedback{font-size:12px;color:#355568;overflow-wrap:anywhere}
+.teacher-help,.teacher-muted{font-size:12px;color:var(--muted,#718078);line-height:1.6}
+.teacher-record-list{display:grid;gap:11px;margin-top:16px}
+.teacher-record-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:15px;align-items:center;padding:15px;border:1px solid var(--border,#dce8e8);border-radius:13px;background:var(--surface,#fff);min-width:0}
+.teacher-record-card h4{font-size:15px;margin:9px 0 5px;overflow-wrap:anywhere}
+.teacher-record-card p{margin:0;color:var(--muted,#718078);font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.teacher-record-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.teacher-record-actions-column{flex-direction:column;align-items:stretch}
+.teacher-record-actions .app-button{white-space:nowrap}
+.app-button.danger{background:#fff1f0;color:#b42318;border:1px solid #ffc9c4}
+.teacher-count-badge{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:6px 11px;border-radius:20px;background:#e9f5f4;color:#075b78;font-size:12px;font-weight:750;white-space:nowrap}
+.teacher-score-form{display:grid;grid-template-columns:minmax(90px,140px) minmax(160px,1fr) auto;align-items:start;gap:7px;min-width:430px}
+.teacher-score-form input,.teacher-score-form textarea{margin:0;min-height:38px}
+.teacher-score-form textarea{min-height:38px}
+.teacher-results-panel{margin-top:16px;border:1px solid #b8d9d7}
+.teacher-notification-list{display:grid;gap:10px}
+.teacher-notification{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px;border:1px solid var(--border,#dce8e8);border-radius:13px;background:var(--surface,#fff)}
+.teacher-notification.is-unread{border-left:4px solid #087f9b;background:#f5fbfa}
+.teacher-notification h4{margin:8px 0 4px;font-size:15px}
+.teacher-notification p{margin:0;color:var(--muted,#718078);font-size:13px;line-height:1.6}
+.teacher-notification-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.teacher-notification-meta time{font-size:11px;color:var(--muted,#718078)}
+.teacher-avatar-card{margin-bottom:16px}
+.teacher-avatar-layout{display:flex;align-items:center;gap:18px}
+.teacher-avatar-preview{width:88px;height:88px;flex:0 0 88px;border-radius:50%;object-fit:cover;border:3px solid #d7ece8;background:#eaf5f3}
+.teacher-avatar-fallback{display:grid;place-items:center;color:#075b78;font-weight:800;font-size:32px}
+.teacher-avatar-layout h3{margin:0 0 5px}
+.teacher-avatar-layout .panel-subtitle{margin:0 0 10px}
+#appDashboard.theme-dark .teacher-form-card,#appDashboard.theme-dark .teacher-record-card,#appDashboard.theme-dark .teacher-notification{background:#10232d;border-color:#345563}
+#appDashboard.theme-dark .teacher-form-grid>label{color:#c9e2e6}
+#appDashboard.theme-dark .teacher-form-grid input:not([type=checkbox]),#appDashboard.theme-dark .teacher-form-grid select,#appDashboard.theme-dark .teacher-form-grid textarea,#appDashboard.theme-dark .teacher-score-form input,#appDashboard.theme-dark .teacher-score-form textarea{background:#10232d;border-color:#345563;color:#eaf5f7}
+#appDashboard.theme-dark .teacher-notification.is-unread{background:#132c35}
+#appDashboard.theme-dark .teacher-count-badge{background:#173741;color:#c9e2e6}
+@media(max-width:1050px){.teacher-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.teacher-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.teacher-dashboard-lower{grid-template-columns:1fr}.teacher-record-card{grid-template-columns:1fr}.teacher-record-actions{justify-content:flex-start}.teacher-record-actions-column{flex-direction:row;flex-wrap:wrap}.teacher-notification{align-items:flex-start;flex-direction:column}.teacher-score-form{min-width:0;grid-template-columns:1fr}.teacher-avatar-layout{align-items:flex-start}}
+@media(max-width:560px){.teacher-card-grid,.teacher-form-grid,.teacher-stats-grid{grid-template-columns:1fr}.teacher-span-all{grid-column:auto}.teacher-section-heading{align-items:flex-start;flex-direction:column}.teacher-avatar-layout{flex-direction:column}.teacher-record-actions .app-button{flex:1 1 auto}.teacher-form-actions .app-button{flex:1 1 auto}}
+
+/* CSS portal peserta dan admin */
+/* ABT V20 integration layer: inherits the V18/V19 design tokens and components. */
+.abt-v20-bell{position:relative;flex:none}
+.abt-v20-bell-count{position:absolute;right:-4px;top:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;display:grid;place-items:center;background:#c83b43;color:#fff;font-size:10px;font-weight:800;line-height:1}
+.abt-v20-bell-count[hidden]{display:none}
+.app-avatar img{width:100%;height:100%;border-radius:inherit;object-fit:cover;display:block}
+.abt-v20-section-head,.abt-v20-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.abt-v20-section-head h3,.abt-v20-card-head h3{margin:0 0 4px}
+.abt-v20-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px;margin-top:14px}
+.abt-v20-class-card,.abt-v20-record,.abt-v20-invoice-card{min-width:0}
+.abt-v20-class-card h3,.abt-v20-record h3{margin:8px 0}
+.abt-v20-card-facts{display:flex;gap:9px 14px;flex-wrap:wrap;align-items:center;margin:12px 0;color:#617887;font-size:13px}
+.abt-v20-card-facts strong{color:#075b78}
+.abt-v20-link-row,.abt-v20-inline-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.abt-v20-link-row .app-button,.abt-v20-inline-actions .app-button{font-size:12px;padding:8px 12px}
+.abt-v20-muted{font-size:12px;color:#70858e}
+.abt-v20-status{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;border-radius:999px;background:#f1f4f5;color:#556b74;font-size:11px;font-weight:750;white-space:nowrap}
+.abt-v20-status.is-active{background:#e5f7ed;color:#167448}
+.abt-v20-note{margin:12px 0;padding:13px 15px;border:1px solid #efcf8d;border-radius:12px;background:#fff9eb;color:#795419;font-size:13px;overflow-wrap:anywhere}
+.abt-v20-note code{font-size:12px}
+.abt-v20-invoice-total{font-size:24px;font-weight:850;color:#075b78;margin:10px 0}
+.abt-v20-grade{padding:10px 12px;margin:10px 0;border-radius:12px;background:#eaf7f0;color:#165f3e}
+.abt-v20-grade p{margin:4px 0 0}
+.abt-v20-student-answer{padding:9px 10px;margin:8px 0;border-radius:10px;background:#f3f8f9;max-width:360px;overflow-wrap:anywhere}
+.abt-v20-student-answer p{margin:5px 0;white-space:pre-wrap}
+.abt-v20-student-answer small{display:block;margin-top:5px;color:#71858d}
+.abt-v20-payroll-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+.abt-v20-payroll-summary>div{padding:14px;border:1px solid #dce8ec;border-radius:14px;background:#f7fafb;min-width:0}
+.abt-v20-payroll-summary small,.abt-v20-payroll-summary strong{display:block}
+.abt-v20-payroll-summary small{color:#617887;font-size:11px}
+.abt-v20-payroll-summary strong{margin-top:5px;color:#075b78;font-size:17px;overflow-wrap:anywhere}
+.abt-v20-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;margin-top:14px}
+.abt-v20-form-grid label,.abt-v20-link-form label,.abt-v20-announcement-form label,.abt-v20-submission-form label,.abt-v20-rate-form label{display:grid;gap:6px;color:#385661;font-size:12px;font-weight:700;min-width:0}
+.abt-v20-form-grid input,.abt-v20-form-grid select,.abt-v20-form-grid textarea,.abt-v20-link-form input,.abt-v20-announcement-form input,.abt-v20-announcement-form select,.abt-v20-announcement-form textarea,.abt-v20-submission-form input,.abt-v20-submission-form textarea,.abt-v20-rate-form input,.abt-v20-reminder-form select{width:100%;min-width:0;border:1px solid #d4e1e5;border-radius:10px;padding:10px 11px;background:#fff;color:#193e49;font:inherit;font-size:13px}
+.abt-v20-span-all{grid-column:1/-1}
+.abt-v20-feedback{display:block;min-height:18px;color:#087f9b;font-size:12px;overflow-wrap:anywhere}
+.abt-v20-rate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px;margin-top:14px}
+.abt-v20-rate-form{padding:12px;border:1px solid #e2ebee;border-radius:13px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:8px}
+.abt-v20-rate-form .abt-v20-feedback{grid-column:1/-1}
+.abt-v20-input-money{display:flex;align-items:center;gap:5px}
+.abt-v20-input-money input{min-width:0}
+.abt-v20-announcement-form{display:grid;gap:11px;margin-bottom:14px}
+.abt-v20-notification-list{display:grid;gap:10px;margin-top:14px}
+.abt-v20-notification{padding:14px;border:1px solid #e1eaed;border-radius:14px;background:#fff;overflow-wrap:anywhere}
+.abt-v20-notification.is-unread{border-color:#a6dbe3;background:#f5fcfd}
+.abt-v20-notification h3{margin:8px 0 4px;font-size:16px}
+.abt-v20-notification p{margin:0 0 8px;color:#506a74}
+.abt-v20-notification-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#71858d}
+.abt-v20-notification-meta time{font-size:11px}
+.abt-v20-reminder-form{display:flex;gap:6px;min-width:190px}
+.abt-v20-reminder-form .app-button{white-space:nowrap}
+.theme-dark .abt-v20-payroll-summary>div,.theme-dark .abt-v20-notification,.theme-dark .abt-v20-rate-form{background:#112a32;border-color:#294650}
+.theme-dark .abt-v20-notification.is-unread{background:#13343c;border-color:#2d6874}
+.theme-dark .abt-v20-student-answer{background:#10242b}
+.theme-dark .abt-v20-payroll-summary strong,.theme-dark .abt-v20-card-facts strong{color:#78d1dc}
+.theme-dark .abt-v20-payroll-summary small,.theme-dark .abt-v20-notification p,.theme-dark .abt-v20-muted{color:#a8bdc3}
+.theme-dark .abt-v20-form-grid input,.theme-dark .abt-v20-form-grid select,.theme-dark .abt-v20-form-grid textarea,.theme-dark .abt-v20-link-form input,.theme-dark .abt-v20-announcement-form input,.theme-dark .abt-v20-announcement-form select,.theme-dark .abt-v20-announcement-form textarea,.theme-dark .abt-v20-submission-form input,.theme-dark .abt-v20-submission-form textarea,.theme-dark .abt-v20-rate-form input,.theme-dark .abt-v20-reminder-form select{background:#10242b;color:#e5f2f4;border-color:#34525b}
+@media(max-width:900px){.abt-v20-payroll-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.abt-v20-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.abt-v20-form-grid{grid-template-columns:1fr}.abt-v20-span-all{grid-column:auto}.abt-v20-payroll-summary{grid-template-columns:1fr 1fr}.abt-v20-section-head{align-items:stretch}.abt-v20-rate-form{grid-template-columns:1fr}.abt-v20-rate-form .abt-v20-feedback{grid-column:auto}.abt-v20-reminder-form{min-width:0;flex-wrap:wrap}.abt-v20-reminder-form select{flex:1}.abt-v20-card-head{align-items:center}}
+
 </style>
 <meta name="abt-version" content="V20-INTEGRASI">
-<link rel="stylesheet" href="./teacher-portal.css">
-<link rel="stylesheet" href="./integration-portal.css">
 </head>
 <body>
   <div id="abtLoading" aria-live="polite"><div class="abt-spinner"></div><span>Memuat Ayo Belajar Tajwid...</span></div>
@@ -554,7 +674,7 @@
     <div class="container nav">
       <a class="brand" href="#beranda" aria-label="Ayo Belajar Tajwid">
         <img src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid" onerror="this.style.display='none';this.parentElement.classList.add('logo-missing')">
-        <div><strong>Ayo Belajar Tajwid</strong><span>Belajar Â· Memperbaiki Â· Mengamalkan</span></div>
+        <div><strong>Ayo Belajar Tajwid</strong><span>Belajar &#xB7; Memperbaiki &#xB7; Mengamalkan</span></div>
       </a>
       <nav class="navlinks" id="navlinks">
         <a href="#beranda">Beranda</a><a href="#program">Program</a><a href="#kelas">Kelas</a><a href="#tentang">Tentang Kami</a><a href="#kontak">Kontak</a>
@@ -563,14 +683,14 @@
         <button class="btn btn-outline" type="button" data-open-register id="publicRegisterBtn">Daftar</button>
         <button class="btn btn-primary" type="button" data-open-login id="publicLoginBtn">Login</button>
         <div class="public-account" id="publicAccount" style="display:none">
-          <button class="public-theme-toggle" id="publicThemeToggle" type="button" aria-label="Ganti tema" title="Terang / Gelap">â˜¼</button>
+          <button class="public-theme-toggle" id="publicThemeToggle" type="button" aria-label="Ganti tema" title="Terang / Gelap">&#x263C;</button>
           <button class="public-profile-button" id="publicProfileButton" type="button" aria-label="Buka dashboard pengguna">
             <span class="public-avatar" id="publicAvatar" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c.7-4.2 3.5-6.5 8-6.5s7.3 2.3 8 6.5"/></svg></span>
             <span id="publicProfileName">Pengguna</span>
           </button>
           <button class="btn btn-outline" type="button" id="publicLogoutButton">Keluar</button>
         </div>
-        <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">â˜°</button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">&#x2630;</button>
       </div>
     </div>
   </header>
@@ -583,15 +703,15 @@
           <h1 id="publicHeroTitle">Perbaiki Bacaan,<br><em>Indahkan Tilawah.</em></h1>
           <p class="hero-copy" id="publicHeroDescription">Belajar tahsin dan tajwid secara terarah bersama pengajar. Mulai dari mengenal makharijul huruf hingga menerapkan kaidah tajwid dalam bacaan Al-Qur'an.</p>
           <div class="hero-buttons">
-            <a class="btn btn-gold" href="#kelas">Jelajahi Kelas <span>â†’</span></a>
+            <a class="btn btn-gold" href="#kelas">Jelajahi Kelas <span>&#x2192;</span></a>
             <a class="btn btn-outline" href="#tentang">Kenali Platform</a>
           </div>
-          <div class="hero-note"><b>â—</b> Pembelajaran terstruktur <span>Â·</span> Materi bertahap <span>Â·</span> Pendampingan pengajar</div>
+          <div class="hero-note"><b>&#x25CF;</b> Pembelajaran terstruktur <span>&#xB7;</span> Materi bertahap <span>&#xB7;</span> Pendampingan pengajar</div>
         </div>
         <div class="hero-art">
           <div class="art-glow"><img src="./AYO%20BELAJAR%20TAJWID.png" alt="Identitas Ayo Belajar Tajwid" onerror="this.style.display='none'"></div>
-          <div class="floating-tag tag-one">Ù…ÙÙ†ÙŽ Ø§Ù„Ù’Ù‚ÙØ±Ù’Ø¢Ù†Ù Ù†ÙŽØ¨Ù’Ø¯ÙŽØ£Ù</div>
-          <div class="floating-tag tag-two">Belajar dengan terarah âœ¦</div>
+          <div class="floating-tag tag-one">&#x645;&#x650;&#x646;&#x64E; &#x627;&#x644;&#x652;&#x642;&#x64F;&#x631;&#x652;&#x622;&#x646;&#x650; &#x646;&#x64E;&#x628;&#x652;&#x62F;&#x64E;&#x623;&#x64F;</div>
+          <div class="floating-tag tag-two">Belajar dengan terarah &#x2726;</div>
         </div>
       </div>
     </section>
@@ -600,9 +720,9 @@
       <div class="container">
         <div class="section-head"><div class="kicker">Mengapa belajar bersama kami?</div><h2>Belajar dengan arah yang jelas</h2><p>Proses belajar dirancang agar peserta memahami kaidah, melatih ketepatan pelafalan, dan memperbaiki kualitas bacaan secara bertahap.</p></div>
         <div class="features">
-          <article class="feature"><div class="iconbox">Ûž</div><h3>Materi Terstruktur</h3><p>Pembelajaran disusun bertahap, dari dasar-dasar bacaan hingga penerapan kaidah tajwid.</p></article>
-          <article class="feature"><div class="iconbox">âœ¦</div><h3>Pendampingan Pengajar</h3><p>Peserta mendapatkan arahan dan evaluasi untuk membantu proses perbaikan bacaan.</p></article>
-          <article class="feature"><div class="iconbox">â–¤</div><h3>Belajar Lebih Terpantau</h3><p>Materi dan aktivitas pembelajaran nantinya dapat diakses melalui dashboard peserta.</p></article>
+          <article class="feature"><div class="iconbox">&#x6DE;</div><h3>Materi Terstruktur</h3><p>Pembelajaran disusun bertahap, dari dasar-dasar bacaan hingga penerapan kaidah tajwid.</p></article>
+          <article class="feature"><div class="iconbox">&#x2726;</div><h3>Pendampingan Pengajar</h3><p>Peserta mendapatkan arahan dan evaluasi untuk membantu proses perbaikan bacaan.</p></article>
+          <article class="feature"><div class="iconbox">&#x25A4;</div><h3>Belajar Lebih Terpantau</h3><p>Materi dan aktivitas pembelajaran nantinya dapat diakses melalui dashboard peserta.</p></article>
         </div>
       </div>
     </section>
@@ -611,9 +731,9 @@
       <div class="container">
         <div class="section-head"><div class="kicker">Program pembelajaran</div><h2>Temukan kelas yang tepat</h2><p>Pilih program sesuai kebutuhan dan kemampuan bacaan Anda. Informasi kelas dapat diperbarui oleh pengelola platform.</p></div>
         <div class="course-grid">
-          <article class="course"><div class="course-top"><span class="badge">PROGRAM DASAR</span></div><div class="course-body"><h3>Tahsin Dasar</h3><p>Mengenal dan memperbaiki pelafalan huruf hijaiyah, makharijul huruf, serta sifat-sifat huruf.</p><div class="course-meta"><span>â—· Materi bertahap</span><span>â—Ž Kelas pemula</span></div><a class="course-link" href="#kontak">Tanyakan program â†’</a></div></article>
-          <article class="course"><div class="course-top"><span class="badge">PROGRAM TAJWID</span></div><div class="course-body"><h3>Belajar Ilmu Tajwid</h3><p>Memahami hukum-hukum bacaan dan melatih penerapannya ketika membaca Al-Qur'an.</p><div class="course-meta"><span>â—· Materi bertahap</span><span>â—Ž Teori & praktik</span></div><a class="course-link" href="#kontak">Tanyakan program â†’</a></div></article>
-          <article class="course"><div class="course-top"><span class="badge">PROGRAM INTENSIF</span></div><div class="course-body"><h3>Tahsin Intensif</h3><p>Program pendampingan yang lebih terarah untuk meningkatkan ketepatan dan kualitas bacaan.</p><div class="course-meta"><span>â—· Terjadwal</span><span>â—Ž Dengan pengajar</span></div><a class="course-link" href="#kontak">Tanyakan program â†’</a></div></article>
+          <article class="course"><div class="course-top"><span class="badge">PROGRAM DASAR</span></div><div class="course-body"><h3>Tahsin Dasar</h3><p>Mengenal dan memperbaiki pelafalan huruf hijaiyah, makharijul huruf, serta sifat-sifat huruf.</p><div class="course-meta"><span>&#x25F7; Materi bertahap</span><span>&#x25CE; Kelas pemula</span></div><a class="course-link" href="#kontak">Tanyakan program &#x2192;</a></div></article>
+          <article class="course"><div class="course-top"><span class="badge">PROGRAM TAJWID</span></div><div class="course-body"><h3>Belajar Ilmu Tajwid</h3><p>Memahami hukum-hukum bacaan dan melatih penerapannya ketika membaca Al-Qur'an.</p><div class="course-meta"><span>&#x25F7; Materi bertahap</span><span>&#x25CE; Teori & praktik</span></div><a class="course-link" href="#kontak">Tanyakan program &#x2192;</a></div></article>
+          <article class="course"><div class="course-top"><span class="badge">PROGRAM INTENSIF</span></div><div class="course-body"><h3>Tahsin Intensif</h3><p>Program pendampingan yang lebih terarah untuk meningkatkan ketepatan dan kualitas bacaan.</p><div class="course-meta"><span>&#x25F7; Terjadwal</span><span>&#x25CE; Dengan pengajar</span></div><a class="course-link" href="#kontak">Tanyakan program &#x2192;</a></div></article>
         </div>
       </div>
     </section>
@@ -637,7 +757,7 @@
     </section>
 
     <section class="cta" id="kontak" data-landing-section="cta">
-      <div class="container cta-inner"><div><h2>Siap memperbaiki bacaan Al-Qur'an?</h2><p>Mulailah ikhtiar belajar tahsin dan tajwid bersama Ayo Belajar Tajwid.</p></div><a class="btn btn-gold" href="mailto:info@ayobelajartajwid.com">Hubungi Kami â†—</a></div>
+      <div class="container cta-inner"><div><h2>Siap memperbaiki bacaan Al-Qur'an?</h2><p>Mulailah ikhtiar belajar tahsin dan tajwid bersama Ayo Belajar Tajwid.</p></div><a class="btn btn-gold" href="mailto:info@ayobelajartajwid.com">Hubungi Kami &#x2197;</a></div>
     </section>
   </main>
 
@@ -648,7 +768,7 @@
         <div><h4>NAVIGASI</h4><div class="footer-links"><a href="#beranda">Beranda</a><a href="#program">Program</a><a href="#kelas">Kelas</a><a href="#tentang">Tentang Kami</a></div></div>
         <div><h4>AKUN</h4><div class="footer-links"><a href="#" data-open-login>Login Peserta</a><a href="#kontak">Hubungi Kami</a></div></div>
       </div>
-      <div class="copyright"><span>Â© <span id="year"></span> Ayo Belajar Tajwid. Seluruh hak cipta dilindungi.</span><span>Dibangun untuk mendukung pembelajaran Al-Qur'an.</span></div>
+      <div class="copyright"><span>&#xA9; <span id="year"></span> Ayo Belajar Tajwid. Seluruh hak cipta dilindungi.</span><span>Dibangun untuk mendukung pembelajaran Al-Qur'an.</span></div>
     </div>
   </footer>
 
@@ -667,7 +787,7 @@
         </div>
         <div class="sidebar-bottom">
           <div>Platform Pembelajaran Al-Qur'an</div>
-          <button class="app-logout" id="logoutButton" type="button">Keluar dari akun â†—</button>
+          <button class="app-logout" id="logoutButton" type="button">Keluar dari akun &#x2197;</button>
         </div>
       </aside>
       <main class="app-main">
@@ -699,14 +819,14 @@
 
   <div class="modal-backdrop" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
     <div class="login-modal">
-      <button class="modal-close" type="button" id="closeLogin" aria-label="Tutup">Ã—</button>
+      <button class="modal-close" type="button" id="closeLogin" aria-label="Tutup">&#xD7;</button>
       <img class="login-logo" src="./AYO%20BELAJAR%20TAJWID.png" alt="Logo Ayo Belajar Tajwid">
       <h2 id="loginTitle">Login</h2>
       <p class="sub" id="authSubtitle">Masuk ke akun Ayo Belajar Tajwid Anda</p>
       <form id="loginForm">
         <div class="field"><label for="loginUsername">Username atau Email</label><input id="loginUsername" type="text" placeholder="Masukkan username atau email" autocomplete="username" required></div>
         <div class="field"><label for="password">Password</label><input id="password" type="password" placeholder="Masukkan password" autocomplete="current-password" required></div>
-        <button class="btn btn-primary" type="submit">Login â†’</button>
+        <button class="btn btn-primary" type="submit">Login &#x2192;</button>
       </form>
       <form id="registerForm" style="display:none">
         <div class="field"><label for="registerName">Nama Lengkap *</label><input id="registerName" type="text" autocomplete="name" required></div>
@@ -722,7 +842,7 @@
         <div class="field"><label for="registerPhone">Nomor WhatsApp *</label><input id="registerPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxxxx" required></div>
         <div class="field"><label for="registerBirthYear">Tahun Kelahiran *</label><select id="registerBirthYear" required><option value="">Pilih tahun kelahiran</option></select></div>
         <div class="field"><label for="registerAge">Usia saat ini</label><input id="registerAge" type="text" readonly placeholder="Terhitung otomatis"></div>
-        <button class="btn btn-primary" type="submit">Buat Akun â†’</button>
+        <button class="btn btn-primary" type="submit">Buat Akun &#x2192;</button>
       </form>
       <div class="notice" id="loginNotice" role="status" aria-live="polite"></div>
       
@@ -731,8 +851,1092 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./teacher-portal.js"></script>
-  <script src="./integration-portal.js"></script>
+  <script>/* ABT V19 teacher workspace. All teacher records are scoped by Supabase RLS. */
+const ABT_TEACHER_MATERIAL_BUCKET = 'abt-teacher-materials';
+const ABT_TEACHER_AVATAR_BUCKET = 'abt-teacher-avatars';
+
+function abtTeacherAllowed() {
+  return currentRole === 'pengajar' && Boolean(currentUser?.id);
+}
+
+function abtTeacherDenied() {
+  return '<div class="app-alert">Halaman ini hanya tersedia untuk akun Pengajar.</div>';
+}
+
+function abtTeacherSchemaNotice(error) {
+  const details = error?.message ? ` (${safeText(error.message)})` : '';
+  return `<div class="app-alert"><strong>Modul belum tersambung.</strong> Jalankan <code>SQL_ABT_V19_PENGAJAR.sql</code> di Supabase, lalu muat ulang halaman${details}.</div>`;
+}
+
+async function abtTeacherAssignedClasses() {
+  if (!abtTeacherAllowed()) return { data: [], error: new Error('Akses pengajar diperlukan.') };
+  return await supabaseClient.from('classes')
+    .select('id,title,description,category,level,status,start_date,end_date,schedule,capacity,instructor_id')
+    .eq('instructor_id', currentUser.id)
+    .order('created_at', { ascending: false });
+}
+
+function abtTeacherClassOptions(classes, selectedId = '') {
+  return (classes || []).map(c => `<option value="${safeText(c.id)}" ${String(c.id) === String(selectedId) ? 'selected' : ''}>${safeText(c.title)}</option>`).join('');
+}
+
+function abtTeacherClassSelect(classes, selectedId = '', id = 'abtTeacherClassId') {
+  return `<select id="${id}" name="class_id" required><option value="">Pilih kelas</option>${abtTeacherClassOptions(classes, selectedId)}</select>`;
+}
+
+function abtTeacherEmpty(message) {
+  return `<div class="panel-card empty-state">${safeText(message)}</div>`;
+}
+
+function abtTeacherUuid() {
+  return globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function abtTeacherSafeFileName(name) {
+  return String(name || 'file').normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(-100) || 'file';
+}
+
+function abtTeacherSafeHttpUrl(value) {
+  try {
+    const parsed = new URL(String(value || '').trim());
+    return ['https:', 'http:'].includes(parsed.protocol) ? parsed.href : '';
+  } catch (_) { return ''; }
+}
+
+function abtTeacherIso(value) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function abtTeacherLocalDateTime(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 16);
+}
+
+function abtTeacherDate(value, includeTime = false) {
+  if (!value) return 'Belum ditentukan';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Belum ditentukan';
+  return date.toLocaleString('id-ID', includeTime ? { dateStyle: 'medium', timeStyle: 'short' } : { dateStyle: 'medium' });
+}
+
+async function abtTeacherSignedUrl(bucket, path) {
+  if (!path) return '';
+  const { data, error } = await supabaseClient.storage.from(bucket).createSignedUrl(path, 3600);
+  return error ? '' : (data?.signedUrl || '');
+}
+
+async function abtTeacherLoadEnrollments(classIds) {
+  if (!classIds?.length) return { data: [], error: null };
+  return await supabaseClient.from('class_enrollments')
+    .select('id,class_id,student_id,payment_status,created_at')
+    .in('class_id', classIds)
+    .order('created_at', { ascending: false });
+}
+
+async function abtTeacherProfileMap(studentIds) {
+  const ids = [...new Set((studentIds || []).filter(Boolean))];
+  if (!ids.length) return { map: {}, error: null };
+  const { data, error } = await supabaseClient.from('profiles')
+    .select('id,full_name,username,contact_email,phone')
+    .in('id', ids);
+  const map = Object.fromEntries((data || []).map(p => [p.id, p]));
+  return { map, error };
+}
+
+async function loadTeacherOverview() {
+  if (!abtTeacherAllowed()) return abtTeacherDenied();
+  const { data: classes, error: classError } = await abtTeacherAssignedClasses();
+  if (classError) return `<div class="app-alert">Kelas pengajar belum dapat dimuat: ${safeText(classError.message)}</div>`;
+  const classRows = classes || [];
+  const classIds = classRows.map(c => c.id);
+  const [enrollmentResult, activityResult, evaluationResult, notificationResult] = await Promise.all([
+    abtTeacherLoadEnrollments(classIds),
+    classIds.length ? supabaseClient.from('teacher_activities').select('id,title,class_id,starts_at').in('class_id', classIds).gte('starts_at', new Date().toISOString()).order('starts_at').limit(5) : Promise.resolve({ data: [], error: null }),
+    classIds.length ? supabaseClient.from('teacher_evaluations').select('id,title,class_id,due_at,kind').in('class_id', classIds).order('created_at', { ascending: false }).limit(5) : Promise.resolve({ data: [], error: null }),
+    supabaseClient.from('teacher_notifications').select('id', { count: 'exact', head: true }).is('read_at', null)
+  ]);
+  const enrollments = enrollmentResult.data || [];
+  const activeStatuses = new Set(['terverifikasi', 'approved', 'active', 'aktif']);
+  const activeStudents = new Set(enrollments.filter(e => activeStatuses.has(String(e.payment_status || '').toLowerCase())).map(e => e.student_id)).size;
+  const classById = Object.fromEntries(classRows.map(c => [c.id, c]));
+  const stats = [
+    ['Kelas diampu', classRows.length],
+    ['Peserta aktif', activeStudents],
+    ['Jadwal mendatang', activityResult.error ? '\u2014' : (activityResult.data || []).length],
+    ['Notifikasi baru', notificationResult.error ? '\u2014' : (notificationResult.count || 0)]
+  ];
+  const classCards = classRows.length ? `<div class="teacher-card-grid">${classRows.slice(0, 6).map(c => `<article class="panel-card teacher-class-card"><span class="status-pill">${safeText(c.status === 'published' ? 'Kelas aktif' : 'Kelas ditugaskan')}</span><h3>${safeText(c.title)}</h3><p>${safeText([c.category, c.level].filter(Boolean).join(' \u00B7 ') || c.description || 'Kelas yang ditugaskan kepada Anda.')}</p><div class="teacher-class-meta">${safeText(c.schedule || 'Jadwal belum diatur')}<br>${safeText(c.start_date ? abtTeacherDate(c.start_date) : 'Tanggal mulai belum ditentukan')}</div><a href="${routePath('students')}" data-page="students">Lihat peserta \u2192</a></article>`).join('')}</div>` : abtTeacherEmpty('Belum ada kelas yang ditugaskan kepada akun Anda. Hubungi Super Admin untuk penugasan kelas.');
+  const activityRows = activityResult.error
+    ? `<tr><td colspan="3">Jadwal belum dapat dimuat. Pastikan migrasi V19 sudah dijalankan.</td></tr>`
+    : (activityResult.data || []).map(a => `<tr><td>${safeText(a.title)}</td><td>${safeText(classById[a.class_id]?.title || 'Kelas')}</td><td>${safeText(abtTeacherDate(a.starts_at, true))}</td></tr>`).join('') || `<tr><td colspan="3">Belum ada jadwal mendatang.</td></tr>`;
+  const evaluationRows = evaluationResult.error
+    ? `<tr><td colspan="3">Evaluasi belum dapat dimuat. Pastikan migrasi V19 sudah dijalankan.</td></tr>`
+    : (evaluationResult.data || []).map(e => `<tr><td>${safeText(e.title)}</td><td>${safeText(classById[e.class_id]?.title || 'Kelas')}</td><td>${safeText(e.due_at ? abtTeacherDate(e.due_at, true) : 'Tanpa tenggat')}</td></tr>`).join('') || `<tr><td colspan="3">Belum ada tugas atau latihan.</td></tr>`;
+  return `<section class="welcome-panel"><h2>Assalamu'alaikum, ${safeText(currentProfile?.full_name || currentUser.email || 'Pengajar')}!</h2><p>Kelola kelas yang ditugaskan, dampingi peserta, dan pantau pembelajaran dari satu tempat.</p></section>
+    <div class="stats-grid teacher-stats-grid">${stats.map(([label, value]) => `<article class="stat-card"><div class="stat-card-copy"><small>${label}</small><strong>${safeText(value)}</strong><span class="stat-accent" aria-hidden="true"></span></div></article>`).join('')}</div>
+    <section class="panel-card"><div class="teacher-section-heading"><div><h3>Kelas Saya</h3><p class="panel-subtitle">Hanya kelas yang ditugaskan kepada akun Anda yang ditampilkan.</p></div><a class="app-button secondary" href="${routePath('classes')}" data-page="classes">Semua kelas</a></div>${classCards}</section>
+    <div class="dashboard-grid teacher-dashboard-lower"><section class="panel-card"><h3>Jadwal Mendatang</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Aktivitas</th><th>Kelas</th><th>Waktu</th></tr></thead><tbody>${activityRows}</tbody></table></div></section><section class="panel-card"><h3>Tugas & Latihan</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Evaluasi</th><th>Kelas</th><th>Tenggat</th></tr></thead><tbody>${evaluationRows}</tbody></table></div></section></div>`;
+}
+
+async function loadTeacherStudents() {
+  if (!abtTeacherAllowed()) return abtTeacherDenied();
+  const { data: classes, error: classError } = await abtTeacherAssignedClasses();
+  if (classError) return `<div class="app-alert">Kelas pengajar belum dapat dimuat: ${safeText(classError.message)}</div>`;
+  const classRows = classes || [];
+  if (!classRows.length) return `<section class="panel-card"><h3>Peserta Kelas</h3>${abtTeacherEmpty('Belum ada peserta karena belum ada kelas yang ditugaskan.')}</section>`;
+  const { data: enrollments, error } = await abtTeacherLoadEnrollments(classRows.map(c => c.id));
+  if (error) return `<div class="app-alert">Data peserta belum dapat dimuat: ${safeText(error.message)}</div>`;
+  const { map: profiles, error: profileError } = await abtTeacherProfileMap((enrollments || []).map(e => e.student_id));
+  if (profileError) return `<div class="app-alert">Nama peserta belum dapat dimuat: ${safeText(profileError.message)}</div>`;
+  const classById = Object.fromEntries(classRows.map(c => [c.id, c]));
+  const rows = (enrollments || []).map(e => {
+    const p = profiles[e.student_id] || {};
+    return `<tr><td><strong>${safeText(p.full_name || p.username || 'Peserta')}</strong><br><small>${safeText(p.username ? '@' + p.username : '')}</small></td><td>${safeText(classById[e.class_id]?.title || 'Kelas')}</td><td>${safeText(p.contact_email || '\u2014')}</td><td>${safeText(p.phone || '\u2014')}</td><td><span class="status-pill">${safeText(e.payment_status || 'Menunggu')}</span></td><td>${safeText(abtTeacherDate(e.created_at))}</td></tr>`;
+  }).join('') || `<tr><td colspan="6">Belum ada pendaftaran peserta pada kelas yang ditugaskan.</td></tr>`;
+  return `<section class="panel-card"><div class="teacher-section-heading"><div><h3>Peserta Kelas</h3><p class="panel-subtitle">Daftar peserta dibatasi pada kelas yang Anda ampu.</p></div><span class="teacher-count-badge">${(enrollments || []).length} pendaftaran</span></div><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Kelas</th><th>Email</th><th>WhatsApp</th><th>Status</th><th>Terdaftar</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+}
+
+async function loadTeacherMaterials() {
+  if (!abtTeacherAllowed()) return abtTeacherDenied();
+  const { data: classes, error: classError } = await abtTeacherAssignedClasses();
+  if (classError) return `<div class="app-alert">Kelas pengajar belum dapat dimuat: ${safeText(classError.message)}</div>`;
+  const classRows = classes || [];
+  if (!classRows.length) return `<section class="panel-card"><h3>Materi Pembelajaran</h3>${abtTeacherEmpty('Penugasan kelas diperlukan sebelum Anda dapat menambahkan materi.')}</section>`;
+  const { data, error } = await supabaseClient.from('teacher_materials')
+    .select('id,class_id,title,description,storage_path,external_url,created_at,classes(title)')
+    .in('class_id', classRows.map(c => c.id)).order('created_at', { ascending: false });
+  if (error) return abtTeacherSchemaNotice(error);
+  const rows = data || [];
+  window.abtTeacherMaterials = rows;
+  const classOptions = abtTeacherClassOptions(classRows);
+  const list = await Promise.all(rows.map(async item => {
+    const downloadUrl = item.storage_path ? await abtTeacherSignedUrl(ABT_TEACHER_MATERIAL_BUCKET, item.storage_path) : abtTeacherSafeHttpUrl(item.external_url);
+    const link = downloadUrl ? `<a class="teacher-file-link" href="${safeText(downloadUrl)}" target="_blank" rel="noopener noreferrer">Buka materi \u2197</a>` : '<span class="teacher-muted">Tautan tidak tersedia</span>';
+    return `<article class="teacher-record-card"><div><span class="status-pill">${safeText(item.classes?.title || 'Kelas')}</span><h4>${safeText(item.title)}</h4><p>${safeText(item.description || 'Tidak ada keterangan.')}</p>${link}</div><div class="teacher-record-actions"><button type="button" class="app-button secondary" data-edit-material="${safeText(item.id)}">Edit</button><button type="button" class="app-button danger" data-delete-material="${safeText(item.id)}">Hapus</button></div></article>`;
+  })).then(items => items.join(''));
+  return `<section class="panel-card"><h3>Materi Pembelajaran</h3><p class="panel-subtitle">Unggah berkas secara privat ke Supabase Storage atau tambahkan tautan HTTPS. Akses hanya tersedia untuk pengajar yang ditugaskan ke kelas.</p>
+      <form id="abtTeacherMaterialForm" class="teacher-form-card"><input type="hidden" id="abtTeacherMaterialId"><div class="teacher-form-grid"><label>Kelas *${abtTeacherClassSelect(classRows, '', 'abtTeacherMaterialClass')}</label><label>Judul materi *<input id="abtTeacherMaterialTitle" maxlength="160" required placeholder="Contoh: Hukum Nun Sukun"></label><label class="teacher-span-all">Keterangan<textarea id="abtTeacherMaterialDescription" maxlength="1200" rows="3" placeholder="Ringkasan materi atau arahan untuk peserta"></textarea></label><label>Berkas materi<input id="abtTeacherMaterialFile" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.mp3,.mp4,.webm"></label><label>Tautan eksternal<input id="abtTeacherMaterialUrl" type="url" placeholder="https://..."></label></div><p class="teacher-help">Isi salah satu: berkas atau tautan. Maksimum berkas 25 MB. Materi tersimpan setelah migrasi dan Storage policy V19 dijalankan.</p><div class="teacher-form-actions"><button class="app-button" type="submit">Simpan Materi</button><button class="app-button secondary" type="button" id="abtTeacherMaterialCancel" hidden>Batal Edit</button><span class="teacher-feedback" id="abtTeacherMaterialFeedback" role="status"></span></div></form>
+      <div class="teacher-record-list">${list || abtTeacherEmpty('Belum ada materi. Tambahkan materi pertama untuk kelas yang Anda ampu.')}</div></section>`;
+}
+
+function abtTeacherResetMaterialForm() {
+  document.getElementById('abtTeacherMaterialForm')?.reset();
+  const id = document.getElementById('abtTeacherMaterialId'); if (id) id.value = '';
+  const cancel = document.getElementById('abtTeacherMaterialCancel'); if (cancel) cancel.hidden = true;
+  const feedback = document.getElementById('abtTeacherMaterialFeedback'); if (feedback) feedback.textContent = '';
+}
+
+async function abtTeacherSaveMaterial(event) {
+  if (!abtTeacherAllowed()) return;
+  event.preventDefault();
+  const form = event.currentTarget;
+  const id = document.getElementById('abtTeacherMaterialId').value;
+  const classId = document.getElementById('abtTeacherMaterialClass').value;
+  const title = document.getElementById('abtTeacherMaterialTitle').value.trim();
+  const description = document.getElementById('abtTeacherMaterialDescription').value.trim() || null;
+  const file = document.getElementById('abtTeacherMaterialFile').files[0] || null;
+  const external = abtTeacherSafeHttpUrl(document.getElementById('abtTeacherMaterialUrl').value);
+  const feedback = document.getElementById('abtTeacherMaterialFeedback');
+  const button = form.querySelector('[type="submit"]');
+  const old = (window.abtTeacherMaterials || []).find(x => String(x.id) === String(id));
+  if (!classId || !title) { feedback.textContent = 'Kelas dan judul materi wajib diisi.'; return; }
+  if (file && external) { feedback.textContent = 'Pilih berkas atau tautan eksternal, bukan keduanya.'; return; }
+  if (!file && !external && !old) { feedback.textContent = 'Tambahkan berkas atau tautan materi.'; return; }
+  if (file && file.size > 25 * 1024 * 1024) { feedback.textContent = 'Ukuran berkas melebihi batas 25 MB.'; return; }
+  if (document.getElementById('abtTeacherMaterialUrl').value.trim() && !external) { feedback.textContent = 'Tautan harus menggunakan HTTP atau HTTPS.'; return; }
+  button.disabled = true; button.textContent = 'Menyimpan\u2026'; feedback.textContent = 'Menyimpan materi\u2026';
+  let storagePath = file ? null : (external ? null : old?.storage_path || null);
+  let uploadedPath = null;
+  if (file) {
+    storagePath = `${classId}/${abtTeacherUuid()}-${abtTeacherSafeFileName(file.name)}`;
+    const { error: uploadError } = await supabaseClient.storage.from(ABT_TEACHER_MATERIAL_BUCKET).upload(storagePath, file, { upsert: false, contentType: file.type || 'application/octet-stream' });
+    if (uploadError) { feedback.textContent = `Unggah gagal: ${uploadError.message}`; button.disabled = false; button.textContent = 'Simpan Materi'; return; }
+    uploadedPath = storagePath;
+  }
+  const payload = { class_id: classId, title, description, storage_path: storagePath, external_url: external || (storagePath ? null : old?.external_url || null) };
+  payload.created_by = currentUser.id;
+  const query = id
+    ? supabaseClient.from('teacher_materials').update(payload).eq('id', id).select('id').maybeSingle()
+    : supabaseClient.from('teacher_materials').insert(payload).select('id').single();
+  const { error } = await query;
+  if (error) {
+    if (uploadedPath) await supabaseClient.storage.from(ABT_TEACHER_MATERIAL_BUCKET).remove([uploadedPath]);
+    feedback.textContent = `Gagal menyimpan materi: ${error.message}`;
+  } else {
+    if (old?.storage_path && old.storage_path !== storagePath) await supabaseClient.storage.from(ABT_TEACHER_MATERIAL_BUCKET).remove([old.storage_path]);
+    await renderDashboardPage('materials');
+  }
+  button.disabled = false; button.textContent = 'Simpan Materi';
+}
+
+function abtTeacherEditMaterial(id) {
+  if (!abtTeacherAllowed()) return;
+  const item = (window.abtTeacherMaterials || []).find(x => String(x.id) === String(id));
+  if (!item) return;
+  document.getElementById('abtTeacherMaterialId').value = item.id;
+  document.getElementById('abtTeacherMaterialClass').value = item.class_id;
+  document.getElementById('abtTeacherMaterialTitle').value = item.title || '';
+  document.getElementById('abtTeacherMaterialDescription').value = item.description || '';
+  document.getElementById('abtTeacherMaterialUrl').value = item.external_url || '';
+  document.getElementById('abtTeacherMaterialFile').value = '';
+  document.getElementById('abtTeacherMaterialCancel').hidden = false;
+  document.getElementById('abtTeacherMaterialForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function abtTeacherDeleteMaterial(id) {
+  if (!abtTeacherAllowed()) return;
+  const item = (window.abtTeacherMaterials || []).find(x => String(x.id) === String(id));
+  if (!item || !confirm(`Hapus materi \u201C${item.title}\u201D?`)) return;
+  const { error } = await supabaseClient.from('teacher_materials').delete().eq('id', id);
+  if (error) { alert(`Gagal menghapus materi: ${error.message}`); return; }
+  if (item.storage_path) await supabaseClient.storage.from(ABT_TEACHER_MATERIAL_BUCKET).remove([item.storage_path]);
+  await renderDashboardPage('materials');
+}
+
+document.addEventListener('submit', event => {
+  if (event.target?.id === 'abtTeacherMaterialForm') abtTeacherSaveMaterial(event);
+});
+
+document.addEventListener('click', event => {
+  const edit = event.target.closest('[data-edit-material]');
+  if (edit) { abtTeacherEditMaterial(edit.dataset.editMaterial); return; }
+  const remove = event.target.closest('[data-delete-material]');
+  if (remove) { abtTeacherDeleteMaterial(remove.dataset.deleteMaterial); return; }
+  if (event.target.closest('#abtTeacherMaterialCancel')) abtTeacherResetMaterialForm();
+});
+
+async function loadTeacherActivities() {
+  if (!abtTeacherAllowed()) return abtTeacherDenied();
+  const { data: classes, error: classError } = await abtTeacherAssignedClasses();
+  if (classError) return `<div class="app-alert">Kelas pengajar belum dapat dimuat: ${safeText(classError.message)}</div>`;
+  const classRows = classes || [];
+  if (!classRows.length) return `<section class="panel-card"><h3>Aktivitas & Jadwal</h3>${abtTeacherEmpty('Penugasan kelas diperlukan sebelum membuat jadwal.')}</section>`;
+  const { data, error } = await supabaseClient.from('teacher_activities')
+    .select('id,class_id,title,details,starts_at,ends_at,location,meeting_url,created_at,classes(title)')
+    .in('class_id', classRows.map(c => c.id)).order('starts_at', { ascending: true });
+  if (error) return abtTeacherSchemaNotice(error);
+  const activities = data || [];
+  window.abtTeacherActivities = activities;
+  const cards = activities.map(a => `<article class="teacher-record-card"><div><span class="status-pill">${safeText(a.classes?.title || 'Kelas')}</span><h4>${safeText(a.title)}</h4><p>${safeText(a.details || 'Tidak ada keterangan.')}</p><div class="teacher-class-meta">${safeText(abtTeacherDate(a.starts_at, true))}${a.ends_at ? ` \u2013 ${safeText(abtTeacherDate(a.ends_at, true))}` : ''}${a.location ? ` \u00B7 ${safeText(a.location)}` : ''}</div>${a.meeting_url ? `<a class="teacher-file-link" href="${safeText(abtTeacherSafeHttpUrl(a.meeting_url))}" target="_blank" rel="noopener noreferrer">Buka tautan pertemuan \u2197</a>` : ''}</div><div class="teacher-record-actions"><button type="button" class="app-button secondary" data-edit-activity="${safeText(a.id)}">Edit</button><button type="button" class="app-button danger" data-delete-activity="${safeText(a.id)}">Hapus</button></div></article>`).join('');
+  return `<section class="panel-card"><h3>Aktivitas Pembelajaran & Jadwal</h3><p class="panel-subtitle">Buat dan kelola jadwal hanya untuk kelas yang ditugaskan kepada Anda.</p>
+    <form id="abtTeacherActivityForm" class="teacher-form-card"><input type="hidden" id="abtTeacherActivityId"><div class="teacher-form-grid"><label>Kelas *${abtTeacherClassSelect(classRows, '', 'abtTeacherActivityClass')}</label><label>Nama aktivitas *<input id="abtTeacherActivityTitle" required maxlength="160" placeholder="Contoh: Pertemuan hukum Mad"></label><label>Mulai *<input id="abtTeacherActivityStart" type="datetime-local" required></label><label>Selesai<input id="abtTeacherActivityEnd" type="datetime-local"></label><label>Tempat / media<input id="abtTeacherActivityLocation" maxlength="180" placeholder="Ruang belajar / Zoom"></label><label>Tautan pertemuan<input id="abtTeacherActivityUrl" type="url" placeholder="https://..."></label><label class="teacher-span-all">Keterangan<textarea id="abtTeacherActivityDetails" maxlength="1200" rows="3"></textarea></label></div><div class="teacher-form-actions"><button class="app-button" type="submit">Simpan Jadwal</button><button class="app-button secondary" type="button" id="abtTeacherActivityCancel" hidden>Batal Edit</button><span class="teacher-feedback" id="abtTeacherActivityFeedback" role="status"></span></div></form>
+    <div class="teacher-record-list">${cards || abtTeacherEmpty('Belum ada jadwal. Buat aktivitas pembelajaran pertama.')}</div></section>`;
+}
+
+function abtTeacherResetActivityForm() {
+  document.getElementById('abtTeacherActivityForm')?.reset();
+  const id = document.getElementById('abtTeacherActivityId'); if (id) id.value = '';
+  const cancel = document.getElementById('abtTeacherActivityCancel'); if (cancel) cancel.hidden = true;
+  const feedback = document.getElementById('abtTeacherActivityFeedback'); if (feedback) feedback.textContent = '';
+}
+
+async function abtTeacherSaveActivity(event) {
+  if (!abtTeacherAllowed()) return;
+  event.preventDefault();
+  const form = event.currentTarget;
+  const id = document.getElementById('abtTeacherActivityId').value;
+  const startsAt = abtTeacherIso(document.getElementById('abtTeacherActivityStart').value);
+  const endsAt = abtTeacherIso(document.getElementById('abtTeacherActivityEnd').value);
+  const meetingUrlRaw = document.getElementById('abtTeacherActivityUrl').value.trim();
+  const meetingUrl = meetingUrlRaw ? abtTeacherSafeHttpUrl(meetingUrlRaw) : null;
+  const feedback = document.getElementById('abtTeacherActivityFeedback');
+  const button = form.querySelector('[type="submit"]');
+  if (!startsAt || (endsAt && new Date(endsAt) < new Date(startsAt))) { feedback.textContent = 'Waktu mulai dan selesai tidak valid.'; return; }
+  if (meetingUrlRaw && !meetingUrl) { feedback.textContent = 'Tautan pertemuan harus menggunakan HTTP atau HTTPS.'; return; }
+  const payload = {
+    class_id: document.getElementById('abtTeacherActivityClass').value,
+    title: document.getElementById('abtTeacherActivityTitle').value.trim(),
+    details: document.getElementById('abtTeacherActivityDetails').value.trim() || null,
+    starts_at: startsAt, ends_at: endsAt,
+    location: document.getElementById('abtTeacherActivityLocation').value.trim() || null,
+    meeting_url: meetingUrl
+  };
+  if (!payload.class_id || !payload.title) { feedback.textContent = 'Kelas dan nama aktivitas wajib diisi.'; return; }
+  payload.created_by = currentUser.id;
+  button.disabled = true; button.textContent = 'Menyimpan\u2026'; feedback.textContent = 'Menyimpan jadwal\u2026';
+  const query = id
+    ? supabaseClient.from('teacher_activities').update(payload).eq('id', id).select('id').maybeSingle()
+    : supabaseClient.from('teacher_activities').insert(payload).select('id').single();
+  const { error } = await query;
+  if (error) { feedback.textContent = `Gagal menyimpan jadwal: ${error.message}`; button.disabled = false; button.textContent = 'Simpan Jadwal'; return; }
+  await renderDashboardPage('activities');
+}
+
+function abtTeacherEditActivity(id) {
+  if (!abtTeacherAllowed()) return;
+  const activity = (window.abtTeacherActivities || []).find(x => String(x.id) === String(id));
+  if (!activity) return;
+  document.getElementById('abtTeacherActivityId').value = activity.id;
+  document.getElementById('abtTeacherActivityClass').value = activity.class_id;
+  document.getElementById('abtTeacherActivityTitle').value = activity.title || '';
+  document.getElementById('abtTeacherActivityDetails').value = activity.details || '';
+  document.getElementById('abtTeacherActivityStart').value = abtTeacherLocalDateTime(activity.starts_at);
+  document.getElementById('abtTeacherActivityEnd').value = abtTeacherLocalDateTime(activity.ends_at);
+  document.getElementById('abtTeacherActivityLocation').value = activity.location || '';
+  document.getElementById('abtTeacherActivityUrl').value = activity.meeting_url || '';
+  document.getElementById('abtTeacherActivityCancel').hidden = false;
+  document.getElementById('abtTeacherActivityForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function abtTeacherDeleteActivity(id) {
+  if (!abtTeacherAllowed()) return;
+  const activity = (window.abtTeacherActivities || []).find(x => String(x.id) === String(id));
+  if (!activity || !confirm(`Hapus aktivitas \u201C${activity.title}\u201D?`)) return;
+  const { error } = await supabaseClient.from('teacher_activities').delete().eq('id', id);
+  if (error) { alert(`Gagal menghapus aktivitas: ${error.message}`); return; }
+  await renderDashboardPage('activities');
+}
+
+async function loadTeacherEvaluations() {
+  if (!abtTeacherAllowed()) return abtTeacherDenied();
+  const { data: classes, error: classError } = await abtTeacherAssignedClasses();
+  if (classError) return `<div class="app-alert">Kelas pengajar belum dapat dimuat: ${safeText(classError.message)}</div>`;
+  const classRows = classes || [];
+  if (!classRows.length) return `<section class="panel-card"><h3>Evaluasi</h3>${abtTeacherEmpty('Penugasan kelas diperlukan sebelum membuat tugas atau latihan.')}</section>`;
+  const { data, error } = await supabaseClient.from('teacher_evaluations')
+    .select('id,class_id,kind,title,instructions,due_at,max_score,is_published,created_at,classes(title)')
+    .in('class_id', classRows.map(c => c.id)).order('created_at', { ascending: false });
+  if (error) return abtTeacherSchemaNotice(error);
+  const evaluations = data || [];
+  window.abtTeacherEvaluationRecords = evaluations;
+  const cards = evaluations.map(e => `<article class="teacher-record-card"><div><span class="status-pill">${safeText(e.classes?.title || 'Kelas')} \u00B7 ${safeText(e.kind === 'latihan' ? 'Latihan' : 'Tugas')}</span><h4>${safeText(e.title)}</h4><p>${safeText(e.instructions || 'Tidak ada petunjuk tambahan.')}</p><div class="teacher-class-meta">Tenggat: ${safeText(e.due_at ? abtTeacherDate(e.due_at, true) : 'Tanpa tenggat')} \u00B7 Nilai maksimum ${safeText(e.max_score)}</div><span class="teacher-muted">${e.is_published ? 'Ditampilkan pada ruang kerja pengajar' : 'Draft'}</span></div><div class="teacher-record-actions teacher-record-actions-column"><button type="button" class="app-button secondary" data-evaluation-results="${safeText(e.id)}">Peserta & Hasil</button><button type="button" class="app-button secondary" data-edit-evaluation="${safeText(e.id)}">Edit</button><button type="button" class="app-button danger" data-delete-evaluation="${safeText(e.id)}">Hapus</button></div></article>`).join('');
+  return `<section class="panel-card"><h3>Evaluasi: Tugas, Latihan, dan Hasil</h3><p class="panel-subtitle">Buat tugas atau latihan, lalu catat nilai dan umpan balik untuk peserta terdaftar. Pengumpulan berkas oleh peserta belum tersedia pada skema ini.</p>
+    <form id="abtTeacherEvaluationForm" class="teacher-form-card"><input type="hidden" id="abtTeacherEvaluationId"><div class="teacher-form-grid"><label>Kelas *${abtTeacherClassSelect(classRows, '', 'abtTeacherEvaluationClass')}</label><label>Jenis *<select id="abtTeacherEvaluationKind" required><option value="tugas">Tugas</option><option value="latihan">Latihan</option></select></label><label class="teacher-span-all">Judul *<input id="abtTeacherEvaluationTitle" required maxlength="160" placeholder="Contoh: Latihan makharijul huruf"></label><label>Tenggat<input id="abtTeacherEvaluationDue" type="datetime-local"></label><label>Nilai maksimum<input id="abtTeacherEvaluationMax" type="number" min="1" max="1000" step="0.5" value="100" required></label><label class="teacher-span-all">Petunjuk<textarea id="abtTeacherEvaluationInstructions" maxlength="3000" rows="4" placeholder="Tuliskan instruksi dan kriteria penilaian"></textarea></label><label class="teacher-check-label"><input id="abtTeacherEvaluationPublished" type="checkbox" checked> Aktifkan</label></div><div class="teacher-form-actions"><button class="app-button" type="submit">Simpan Evaluasi</button><button class="app-button secondary" type="button" id="abtTeacherEvaluationCancel" hidden>Batal Edit</button><span class="teacher-feedback" id="abtTeacherEvaluationFeedback" role="status"></span></div></form>
+    <div class="teacher-record-list">${cards || abtTeacherEmpty('Belum ada evaluasi. Buat tugas atau latihan pertama.')}</div><div id="abtTeacherResultsPanel"></div></section>`;
+}
+
+function abtTeacherResetEvaluationForm() {
+  document.getElementById('abtTeacherEvaluationForm')?.reset();
+  const id = document.getElementById('abtTeacherEvaluationId'); if (id) id.value = '';
+  const max = document.getElementById('abtTeacherEvaluationMax'); if (max) max.value = '100';
+  const published = document.getElementById('abtTeacherEvaluationPublished'); if (published) published.checked = true;
+  const cancel = document.getElementById('abtTeacherEvaluationCancel'); if (cancel) cancel.hidden = true;
+  const feedback = document.getElementById('abtTeacherEvaluationFeedback'); if (feedback) feedback.textContent = '';
+}
+
+async function abtTeacherSaveEvaluation(event) {
+  if (!abtTeacherAllowed()) return;
+  event.preventDefault();
+  const form = event.currentTarget;
+  const id = document.getElementById('abtTeacherEvaluationId').value;
+  const dueValue = document.getElementById('abtTeacherEvaluationDue').value;
+  const maxScore = Number(document.getElementById('abtTeacherEvaluationMax').value);
+  const feedback = document.getElementById('abtTeacherEvaluationFeedback');
+  const button = form.querySelector('[type="submit"]');
+  const payload = {
+    class_id: document.getElementById('abtTeacherEvaluationClass').value,
+    kind: document.getElementById('abtTeacherEvaluationKind').value,
+    title: document.getElementById('abtTeacherEvaluationTitle').value.trim(),
+    instructions: document.getElementById('abtTeacherEvaluationInstructions').value.trim() || null,
+    due_at: dueValue ? abtTeacherIso(dueValue) : null,
+    max_score: maxScore,
+    is_published: document.getElementById('abtTeacherEvaluationPublished').checked
+  };
+  if (!payload.class_id || !payload.title || !Number.isFinite(maxScore) || maxScore <= 0) { feedback.textContent = 'Kelas, judul, dan nilai maksimum yang valid wajib diisi.'; return; }
+  payload.created_by = currentUser.id;
+  button.disabled = true; button.textContent = 'Menyimpan\u2026'; feedback.textContent = 'Menyimpan evaluasi\u2026';
+  const query = id
+    ? supabaseClient.from('teacher_evaluations').update(payload).eq('id', id).select('id').maybeSingle()
+    : supabaseClient.from('teacher_evaluations').insert(payload).select('id').single();
+  const { error } = await query;
+  if (error) { feedback.textContent = `Gagal menyimpan evaluasi: ${error.message}`; button.disabled = false; button.textContent = 'Simpan Evaluasi'; return; }
+  await renderDashboardPage('evaluations');
+}
+
+function abtTeacherEditEvaluation(id) {
+  if (!abtTeacherAllowed()) return;
+  const e = (window.abtTeacherEvaluationRecords || []).find(x => String(x.id) === String(id));
+  if (!e) return;
+  document.getElementById('abtTeacherEvaluationId').value = e.id;
+  document.getElementById('abtTeacherEvaluationClass').value = e.class_id;
+  document.getElementById('abtTeacherEvaluationKind').value = e.kind;
+  document.getElementById('abtTeacherEvaluationTitle').value = e.title || '';
+  document.getElementById('abtTeacherEvaluationInstructions').value = e.instructions || '';
+  document.getElementById('abtTeacherEvaluationDue').value = abtTeacherLocalDateTime(e.due_at);
+  document.getElementById('abtTeacherEvaluationMax').value = e.max_score || 100;
+  document.getElementById('abtTeacherEvaluationPublished').checked = Boolean(e.is_published);
+  document.getElementById('abtTeacherEvaluationCancel').hidden = false;
+  document.getElementById('abtTeacherEvaluationForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function abtTeacherDeleteEvaluation(id) {
+  if (!abtTeacherAllowed()) return;
+  const e = (window.abtTeacherEvaluationRecords || []).find(x => String(x.id) === String(id));
+  if (!e || !confirm(`Hapus evaluasi \u201C${e.title}\u201D beserta hasil penilaiannya?`)) return;
+  const { error } = await supabaseClient.from('teacher_evaluations').delete().eq('id', id);
+  if (error) { alert(`Gagal menghapus evaluasi: ${error.message}`); return; }
+  await renderDashboardPage('evaluations');
+}
+
+async function abtTeacherShowResults(id) {
+  if (!abtTeacherAllowed()) return;
+  const evaluation = (window.abtTeacherEvaluationRecords || []).find(x => String(x.id) === String(id));
+  if (!evaluation) return;
+  const panel = document.getElementById('abtTeacherResultsPanel');
+  if (!panel) return;
+  panel.innerHTML = '<div class="panel-card"><p>Memuat peserta dan nilai\u2026</p></div>';
+  const [enrollmentResult, resultQuery, submissionQuery] = await Promise.all([
+    abtTeacherLoadEnrollments([evaluation.class_id]),
+    supabaseClient.from('teacher_evaluation_results').select('id,student_id,score,feedback,graded_at').eq('evaluation_id', evaluation.id),
+    supabaseClient.from('teacher_evaluation_submissions').select('student_id,response_text,response_url,submitted_at').eq('evaluation_id', evaluation.id)
+  ]);
+  if (enrollmentResult.error || resultQuery.error || submissionQuery.error) {
+    const error = enrollmentResult.error || resultQuery.error || submissionQuery.error;
+    panel.innerHTML = `<div class="app-alert">${safeText(error.message)}${submissionQuery.error ? ' \u00B7 Pastikan migrasi V20 sudah dijalankan untuk melihat jawaban peserta.' : ''}</div>`;
+    return;
+  }
+  const enrollments = enrollmentResult.data || [];
+  const { map: profiles, error: profileError } = await abtTeacherProfileMap(enrollments.map(x => x.student_id));
+  if (profileError) { panel.innerHTML = `<div class="app-alert">Nama peserta belum dapat dimuat: ${safeText(profileError.message)}</div>`; return; }
+  const results = Object.fromEntries((resultQuery.data || []).map(x => [x.student_id, x]));
+  const submissions = Object.fromEntries((submissionQuery.data || []).map(x => [x.student_id, x]));
+  const rows = enrollments.map(enrollment => {
+    const studentId = enrollment.student_id;
+    const profile = profiles[studentId] || {};
+    const result = results[studentId] || {};
+    const submission = submissions[studentId] || {};
+    const submissionUrl = abtTeacherSafeHttpUrl(submission.response_url);
+    const submissionView = submission.response_text || submissionUrl
+      ? `<div class="abt-v20-student-answer"><strong>Jawaban peserta</strong>${submission.response_text ? `<p>${safeText(submission.response_text)}</p>` : ''}${submissionUrl ? `<a href="${safeText(submissionUrl)}" target="_blank" rel="noopener noreferrer">Buka tautan jawaban</a>` : ''}<small>Dikirim ${safeText(abtTeacherDate(submission.submitted_at, true))}</small></div>`
+      : '<span class="teacher-muted">Belum ada jawaban</span>';
+    return `<tr><td>${safeText(profile.full_name || profile.username || 'Peserta')}<br><small>${safeText(profile.username || '')}</small></td><td><span class="status-pill">${safeText(enrollment.payment_status || 'Terdaftar')}</span></td><td>${submissionView}<form class="teacher-score-form" data-evaluation-id="${safeText(evaluation.id)}" data-student-id="${safeText(studentId)}"><input aria-label="Nilai ${safeText(profile.full_name || 'peserta')}" name="score" type="number" min="0" max="${safeText(evaluation.max_score)}" step="0.1" value="${result.score == null ? '' : safeText(result.score)}" placeholder="0\u2013${safeText(evaluation.max_score)}"><textarea aria-label="Umpan balik untuk ${safeText(profile.full_name || 'peserta')}" name="feedback" maxlength="1500" rows="2" placeholder="Umpan balik">${safeText(result.feedback || '')}</textarea><button class="app-button secondary" type="submit">Simpan Nilai</button><span class="teacher-feedback" role="status"></span></form></td></tr>`;
+  }).join('') || '<tr><td colspan="3">Belum ada peserta terdaftar pada kelas ini.</td></tr>';
+  panel.innerHTML = `<section class="panel-card teacher-results-panel"><div class="teacher-section-heading"><div><h3>Peserta & Hasil: ${safeText(evaluation.title)}</h3><p class="panel-subtitle">Nilai maksimum ${safeText(evaluation.max_score)}. Data hanya berasal dari peserta kelas ini.</p></div><button class="app-button secondary" type="button" id="abtTeacherCloseResults">Tutup</button></div><div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Status</th><th>Nilai & umpan balik</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function abtTeacherSaveResult(event) {
+  if (!abtTeacherAllowed()) return;
+  event.preventDefault();
+  const form = event.currentTarget;
+  const scoreValue = form.elements.score.value;
+  const score = scoreValue === '' ? null : Number(scoreValue);
+  const feedback = form.elements.feedback.value.trim() || null;
+  const status = form.querySelector('[role="status"]');
+  const button = form.querySelector('[type="submit"]');
+  if (score === null || !Number.isFinite(score) || score < 0) { status.textContent = 'Masukkan nilai yang valid.'; return; }
+  const evaluation = (window.abtTeacherEvaluationRecords || []).find(x => String(x.id) === form.dataset.evaluationId);
+  if (!evaluation || score > Number(evaluation.max_score)) { status.textContent = 'Nilai melebihi batas maksimum.'; return; }
+  button.disabled = true; status.textContent = 'Menyimpan\u2026';
+  const { error } = await supabaseClient.from('teacher_evaluation_results').upsert({
+    evaluation_id: form.dataset.evaluationId,
+    student_id: form.dataset.studentId,
+    score,
+    feedback,
+    graded_by: currentUser.id,
+    graded_at: new Date().toISOString()
+  }, { onConflict: 'evaluation_id,student_id' });
+  status.textContent = error ? `Gagal: ${error.message}` : 'Nilai tersimpan.';
+  button.disabled = false;
+}
+
+document.addEventListener('submit', event => {
+  if (event.target?.id === 'abtTeacherActivityForm') abtTeacherSaveActivity(event);
+  if (event.target?.id === 'abtTeacherEvaluationForm') abtTeacherSaveEvaluation(event);
+  if (event.target?.matches('.teacher-score-form')) abtTeacherSaveResult(event);
+});
+
+document.addEventListener('click', event => {
+  const editActivity = event.target.closest('[data-edit-activity]');
+  if (editActivity) { abtTeacherEditActivity(editActivity.dataset.editActivity); return; }
+  const deleteActivity = event.target.closest('[data-delete-activity]');
+  if (deleteActivity) { abtTeacherDeleteActivity(deleteActivity.dataset.deleteActivity); return; }
+  if (event.target.closest('#abtTeacherActivityCancel')) { abtTeacherResetActivityForm(); return; }
+  const editEvaluation = event.target.closest('[data-edit-evaluation]');
+  if (editEvaluation) { abtTeacherEditEvaluation(editEvaluation.dataset.editEvaluation); return; }
+  const deleteEvaluation = event.target.closest('[data-delete-evaluation]');
+  if (deleteEvaluation) { abtTeacherDeleteEvaluation(deleteEvaluation.dataset.deleteEvaluation); return; }
+  const showResults = event.target.closest('[data-evaluation-results]');
+  if (showResults) { abtTeacherShowResults(showResults.dataset.evaluationResults); return; }
+  if (event.target.closest('#abtTeacherEvaluationCancel')) { abtTeacherResetEvaluationForm(); return; }
+  if (event.target.closest('#abtTeacherCloseResults')) document.getElementById('abtTeacherResultsPanel').innerHTML = '';
+});
+
+async function loadTeacherNotifications() {
+  if (!abtTeacherAllowed()) return abtTeacherDenied();
+  const { data, error } = await supabaseClient.from('teacher_notifications')
+    .select('id,class_id,title,body,kind,read_at,created_at,classes(title)')
+    .order('created_at', { ascending: false }).limit(100);
+  if (error) return abtTeacherSchemaNotice(error);
+  const notifications = data || [];
+  const rows = notifications.map(n => `<article class="teacher-notification ${n.read_at ? '' : 'is-unread'}"><div><div class="teacher-notification-meta"><span class="status-pill">${safeText(n.classes?.title || 'Akun pengajar')}</span><time>${safeText(abtTeacherDate(n.created_at, true))}</time></div><h4>${safeText(n.title)}</h4><p>${safeText(n.body || '')}</p></div>${n.read_at ? '<span class="teacher-muted">Sudah dibaca</span>' : `<button type="button" class="app-button secondary" data-read-notification="${safeText(n.id)}">Tandai dibaca</button>`}</article>`).join('');
+  return `<section class="panel-card"><div class="teacher-section-heading"><div><h3>Notifikasi</h3><p class="panel-subtitle">Pemberitahuan pendaftaran dan perubahan status peserta pada kelas yang Anda ampu.</p></div><span class="teacher-count-badge">${notifications.filter(n => !n.read_at).length} belum dibaca</span></div><div class="teacher-notification-list">${rows || abtTeacherEmpty('Belum ada notifikasi. Pemberitahuan akan muncul saat ada pendaftaran baru atau perubahan status.')}</div></section>`;
+}
+
+async function abtTeacherMarkNotificationRead(id) {
+  if (!abtTeacherAllowed()) return;
+  const { error } = await supabaseClient.rpc('mark_teacher_notification_read', { p_notification_id: id });
+  if (error) { alert(`Gagal memperbarui notifikasi: ${error.message}`); return; }
+  await renderDashboardPage('notifications');
+}
+
+document.addEventListener('click', event => {
+  const button = event.target.closest('[data-read-notification]');
+  if (button) abtTeacherMarkNotificationRead(button.dataset.readNotification);
+});
+
+async function loadTeacherProfile() {
+  if (!currentUser?.id) return '<div class="app-alert">Silakan masuk untuk mengelola profil.</div>';
+  const { data: photo, error } = await supabaseClient.from('teacher_profile_photos')
+    .select('storage_path').eq('profile_id', currentUser.id).maybeSingle();
+  if (error) return loadProfile() + `<div class="abt-v20-note"><strong>Foto profil belum tersambung.</strong> Jalankan migrasi V20 untuk mengaktifkan foto bagi semua peran. ${safeText(error.message)}</div>`;
+  const url = photo?.storage_path ? await abtTeacherSignedUrl(ABT_TEACHER_AVATAR_BUCKET, photo.storage_path) : '';
+  const avatar = url ? `<img class="teacher-avatar-preview" src="${safeText(url)}" alt="Foto profil">` : `<div class="teacher-avatar-preview teacher-avatar-fallback">${safeText((currentProfile?.full_name || 'P').trim().charAt(0).toUpperCase())}</div>`;
+  return `<section class="panel-card teacher-avatar-card"><div class="teacher-avatar-layout">${avatar}<div><h3>Foto Profil</h3><p class="panel-subtitle">Unggah foto JPG, PNG, atau WebP. Maksimum 5 MB. Foto hanya dapat dikelola oleh pemilik akun.</p><form id="abtTeacherAvatarForm"><input id="abtTeacherAvatarFile" type="file" accept="image/jpeg,image/png,image/webp" required><div class="teacher-form-actions"><button class="app-button" type="submit">Simpan Foto</button><span class="teacher-feedback" id="abtTeacherAvatarFeedback" role="status"></span></div></form></div></div></section>${loadProfile()}`;
+}
+
+async function abtTeacherSaveAvatar(event) {
+  if (!currentUser?.id) return;
+  event.preventDefault();
+  const form = event.currentTarget;
+  const file = document.getElementById('abtTeacherAvatarFile').files[0];
+  const feedback = document.getElementById('abtTeacherAvatarFeedback');
+  const button = form.querySelector('[type="submit"]');
+  if (!file || !['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) { feedback.textContent = 'Pilih foto JPG, PNG, atau WebP.'; return; }
+  if (file.size > 5 * 1024 * 1024) { feedback.textContent = 'Ukuran foto melebihi batas 5 MB.'; return; }
+  button.disabled = true; feedback.textContent = 'Mengunggah foto\u2026';
+  const path = `${currentUser.id}/${abtTeacherUuid()}-${abtTeacherSafeFileName(file.name)}`;
+  const { error: uploadError } = await supabaseClient.storage.from(ABT_TEACHER_AVATAR_BUCKET).upload(path, file, { upsert: false, contentType: file.type });
+  if (uploadError) { feedback.textContent = `Unggah gagal: ${uploadError.message}`; button.disabled = false; return; }
+  const { data: old } = await supabaseClient.from('teacher_profile_photos').select('storage_path').eq('profile_id', currentUser.id).maybeSingle();
+  const { error } = await supabaseClient.from('teacher_profile_photos').upsert({ profile_id: currentUser.id, storage_path: path, updated_at: new Date().toISOString() }, { onConflict: 'profile_id' });
+  if (error) {
+    await supabaseClient.storage.from(ABT_TEACHER_AVATAR_BUCKET).remove([path]);
+    feedback.textContent = `Gagal menyimpan foto: ${error.message}`;
+    button.disabled = false;
+    return;
+  }
+  if (old?.storage_path) await supabaseClient.storage.from(ABT_TEACHER_AVATAR_BUCKET).remove([old.storage_path]);
+  await refreshTopbarAvatar();
+  await renderDashboardPage('profile');
+}
+
+document.addEventListener('submit', event => {
+  if (event.target?.id === 'abtTeacherAvatarForm') abtTeacherSaveAvatar(event);
+});
+</script>
+  <script>/* ABT V21 cross-account workspace. Builds on the V18/V19/V20 schema and
+   SQL_ABT_V21_PRIVAT_TAGIHAN.sql for group-private classes and billing. */
+const ABT_V20_ACTIVE_ENROLLMENT = new Set(['terverifikasi', 'approved', 'active', 'aktif']);
+let abtV20NotificationTimer = null;
+
+function abtV20IsAdmin() { return ['admin', 'super_admin'].includes(currentRole); }
+function abtV20Date(value, withTime = false) {
+  if (!value) return 'Belum ditentukan';
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? 'Belum ditentukan' : d.toLocaleString('id-ID', withTime ? { dateStyle: 'medium', timeStyle: 'short' } : { dateStyle: 'medium' });
+}
+function abtV20Money(value) {
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(value) || 0);
+}
+function abtV20DateInput(date = new Date()) {
+  const d = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return d.toISOString().slice(0, 10);
+}
+function abtV20JakartaPreviousMonth() {
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit' }).formatToParts(new Date());
+  const year = Number(parts.find(p => p.type === 'year')?.value);
+  const month = Number(parts.find(p => p.type === 'month')?.value);
+  const previous = new Date(Date.UTC(year, month - 2, 1));
+  const next = new Date(Date.UTC(previous.getUTCFullYear(), previous.getUTCMonth() + 1, 1));
+  const start = `${previous.getUTCFullYear()}-${String(previous.getUTCMonth() + 1).padStart(2, '0')}-01`;
+  const end = `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, '0')}-01`;
+  return { start, end };
+}
+function abtV21CurrentMonth() {
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit' }).formatToParts(new Date());
+  return `${parts.find(p => p.type === 'year')?.value}-${parts.find(p => p.type === 'month')?.value}-01`;
+}
+function abtV20MonthLabel(month) {
+  return new Date(`${month}T00:00:00`).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+}
+function abtV20SafeUrl(raw) {
+  try { const u = new URL(String(raw || '').trim()); return ['https:', 'http:'].includes(u.protocol) ? u.href : ''; }
+  catch (_) { return ''; }
+}
+function abtV20PhoneUrl(raw) {
+  let digits = String(raw || '').replace(/\D/g, '');
+  if (digits.startsWith('0')) digits = `62${digits.slice(1)}`;
+  return digits ? `https://wa.me/${digits}` : '';
+}
+function abtV20StatusLabel(value) {
+  const labels = { menunggu_konfirmasi: 'Menunggu konfirmasi', terverifikasi: 'Terverifikasi', approved: 'Disetujui / aktif', active: 'Aktif', aktif: 'Aktif', ditolak: 'Ditolak', submitted: 'Menunggu tinjauan', needs_correction: 'Perlu perbaikan', issued: 'Belum dibayar', paid: 'Lunas', void: 'Dibatalkan', completed: 'Selesai', cancelled: 'Dibatalkan', no_show: 'Tidak hadir' };
+  return labels[String(value || '').toLowerCase()] || String(value || 'Belum ditentukan').replaceAll('_', ' ');
+}
+function abtV20Alert(error, title = 'Data belum dapat dimuat') {
+  return `<div class="app-alert"><strong>${safeText(title)}.</strong> ${safeText(error?.message || error || 'Periksa koneksi dan pastikan migrasi V20 sudah dijalankan.')}</div>`;
+}
+function abtV20SchemaNotice(error) {
+  return `<div class="abt-v20-note"><strong>Integrasi V20 belum aktif.</strong><br>Jalankan <code>SQL_ABT_V20_INTEGRASI.sql</code> di Supabase setelah migrasi V19. Detail: ${safeText(error?.message || '')}</div>`;
+}
+async function abtV20GetTeacherClasses(includeOpenPrivate = false) {
+  let query = supabaseClient.from('classes').select('id,title,category,level,status,schedule,instructor_id').order('title');
+  query = includeOpenPrivate
+    ? query.or(`instructor_id.eq.${currentUser.id},instructor_id.is.null`)
+    : query.eq('instructor_id', currentUser.id);
+  return await query;
+}
+async function abtV20GetClassMap(classIds) {
+  if (!classIds?.length) return {};
+  const { data } = await supabaseClient.from('classes').select('id,title,category,level,status,schedule,instructor_id').in('id', [...new Set(classIds)]);
+  return Object.fromEntries((data || []).map(c => [c.id, c]));
+}
+async function abtV20GetProfiles(ids, fields = 'id,full_name,username,phone,contact_email,role') {
+  const unique = [...new Set((ids || []).filter(Boolean))];
+  if (!unique.length) return {};
+  const { data, error } = await supabaseClient.from('profiles').select(fields).in('id', unique);
+  if (error) throw error;
+  return Object.fromEntries((data || []).map(p => [p.id, p]));
+}
+async function abtV20StudentEnrollmentContext() {
+  const { data: enrollments, error } = await supabaseClient.from('class_enrollments')
+    .select('id,class_id,student_id,payment_status,created_at').eq('student_id', currentUser.id).order('created_at', { ascending: false });
+  if (error) throw error;
+  const rows = enrollments || [];
+  const classMap = await abtV20GetClassMap(rows.map(e => e.class_id));
+  const privateIds = rows.filter(e => String(classMap[e.class_id]?.category || '').toLowerCase().includes('privat')).map(e => e.class_id);
+  let selections = {};
+  if (privateIds.length) {
+    const { data, error: selectionError } = await supabaseClient.from('teacher_private_selections').select('class_id,student_id,teacher_id,status')
+      .eq('student_id', currentUser.id).in('class_id', [...new Set(privateIds)]);
+    if (selectionError) throw selectionError;
+    selections = Object.fromEntries((data || []).map(s => [s.class_id, s]));
+  }
+  const activeRows = rows.filter(e => {
+    const isPrivate = String(classMap[e.class_id]?.category || '').toLowerCase().includes('privat');
+    return isPrivate ? selections[e.class_id]?.status === 'aktif' : ABT_V20_ACTIVE_ENROLLMENT.has(String(e.payment_status || '').toLowerCase());
+  });
+  return { enrollments: rows, activeRows, classMap, selections };
+}
+async function loadStudentOverview() {
+  let context;
+  try { context = await abtV20StudentEnrollmentContext(); } catch (e) { return abtV20Alert(e); }
+  const activeIds = [...new Set(context.activeRows.map(e => e.class_id))];
+  const [{ count: unread }, { count: unpaid }, activityResult] = await Promise.all([
+    supabaseClient.from('abt_notifications').select('id', { count: 'exact', head: true }).eq('recipient_id', currentUser.id).is('read_at', null),
+    supabaseClient.from('participant_invoices').select('id', { count: 'exact', head: true }).eq('student_id', currentUser.id).eq('status', 'issued'),
+    activeIds.length ? supabaseClient.from('teacher_activities').select('id,class_id,title,starts_at').in('class_id', activeIds).gte('starts_at', new Date().toISOString()).order('starts_at').limit(3) : Promise.resolve({ data: [], error: null })
+  ]);
+  const stats = [['Kelas terdaftar', context.enrollments.length], ['Kelas aktif', context.activeRows.length], ['Jadwal mendatang', activityResult.error ? '\u2014' : (activityResult.data || []).length], ['Tagihan terbuka', unpaid ?? '\u2014'], ['Notifikasi baru', unread ?? '\u2014']];
+  const cards = context.enrollments.slice(0, 4).map(e => {
+    const c = context.classMap[e.class_id] || {};
+    const isPrivate = String(c.category || '').toLowerCase().includes('privat');
+    const active = isPrivate ? context.selections[e.class_id]?.status === 'aktif' : ABT_V20_ACTIVE_ENROLLMENT.has(String(e.payment_status || '').toLowerCase());
+    return `<article class="panel-card abt-v20-class-card"><span class="status-pill">${safeText(c.category || 'Kelas')}</span><h3>${safeText(c.title || 'Kelas')}</h3><p>${safeText(c.schedule || 'Jadwal menyusul')}</p><span class="abt-v20-status ${active ? 'is-active' : ''}">${safeText(isPrivate ? active ? 'Aktif belajar' : 'Menunggu pilihan pengajar' : abtV20StatusLabel(e.payment_status))}</span></article>`;
+  }).join('');
+  const activityRows = (activityResult.data || []).map(a => `<tr><td>${safeText(a.title)}</td><td>${safeText(context.classMap[a.class_id]?.title || 'Kelas')}</td><td>${safeText(abtV20Date(a.starts_at, true))}</td></tr>`).join('');
+  return `<section class="welcome-panel"><h2>Assalamu'alaikum, ${safeText(currentProfile?.full_name || currentUser.email || 'Peserta')}!</h2><p>Ringkasan kelas yang Anda ikuti, jadwal, tagihan, dan pemberitahuan terbaru.</p></section><div class="stats-grid">${stats.map(([label, value]) => `<article class="stat-card"><div class="stat-card-copy"><small>${safeText(label)}</small><strong>${safeText(value)}</strong><span class="stat-accent" aria-hidden="true"></span></div></article>`).join('')}</div><section class="panel-card"><div class="abt-v20-section-head"><div><h3>Kelas Saya</h3><p class="panel-subtitle">Hanya pendaftaran akun Anda yang ditampilkan.</p></div><a class="app-button secondary" href="${routePath('follow')}" data-page="follow">Ikuti kelas lain</a></div><div class="abt-v20-card-grid">${cards || '<div class="empty-state">Belum ada pendaftaran kelas.</div>'}</div></section><section class="panel-card"><h3>Jadwal Mendatang</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Kegiatan</th><th>Kelas</th><th>Waktu</th></tr></thead><tbody>${activityRows || '<tr><td colspan="3">Belum ada jadwal aktif.</td></tr>'}</tbody></table></div></section>`;
+}
+async function abtV20TeacherParticipants(classRows, onlyActive = false) {
+  const ids = classRows.map(c => c.id);
+  if (!ids.length) return { rows: [], profiles: {}, selections: {}, classMap: {} };
+  const [{ data: enrollments, error }, { data: selections, error: selectionError }] = await Promise.all([
+    supabaseClient.from('class_enrollments').select('id,class_id,student_id,payment_status,created_at').in('class_id', ids).order('created_at', { ascending: false }),
+    supabaseClient.from('teacher_private_selections').select('class_id,student_id,teacher_id,status').in('class_id', ids)
+  ]);
+  if (error) throw error;
+  if (selectionError) throw selectionError;
+  const selectionMap = Object.fromEntries((selections || []).map(s => [`${s.class_id}:${s.student_id}`, s]));
+  const classMap = Object.fromEntries(classRows.map(c => [c.id, c]));
+  let rows = enrollments || [];
+  if (onlyActive) rows = rows.filter(e => {
+    const privateClass = String(classMap[e.class_id]?.category || '').toLowerCase().includes('privat');
+    return privateClass ? selectionMap[`${e.class_id}:${e.student_id}`]?.status === 'aktif' : ABT_V20_ACTIVE_ENROLLMENT.has(String(e.payment_status || '').toLowerCase());
+  });
+  return { rows, profiles: await abtV20GetProfiles(rows.map(e => e.student_id)), selections: selectionMap, classMap };
+}
+
+async function loadStudentClasses() {
+  let context;
+  try { context = await abtV20StudentEnrollmentContext(); } catch (e) { return abtV20SchemaNotice(e); }
+  const { enrollments, classMap, selections } = context;
+  if (!enrollments.length) return `<section class="panel-card"><h3>Kelas Saya</h3><div class="empty-state">Anda belum mendaftar kelas. Buka menu <strong>Ikuti Kelas</strong> untuk melihat program yang tersedia.</div></section>`;
+  const teacherMap = await abtV20GetProfiles(Object.values(classMap).map(c => c.instructor_id), 'id,full_name,username,phone,role').catch(() => ({}));
+  const linkQuery = await supabaseClient.from('teacher_class_links').select('class_id,whatsapp_group_url,teacher_whatsapp,default_meeting_url').in('class_id', Object.keys(classMap));
+  if (linkQuery.error) return abtV20SchemaNotice(linkQuery.error);
+  const linkMap = Object.fromEntries((linkQuery.data || []).map(l => [l.class_id, l]));
+  const cards = enrollments.map(e => {
+    const c = classMap[e.class_id] || {};
+    const isPrivate = String(c.category || '').toLowerCase().includes('privat');
+    const choice = selections[e.class_id];
+    const status = isPrivate ? (choice?.status === 'aktif' ? 'Aktif belajar' : choice?.status === 'ditolak' ? 'Belum diambil' : 'Menunggu pilihan pengajar') : abtV20StatusLabel(e.payment_status);
+    const t = teacherMap[c.instructor_id] || {};
+    const l = linkMap[e.class_id] || {};
+    const groupUrl = abtV20SafeUrl(l.whatsapp_group_url);
+    const meetingUrl = abtV20SafeUrl(l.default_meeting_url);
+    const wa = abtV20PhoneUrl(l.teacher_whatsapp || t.phone);
+    const active = isPrivate ? choice?.status === 'aktif' : ABT_V20_ACTIVE_ENROLLMENT.has(String(e.payment_status || '').toLowerCase());
+    return `<article class="panel-card abt-v20-class-card"><div class="abt-v20-card-head"><div><span class="status-pill">${safeText(c.category || 'Kelas')}</span><h3>${safeText(c.title || 'Kelas')}</h3></div><span class="abt-v20-status ${active ? 'is-active' : ''}">${safeText(status)}</span></div><p class="panel-subtitle">${safeText(c.schedule || 'Jadwal akan diumumkan pengajar.')}</p><p>Pengajar: <strong>${safeText(t.full_name || t.username || 'Belum ditentukan')}</strong></p><div class="abt-v20-link-row">${groupUrl ? `<a class="app-button secondary" href="${safeText(groupUrl)}" target="_blank" rel="noopener noreferrer">Grup WhatsApp</a>` : ''}${wa ? `<a class="app-button secondary" href="${safeText(wa)}" target="_blank" rel="noopener noreferrer">WhatsApp Pengajar</a>` : ''}${active && meetingUrl ? `<a class="app-button" href="${safeText(meetingUrl)}" target="_blank" rel="noopener noreferrer">Buka Meeting</a>` : ''}</div>${!groupUrl && !wa && !meetingUrl ? '<p class="abt-v20-muted">Informasi kontak dan meeting akan tampil setelah diisi pengajar.</p>' : ''}</article>`;
+  }).join('');
+  return `<section class="panel-card"><div class="abt-v20-section-head"><div><h3>Kelas Saya</h3><p class="panel-subtitle">Daftar ini hanya memuat pendaftaran akun Anda.</p></div><a class="app-button secondary" href="${routePath('follow')}" data-page="follow">Cari kelas</a></div><div class="abt-v20-card-grid">${cards}</div></section>`;
+}
+
+async function loadStudentFollowClasses() {
+  let own;
+  try { own = await abtV20StudentEnrollmentContext(); } catch (e) { return abtV20SchemaNotice(e); }
+  const { data: classes, error } = await supabaseClient.from('classes').select('id,title,description,category,level,duration_text,payment_type,price_amount,thumbnail_url,schedule,status').eq('status', 'published').order('created_at', { ascending: false });
+  if (error) return abtV20Alert(error, 'Kelas yang tersedia belum dapat dimuat');
+  const registered = new Set(own.enrollments.map(e => e.class_id));
+  const available = (classes || []).filter(c => !registered.has(c.id));
+  if (!available.length) return `<section class="panel-card"><h3>Ikuti Kelas</h3><div class="empty-state">Semua kelas terbit sudah Anda daftarkan, atau belum ada kelas baru yang tersedia.</div></section>`;
+  return `<section><section class="panel-card"><h3>Ikuti Kelas</h3><p class="panel-subtitle">Kelas privat menampilkan biaya pendaftaran satu kali. Tagihan pertemuan privat dihitung dari jumlah pertemuan dan jumlah peserta aktif, lalu diterbitkan Admin setelah laporan pengajar disetujui. Tarif bulanan kelas reguler bersifat tetap.</p></section><div class="abt-v20-card-grid">${available.map(c => { const isPrivate = String(c.category || '').toLowerCase().includes('privat'); return `<article class="panel-card abt-v20-class-card"><span class="status-pill">${safeText(c.category || 'Program')}</span><h3>${safeText(c.title)}</h3><p>${safeText(c.description || 'Program pembelajaran Ayo Belajar Tajwid.')}</p><div class="abt-v20-class-facts"><span>${safeText(c.level || 'Semua tingkat')}</span><span>${safeText(c.duration_text || c.schedule || 'Jadwal menyusul')}</span><strong>${safeText(formatRupiah(c.price_amount))}${isPrivate ? ' biaya pendaftaran' : c.payment_type === 'monthly' ? ' / bulan' : ''}</strong></div><button type="button" class="app-button" data-class-enroll="${safeText(c.id)}">Daftar kelas</button></article>`; }).join('')}</div></section>`;
+}
+
+async function loadStudentLearningMaterials() {
+  let context;
+  try { context = await abtV20StudentEnrollmentContext(); } catch (e) { return abtV20SchemaNotice(e); }
+  const classIds = context.activeRows.map(e => e.class_id);
+  if (!classIds.length) return `<section class="panel-card"><h3>Materi Belajar</h3><div class="empty-state">Materi akan terbuka setelah pendaftaran kelas aktif. Pendaftaran privat menunggu pilihan pengajar.</div></section>`;
+  const [{ data: core, error: coreError }, { data: added, error: addedError }] = await Promise.all([
+    supabaseClient.from('lessons').select('id,title,description,order_number,class_id').in('class_id', [...new Set(classIds)]).eq('is_published', true).order('order_number'),
+    supabaseClient.from('teacher_materials').select('id,title,description,class_id,storage_path,external_url,created_at').in('class_id', [...new Set(classIds)]).order('created_at', { ascending: false })
+  ]);
+  if (coreError) return abtV20Alert(coreError, 'Materi inti belum dapat dimuat');
+  if (addedError) return abtV20SchemaNotice(addedError);
+  const map = context.classMap;
+  const cards = [];
+  for (const item of (added || [])) {
+    let url = abtV20SafeUrl(item.external_url);
+    if (!url && item.storage_path) url = await abtTeacherSignedUrl(ABT_TEACHER_MATERIAL_BUCKET, item.storage_path);
+    cards.push(`<article class="panel-card abt-v20-record"><span class="status-pill">${safeText(map[item.class_id]?.title || 'Kelas')}</span><h3>${safeText(item.title)}</h3><p>${safeText(item.description || 'Materi tambahan dari pengajar.')}</p>${url ? `<a class="app-button secondary" href="${safeText(url)}" target="_blank" rel="noopener noreferrer">Buka materi</a>` : '<span class="abt-v20-muted">Tautan materi belum tersedia</span>'}</article>`);
+  }
+  for (const item of (core || [])) cards.push(`<article class="panel-card abt-v20-record"><span class="status-pill">${safeText(map[item.class_id]?.title || 'Kelas')} \u00B7 Materi inti</span><h3>${safeText(item.title)}</h3><p>${safeText(item.description || '')}</p></article>`);
+  return `<section class="panel-card"><h3>Materi Belajar</h3><p class="panel-subtitle">Materi hanya dimuat dari kelas aktif yang terdaftar pada akun Anda.</p><div class="abt-v20-card-grid">${cards.join('') || '<div class="empty-state">Belum ada materi yang diterbitkan untuk kelas aktif.</div>'}</div></section>`;
+}
+
+async function loadStudentSchedule() {
+  let context;
+  try { context = await abtV20StudentEnrollmentContext(); } catch (e) { return abtV20SchemaNotice(e); }
+  if (!context.activeRows.length) return `<section class="panel-card"><h3>Jadwal & Pengingat</h3><div class="empty-state">Jadwal akan tersedia setelah kelas aktif.</div></section>`;
+  await supabaseClient.rpc('process_due_class_reminders'); await refreshGlobalNotificationCount();
+  const classIds = [...new Set(context.activeRows.map(e => e.class_id))];
+  const [{ data: activities, error }, { data: reminders, error: reminderError }, { data: sessions, error: sessionError }] = await Promise.all([
+    supabaseClient.from('teacher_activities').select('id,class_id,title,details,starts_at,ends_at,location,meeting_url').in('class_id', classIds).order('starts_at'),
+    supabaseClient.from('participant_reminders').select('id,activity_id,minutes_before,reminder_at,sent_at').eq('student_id', currentUser.id),
+    supabaseClient.from('teacher_sessions').select('activity_id,class_id,session_date,minutes,status,notes').eq('student_id', currentUser.id).order('session_date', { ascending: false }).limit(50)
+  ]);
+  if (error) return abtV20SchemaNotice(error);
+  if (reminderError) return abtV20SchemaNotice(reminderError);
+  if (sessionError) return abtV20SchemaNotice(sessionError);
+  const reminderMap = Object.fromEntries((reminders || []).map(r => [r.activity_id, r]));
+  const rows = (activities || []).map(a => {
+    const r = reminderMap[a.id];
+    const options = [['0', 'Tanpa pengingat'], ['15', '15 menit'], ['30', '30 menit'], ['60', '1 jam'], ['1440', '1 hari']].map(([val, label]) => `<option value="${val}" ${String(r?.minutes_before || 0) === val ? 'selected' : ''}>${label}</option>`).join('');
+    const meeting = abtV20SafeUrl(a.meeting_url);
+    return `<tr><td><strong>${safeText(a.title)}</strong><br><small>${safeText(a.details || '')}</small></td><td>${safeText(context.classMap[a.class_id]?.title || 'Kelas')}</td><td>${safeText(abtV20Date(a.starts_at, true))}</td><td>${meeting ? `<a href="${safeText(meeting)}" target="_blank" rel="noopener noreferrer">Buka meeting</a>` : safeText(a.location || 'Belum tersedia')}</td><td><form class="abt-v20-reminder-form" data-activity-id="${safeText(a.id)}"><select aria-label="Waktu pengingat">${options}</select><button class="app-button secondary" type="submit">Simpan</button></form>${r?.sent_at ? '<small>Pengingat sudah masuk ke notifikasi.</small>' : ''}</td></tr>`;
+  }).join('');
+  const sessionRows = (sessions || []).map(s => `<tr><td>${safeText(abtV20Date(s.session_date))}</td><td>${safeText(context.classMap[s.class_id]?.title || 'Kelas')}</td><td>${safeText(abtV20StatusLabel(s.status))}</td><td>${safeText(s.minutes)} menit</td><td>${safeText(s.notes || '')}</td></tr>`).join('');
+  return `<section class="panel-card"><h3>Jadwal & Pengingat</h3><p class="panel-subtitle">Pengingat ditampilkan di pusat notifikasi saat Anda membuka aplikasi setelah waktu pengingat tiba.</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Kegiatan</th><th>Kelas</th><th>Waktu</th><th>Tempat / Meeting</th><th>Pengingat</th></tr></thead><tbody>${rows || '<tr><td colspan="5">Belum ada jadwal kelas mendatang.</td></tr>'}</tbody></table></div></section><section class="panel-card"><h3>Riwayat Pertemuan</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Tanggal</th><th>Kelas</th><th>Status</th><th>Durasi</th><th>Catatan pengajar</th></tr></thead><tbody>${sessionRows || '<tr><td colspan="5">Belum ada pertemuan tercatat.</td></tr>'}</tbody></table></div></section>`;
+}
+
+async function loadStudentAssignments() {
+  let context;
+  try { context = await abtV20StudentEnrollmentContext(); } catch (e) { return abtV20SchemaNotice(e); }
+  const ids = [...new Set(context.activeRows.map(e => e.class_id))];
+  if (!ids.length) return `<section class="panel-card"><h3>Tugas & Latihan</h3><div class="empty-state">Tugas dan latihan tersedia setelah kelas aktif.</div></section>`;
+  const { data: evaluations, error } = await supabaseClient.from('teacher_evaluations').select('id,class_id,kind,title,instructions,due_at,max_score').in('class_id', ids).eq('is_published', true).order('due_at');
+  if (error) return abtV20SchemaNotice(error);
+  const evals = evaluations || [];
+  const evalIds = evals.map(e => e.id);
+  const [submissionResult, resultResult] = evalIds.length ? await Promise.all([
+    supabaseClient.from('teacher_evaluation_submissions').select('id,evaluation_id,response_text,response_url,submitted_at').eq('student_id', currentUser.id).in('evaluation_id', evalIds),
+    supabaseClient.from('teacher_evaluation_results').select('evaluation_id,score,feedback,graded_at').eq('student_id', currentUser.id).in('evaluation_id', evalIds)
+  ]) : [{ data: [], error: null }, { data: [], error: null }];
+  if (submissionResult.error) return abtV20SchemaNotice(submissionResult.error);
+  if (resultResult.error) return abtV20SchemaNotice(resultResult.error);
+  const submissions = Object.fromEntries((submissionResult.data || []).map(s => [s.evaluation_id, s]));
+  const results = Object.fromEntries((resultResult.data || []).map(r => [r.evaluation_id, r]));
+  return `<section class="abt-v20-card-grid">${evals.map(e => {
+    const sub = submissions[e.id] || {};
+    const grade = results[e.id];
+    return `<article class="panel-card abt-v20-record"><span class="status-pill">${safeText(context.classMap[e.class_id]?.title || 'Kelas')} \u00B7 ${safeText(e.kind)}</span><h3>${safeText(e.title)}</h3><p>${safeText(e.instructions || 'Tidak ada instruksi tambahan.')}</p><p class="abt-v20-muted">Tenggat: ${safeText(abtV20Date(e.due_at, true))} \u00B7 Nilai maksimum ${safeText(e.max_score)}</p>${grade ? `<div class="abt-v20-grade"><strong>Nilai ${safeText(grade.score)}</strong><p>${safeText(grade.feedback || 'Belum ada umpan balik.')}</p></div>` : ''}<form class="abt-v20-submission-form" data-evaluation-id="${safeText(e.id)}"><label>Jawaban teks<textarea maxlength="5000" rows="3" name="response_text" placeholder="Tulis jawaban atau catatan">${safeText(sub.response_text || '')}</textarea></label><label>Tautan jawaban (opsional)<input name="response_url" type="url" maxlength="1000" value="${safeText(sub.response_url || '')}" placeholder="https://..."></label><button class="app-button" type="submit">${sub.id ? 'Perbarui Jawaban' : 'Kirim Jawaban'}</button><span class="abt-v20-feedback" role="status"></span></form></article>`;
+  }).join('') || '<section class="panel-card empty-state">Belum ada tugas atau latihan yang diterbitkan.</section>'}</section>`;
+}
+
+async function loadStudentInvoices() {
+  const { data, error } = await supabaseClient.from('participant_invoices').select('id,invoice_no,report_id,class_id,billing_month,session_count,rate_per_session,amount_due,status,billing_type,due_date,participant_count,issued_at,paid_at,admin_note').eq('student_id', currentUser.id).order('billing_month', { ascending: false });
+  if (error) return abtV20SchemaNotice(error);
+  const invoices = data || [];
+  const classMap = await abtV20GetClassMap(invoices.map(i => i.class_id));
+  window.abtV20Invoices = Object.fromEntries(invoices.map(i => [i.id, i]));
+  window.abtV20InvoiceClassMap = classMap;
+  return `<section class="panel-card"><h3>Tagihan</h3><p class="panel-subtitle">Tagihan reguler memakai biaya yang tercatat saat Anda mendaftar, terbit otomatis setiap awal bulan, dan jatuh tempo tanggal 5. Tagihan privat terbit setelah Admin menyetujui laporan pertemuan pengajar.</p><div class="abt-v20-card-grid">${invoices.map(i => { const kind = i.billing_type || 'legacy'; const detail = kind === 'regular' ? `Biaya tetap bulanan \u00B7 jatuh tempo ${i.due_date ? safeText(abtV20Date(i.due_date)) : 'tanggal 5'}` : kind === 'private' ? `${safeText(i.session_count)} pertemuan \u00D7 ${safeText(abtV20Money(i.rate_per_session))} per peserta${i.participant_count ? ` \u00B7 tarif untuk ${safeText(i.participant_count)} peserta aktif` : ''}` : `${safeText(i.session_count)} pertemuan \u00D7 ${safeText(abtV20Money(i.rate_per_session))}`; return `<article class="panel-card abt-v20-invoice-card"><div class="abt-v20-card-head"><div><span class="status-pill">${safeText(i.invoice_no)} \u00B7 ${safeText(kind === 'regular' ? 'Reguler' : kind === 'private' ? 'Privat' : 'Tagihan lama')}</span><h3>${safeText(classMap[i.class_id]?.title || 'Kelas')}</h3></div><span class="abt-v20-status ${i.status === 'paid' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(i.status))}</span></div><p>${safeText(abtV20MonthLabel(i.billing_month))}</p><div class="abt-v20-invoice-total">${safeText(abtV20Money(i.amount_due))}</div><p>${detail}</p>${i.admin_note ? `<p class="abt-v20-muted">Catatan Admin: ${safeText(i.admin_note)}</p>` : ''}<button class="app-button secondary" type="button" data-print-invoice="${safeText(i.id)}">Cetak invoice</button></article>`; }).join('') || '<div class="empty-state">Belum ada tagihan.</div>'}</div></section>`;
+}
+function abtV20PrintInvoice(id) {
+  const i = window.abtV20Invoices?.[id]; if (!i) return;
+  const className = window.abtV20InvoiceClassMap?.[i.class_id]?.title || 'Kelas';
+  const kind = i.billing_type || 'legacy';
+  const rows = kind === 'regular'
+    ? `<div class="row"><span>Jenis</span><strong>Tagihan flat bulanan</strong></div><div class="row"><span>Jatuh tempo</span><strong>${safeText(i.due_date ? abtV20Date(i.due_date) : 'Tanggal 5')}</strong></div>`
+    : `<div class="row"><span>Jumlah pertemuan</span><strong>${safeText(i.session_count)}</strong></div><div class="row"><span>Tarif / peserta / pertemuan</span><strong>${safeText(abtV20Money(i.rate_per_session))}</strong></div>${i.participant_count ? `<div class="row"><span>Jumlah peserta aktif</span><strong>${safeText(i.participant_count)}</strong></div>` : ''}`;
+  const body = `<!doctype html><html lang="id"><meta charset="utf-8"><title>Invoice ${safeText(i.invoice_no)}</title><style>body{font:16px Arial,sans-serif;max-width:720px;margin:40px auto;color:#153b45}h1{color:#087f9b}.box{border:1px solid #d7e5e8;border-radius:12px;padding:24px}.row{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid #edf2f3}.total{font-size:24px;font-weight:700;margin-top:18px}@media print{button{display:none}}</style><body><div class="box"><h1>Ayo Belajar Tajwid</h1><h2>Invoice ${safeText(i.invoice_no)}</h2><div class="row"><span>Peserta</span><strong>${safeText(currentProfile?.full_name || currentProfile?.username || 'Peserta')}</strong></div><div class="row"><span>Kelas</span><strong>${safeText(className)}</strong></div><div class="row"><span>Bulan tagihan</span><strong>${safeText(abtV20MonthLabel(i.billing_month))}</strong></div>${rows}<div class="total">Total: ${safeText(abtV20Money(i.amount_due))}</div><p>Status: ${safeText(abtV20StatusLabel(i.status))}</p><p>Terbit: ${safeText(abtV20Date(i.issued_at))}</p><button onclick="window.print()">Cetak</button></div></body></html>`;
+  const win = window.open('', '_blank');
+  if (!win) { alert('Izinkan jendela baru untuk mencetak invoice.'); return; }
+  win.opener = null;
+  win.document.open(); win.document.write(body); win.document.close();
+}
+
+async function loadTeacherPrivateRequests() {
+  const { data, error } = await supabaseClient.rpc('list_teacher_private_requests');
+  if (error) return abtV20Alert(error, 'Permintaan kelas privat belum dapat dimuat. Pastikan SQL V21 sudah diterapkan.');
+  const rows = (data || []).map(e => {
+    const s = e.selection_status;
+    const state = s === 'aktif' ? 'Aktif belajar' : s === 'ditolak' ? 'Pernah dilewati \u00B7 masih terbuka' : 'Menunggu keputusan';
+    const actions = s === 'aktif' ? '<span class="abt-v20-muted">Peserta aktif</span>' : `<div class="abt-v20-inline-actions"><button class="app-button" type="button" data-private-choice="accept" data-class-id="${safeText(e.class_id)}" data-student-id="${safeText(e.student_id)}">Ambil peserta</button><button class="app-button secondary" type="button" data-private-choice="decline" data-class-id="${safeText(e.class_id)}" data-student-id="${safeText(e.student_id)}">Lewati</button></div>`;
+    return `<tr><td><strong>${safeText(e.student_name || e.student_username || 'Peserta')}</strong><br><small>${safeText(e.student_phone || '')}</small></td><td>${safeText(e.class_title || 'Kelas')}</td><td>${safeText(abtV20StatusLabel(e.payment_status))}</td><td><span class="abt-v20-status ${s === 'aktif' ? 'is-active' : ''}">${safeText(state)}</span></td><td>${safeText(abtV20Date(e.registered_at))}</td><td>${actions}</td></tr>`;
+  }).join('');
+  return `<section class="panel-card"><h3>Permintaan Kelas Privat</h3><p class="panel-subtitle">Kelas privat berkelompok diambil oleh satu pengajar. Pengajar pertama yang menerima peserta menjadi penanggung jawab kelas; peserta yang dipilih menerima pesan konfirmasi dan hanya belajar dengan pengajar tersebut.</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Kelas privat</th><th>Status pendaftaran</th><th>Status seleksi</th><th>Tanggal daftar</th><th>Aksi</th></tr></thead><tbody>${rows || '<tr><td colspan="6">Belum ada permintaan yang menunggu keputusan.</td></tr>'}</tbody></table></div></section>`;
+}
+
+async function loadTeacherClassLinks() {
+  const { data: classes, error } = await abtV20GetTeacherClasses();
+  if (error) return abtV20Alert(error);
+  if (!classes?.length) return `<section class="panel-card"><h3>Akses & Kontak Kelas</h3><div class="empty-state">Tautan dapat diatur setelah kelas ditugaskan kepada Anda.</div></section>`;
+  const { data: links, error: linkError } = await supabaseClient.from('teacher_class_links').select('class_id,whatsapp_group_url,teacher_whatsapp,default_meeting_url').in('class_id', classes.map(c => c.id));
+  if (linkError) return abtV20SchemaNotice(linkError);
+  const map = Object.fromEntries((links || []).map(l => [l.class_id, l]));
+  return `<div class="abt-v20-card-grid">${classes.map(c => { const l = map[c.id] || {}; return `<form class="panel-card abt-v20-link-form" data-class-id="${safeText(c.id)}"><h3>${safeText(c.title)}</h3><label>Link grup WhatsApp<input name="whatsapp_group_url" type="url" maxlength="1000" value="${safeText(l.whatsapp_group_url || '')}" placeholder="https://chat.whatsapp.com/..."></label><label>Nomor WhatsApp pengajar<input name="teacher_whatsapp" type="tel" maxlength="30" value="${safeText(l.teacher_whatsapp || currentProfile?.phone || '')}" placeholder="62812..."></label><label>Link meeting default<input name="default_meeting_url" type="url" maxlength="1000" value="${safeText(l.default_meeting_url || '')}" placeholder="https://..."></label><button class="app-button" type="submit">Simpan akses kelas</button><span class="abt-v20-feedback" role="status"></span></form>`; }).join('')}</div>`;
+}
+
+async function loadTeacherSessions() {
+  const { data: classes, error } = await abtV20GetTeacherClasses();
+  if (error) return abtV20Alert(error);
+  if (!classes?.length) return `<section class="panel-card"><h3>Catatan Pertemuan</h3><div class="empty-state">Belum ada kelas yang ditugaskan.</div></section>`;
+  let context;
+  try { context = await abtV20TeacherParticipants(classes, true); } catch (e) { return abtV20SchemaNotice(e); }
+  const [{ data: activities, error: activityError }, { data: sessions, error: sessionError }] = await Promise.all([
+    supabaseClient.from('teacher_activities').select('id,class_id,title,starts_at').in('class_id', classes.map(c => c.id)).order('starts_at', { ascending: false }),
+    supabaseClient.from('teacher_sessions').select('id,activity_id,class_id,student_id,session_date,minutes,status,notes').eq('teacher_id', currentUser.id).order('session_date', { ascending: false }).limit(100)
+  ]);
+  if (activityError) return abtV20SchemaNotice(activityError);
+  if (sessionError) return abtV20SchemaNotice(sessionError);
+  const activeParticipants = context.rows;
+  const activitiesIn = activities || [];
+  const options = (items, placeholder, valueKey, label) => `<option value="">${placeholder}</option>${items.map(x => `<option value="${safeText(x[valueKey])}" data-class-id="${safeText(x.class_id)}">${safeText(label(x))}</option>`).join('')}`;
+  const students = activeParticipants.map(e => ({ ...e, name: context.profiles[e.student_id]?.full_name || context.profiles[e.student_id]?.username || 'Peserta', class_name: context.classMap[e.class_id]?.title || 'Kelas' }));
+  const activityOptions = options(activitiesIn, 'Pilih aktivitas', 'id', a => `${a.title} \u00B7 ${context.classMap[a.class_id]?.title || 'Kelas'}`);
+  const studentOptions = options(students, 'Pilih peserta aktif', 'student_id', s => `${s.name} \u00B7 ${s.class_name}`);
+  const sessionRows = (sessions || []).map(s => `<tr><td>${safeText(abtV20Date(s.session_date))}</td><td>${safeText(context.classMap[s.class_id]?.title || 'Kelas')}</td><td>${safeText(context.profiles[s.student_id]?.full_name || 'Peserta')}</td><td>${safeText(abtV20StatusLabel(s.status))}</td><td>${safeText(s.minutes)} menit</td><td>${safeText(s.notes || '')}</td></tr>`).join('');
+  return `<section class="panel-card"><h3>Catat Pertemuan Peserta</h3><p class="panel-subtitle">Hanya peserta aktif di kelas Anda yang bisa dicatat. Laporan honor menghitung pertemuan berstatus Selesai.</p><form id="abtV20SessionForm" class="abt-v20-form-grid"><label>Kelas<select name="class_id" required>${options(classes, 'Pilih kelas', 'id', c => c.title)}</select></label><label>Aktivitas / jadwal<select name="activity_id" required>${activityOptions}</select></label><label>Peserta<select name="student_id" required>${studentOptions}</select></label><label>Tanggal pertemuan<input name="session_date" type="date" value="${abtV20DateInput()}" required></label><label>Durasi (menit)<input name="minutes" type="number" min="1" max="1440" value="60" required></label><label>Status<select name="status"><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option><option value="no_show">Tidak hadir</option></select></label><label class="abt-v20-span-all">Catatan<textarea name="notes" maxlength="1000" rows="2"></textarea></label><button class="app-button" type="submit">Simpan pertemuan</button><span class="abt-v20-feedback" role="status"></span></form></section><section class="panel-card"><h3>Riwayat Pertemuan</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Tanggal</th><th>Kelas</th><th>Peserta</th><th>Status</th><th>Durasi</th><th>Catatan</th></tr></thead><tbody>${sessionRows || '<tr><td colspan="6">Belum ada pertemuan yang dicatat.</td></tr>'}</tbody></table></div></section>`;
+}
+
+async function loadTeacherPayroll() {
+  const { data: rate, error: rateError } = await supabaseClient.from('teacher_session_rates').select('rate_per_session,updated_at').eq('teacher_id', currentUser.id).maybeSingle();
+  if (rateError) return abtV20SchemaNotice(rateError);
+  const { start: month, end: nextMonthStart } = abtV20JakartaPreviousMonth();
+  const [{ data: report, error: reportError }, { data: sessions, error: sessionError }] = await Promise.all([
+    supabaseClient.from('teacher_monthly_reports').select('*').eq('teacher_id', currentUser.id).eq('report_month', month).maybeSingle(),
+    supabaseClient.from('teacher_sessions').select('id,session_date,status,student_id,class_id').eq('teacher_id', currentUser.id).eq('status', 'completed').gte('session_date', month).lt('session_date', nextMonthStart)
+  ]);
+  if (reportError) return abtV20SchemaNotice(reportError);
+  if (sessionError) return abtV20SchemaNotice(sessionError);
+  const count = (sessions || []).length;
+  const reportCount = report?.status === 'needs_correction' ? count : (report?.session_count ?? count);
+  const total = count * Number(rate?.rate_per_session || 0);
+  const locked = ['submitted', 'approved'].includes(report?.status);
+  return `<section class="panel-card"><div class="abt-v20-section-head"><div><h3>Laporan Honor</h3><p class="panel-subtitle">Laporan dibuat untuk bulan sebelumnya dan dikirim ke Admin untuk ditinjau.</p></div><span class="abt-v20-status ${report?.status === 'approved' ? 'is-active' : ''}">${safeText(report ? abtV20StatusLabel(report.status) : 'Belum dikirim')}</span></div><div class="abt-v20-payroll-summary"><div><small>Periode</small><strong>${safeText(abtV20MonthLabel(month))}</strong></div><div><small>Pertemuan selesai</small><strong>${safeText(reportCount)}</strong></div><div><small>Tarif / pertemuan</small><strong>${safeText(abtV20Money(report?.status === 'needs_correction' ? rate?.rate_per_session : report?.rate_per_session ?? rate?.rate_per_session ?? 0))}</strong></div><div><small>Perkiraan honor</small><strong>${safeText(abtV20Money(report?.status === 'needs_correction' ? total : report?.total_amount ?? total))}</strong></div></div>${rate ? `<p class="abt-v20-muted">Tarif ditetapkan Admin${rate.updated_at ? ` \u00B7 diperbarui ${safeText(abtV20Date(rate.updated_at))}` : ''}.</p>` : '<div class="abt-v20-note">Tarif per pertemuan belum ditetapkan Admin. Laporan belum dapat dikirim.</div>'}${report?.admin_note ? `<div class="abt-v20-note">Catatan Admin: ${safeText(report.admin_note)}</div>` : ''}<button type="button" class="app-button" id="abtV20SubmitPayroll" ${!rate || locked ? 'disabled' : ''}>${report?.status === 'needs_correction' ? 'Kirim ulang laporan' : 'Kirim laporan bulan sebelumnya'}</button><span id="abtV20PayrollFeedback" class="abt-v20-feedback" role="status"></span><p class="abt-v20-muted">Pengiriman dilakukan saat tombol ini ditekan. Sistem tidak mengirim laporan otomatis di latar belakang.</p></section>`;
+}
+
+async function loadAdminFinance() {
+  if (!abtV20IsAdmin()) return `<div class="app-alert">Anda tidak memiliki akses ke halaman ini.</div>`;
+  const [{ data: teachers, error: teacherError }, { data: classes, error: classError }, { data: reports, error: reportError }, { data: invoices, error: invoiceError }, { data: privateTiers, error: tierError }, { data: teacherRates, error: trError }] = await Promise.all([
+    supabaseClient.from('profiles').select('id,full_name,username').eq('role', 'pengajar').order('full_name'),
+    supabaseClient.from('classes').select('id,title,category,instructor_id,payment_type,price_amount,status').order('title'),
+    supabaseClient.from('teacher_monthly_reports').select('*').order('report_month', { ascending: false }).limit(100),
+    supabaseClient.from('participant_invoices').select('*').order('billing_month', { ascending: false }).limit(100),
+    supabaseClient.from('private_class_rate_tiers').select('participant_count,rate_per_participant,updated_at').order('participant_count'),
+    supabaseClient.from('teacher_session_rates').select('teacher_id,rate_per_session,updated_at')
+  ]);
+  if (teacherError || classError || reportError || invoiceError || tierError || trError) return abtV20SchemaNotice(teacherError || classError || reportError || invoiceError || tierError || trError);
+  const teacherRateMap = Object.fromEntries((teacherRates || []).map(x => [x.teacher_id, x.rate_per_session]));
+  const profileMap = await abtV20GetProfiles([...(reports || []).map(r => r.teacher_id), ...(invoices || []).map(i => i.student_id)], 'id,full_name,username').catch(() => ({}));
+  const classMap = Object.fromEntries((classes || []).map(c => [c.id, c]));
+  const regularClasses = (classes || []).filter(c => String(c.category || '').toLowerCase() === 'reguler' && c.payment_type === 'monthly');
+  const reportRows = (reports || []).map(r => `<tr><td>${safeText(profileMap[r.teacher_id]?.full_name || profileMap[r.teacher_id]?.username || 'Pengajar')}</td><td>${safeText(abtV20MonthLabel(r.report_month))}</td><td>${safeText(r.session_count)}</td><td>${safeText(abtV20Money(r.rate_per_session))}</td><td><strong>${safeText(abtV20Money(r.total_amount))}</strong></td><td><span class="abt-v20-status ${r.status === 'approved' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(r.status))}</span>${r.admin_note ? `<br><small>${safeText(r.admin_note)}</small>` : ''}</td><td>${r.status === 'submitted' ? `<div class="abt-v20-inline-actions"><button class="app-button" type="button" data-v20-review="approve" data-report-id="${safeText(r.id)}">Setujui & terbitkan tagihan privat</button><button class="app-button secondary" type="button" data-v20-review="return" data-report-id="${safeText(r.id)}">Minta perbaikan</button></div>` : ''}</td></tr>`).join('');
+  const invoiceRows = (invoices || []).map(i => { const kind = i.billing_type || 'legacy'; return `<tr><td>${safeText(i.invoice_no)}</td><td>${safeText(kind === 'regular' ? 'Reguler' : kind === 'private' ? 'Privat' : 'Lama')}</td><td>${safeText(profileMap[i.student_id]?.full_name || 'Peserta')}</td><td>${safeText(classMap[i.class_id]?.title || 'Kelas')}</td><td>${safeText(abtV20MonthLabel(i.billing_month))}</td><td>${i.due_date ? safeText(abtV20Date(i.due_date)) : '\u2014'}</td><td>${safeText(abtV20Money(i.amount_due))}</td><td><span class="abt-v20-status ${i.status === 'paid' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(i.status))}</span></td><td>${i.status === 'void' ? '' : `<button class="app-button secondary" type="button" data-v20-invoice-status="${i.status === 'paid' ? 'issued' : 'paid'}" data-invoice-id="${safeText(i.id)}">${i.status === 'paid' ? 'Tandai belum dibayar' : 'Tandai lunas'}</button>`}</td></tr>`; }).join('');
+  const tierRows = (privateTiers || []).map(t => `<tr><td>${safeText(t.participant_count)} peserta</td><td><form class="abt-v20-rate-form abt-v21-inline-rate" data-kind="private-tier" data-id="${safeText(t.participant_count)}"><span class="abt-v20-input-money"><span>Rp</span><input name="rate" type="number" min="0" step="500" required value="${safeText(t.rate_per_participant)}" aria-label="Tarif per peserta untuk ${safeText(t.participant_count)} orang"></span><button class="app-button secondary" type="submit">Simpan</button><span class="abt-v20-feedback" role="status"></span></form></td><td>${safeText(abtV20Money(Number(t.rate_per_participant) * Number(t.participant_count)))}</td></tr>`).join('');
+  return `<section class="panel-card"><h3>Tarif Honor Pengajar</h3><p class="panel-subtitle">Tarif ini digunakan menghitung honor pengajar. Perubahan berlaku untuk laporan berikutnya.</p><div class="abt-v20-rate-grid">${(teachers || []).map(t => `<form class="abt-v20-rate-form" data-kind="teacher" data-id="${safeText(t.id)}"><label>${safeText(t.full_name || t.username || 'Pengajar')}<span class="abt-v20-input-money"><span>Rp</span><input name="rate" type="number" min="0" step="500" required value="${safeText(teacherRateMap[t.id] ?? '')}" placeholder="Tarif / pertemuan"></span></label><button class="app-button secondary" type="submit">Simpan tarif</button><span class="abt-v20-feedback" role="status"></span></form>`).join('') || '<div class="empty-state">Belum ada akun pengajar.</div>'}</div></section>
+  <section class="panel-card"><h3>Tarif Tagihan Peserta</h3><p class="panel-subtitle">Reguler: biaya per bulan dibekukan saat peserta mendaftar. Tagihan terbit otomatis setiap tanggal 1 dan jatuh tempo tanggal 5. Privat: tagihan menunggu persetujuan laporan pengajar; tarif per peserta per pertemuan mengikuti jumlah peserta aktif pada kelas.</p><h4>Biaya tetap kelas reguler</h4><div class="abt-v20-rate-grid">${regularClasses.map(c => `<form class="abt-v20-rate-form" data-kind="regular" data-id="${safeText(c.id)}"><label>${safeText(c.title)}<span class="abt-v20-input-money"><span>Rp</span><input name="rate" type="number" min="0" step="1000" required value="${safeText(c.price_amount ?? '')}" aria-label="Tagihan bulanan ${safeText(c.title)}"></span></label><button class="app-button secondary" type="submit">Simpan biaya</button><span class="abt-v20-feedback" role="status"></span></form>`).join('') || '<div class="empty-state">Belum ada kelas reguler dengan skema bulanan.</div>'}</div><h4 style="margin-top:20px">Tarif privat per peserta per pertemuan (60 menit)</h4><div class="table-wrap"><table class="app-table"><thead><tr><th>Jumlah peserta aktif</th><th>Biaya per peserta</th><th>Total kelas / pertemuan</th></tr></thead><tbody>${tierRows || '<tr><td colspan="3">Tarif belum tersedia. Jalankan SQL V21.</td></tr>'}</tbody></table></div><p class="abt-v20-muted">Biaya pendaftaran privat disetel pada detail kelas (awal Rp50.000). Nilai tagihan yang sudah terbit menyimpan snapshot tarifnya.</p><div class="abt-v20-inline-actions"><button type="button" class="app-button" id="abtV21IssueRegularInvoices">Terbitkan tagihan reguler bulan ini</button><span id="abtV21RegularInvoiceFeedback" class="abt-v20-feedback" role="status"></span></div></section>
+  <section class="panel-card"><h3>Laporan Honor Masuk</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Pengajar</th><th>Periode</th><th>Pertemuan</th><th>Tarif</th><th>Total honor</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>${reportRows || '<tr><td colspan="7">Belum ada laporan.</td></tr>'}</tbody></table></div></section>
+  <section class="panel-card"><h3>Invoice Peserta</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Invoice</th><th>Jenis</th><th>Peserta</th><th>Kelas</th><th>Bulan</th><th>Jatuh tempo</th><th>Tagihan</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>${invoiceRows || '<tr><td colspan="9">Belum ada tagihan terbit.</td></tr>'}</tbody></table></div></section>`;
+}
+
+async function loadIntegratedNotifications() {
+  if (currentRole === 'peserta') { await supabaseClient.rpc('process_due_class_reminders'); await refreshGlobalNotificationCount(); }
+  const { data, error } = await supabaseClient.from('abt_notifications').select('id,class_id,sender_id,title,body,source,read_at,created_at').eq('recipient_id', currentUser.id).order('created_at', { ascending: false }).limit(100);
+  if (error) return abtV20SchemaNotice(error);
+  const notifications = data || [];
+  const classMap = await abtV20GetClassMap(notifications.map(n => n.class_id));
+  let compose = '';
+  if (currentRole === 'pengajar') {
+    const { data: classes } = await abtV20GetTeacherClasses();
+    compose = `<form id="abtV20AnnouncementForm" class="panel-card abt-v20-announcement-form"><h3>Kirim Notifikasi Kelas</h3><label>Kelas<select name="class_id" required>${(classes || []).map(c => `<option value="${safeText(c.id)}">${safeText(c.title)}</option>`).join('')}</select></label><label>Judul<input name="title" maxlength="160" required></label><label>Pesan<textarea name="body" maxlength="3000" rows="3" required></textarea></label><button class="app-button" type="submit">Kirim ke peserta aktif</button><span class="abt-v20-feedback" role="status"></span></form>`;
+  } else if (abtV20IsAdmin()) {
+    const { data: classes } = await supabaseClient.from('classes').select('id,title').order('title');
+    compose = `<form id="abtV20AnnouncementForm" class="panel-card abt-v20-announcement-form"><h3>Terbitkan Notifikasi</h3><label>Sasaran<select name="audience"><option value="all">Semua akun</option><option value="pengajar">Pengajar</option><option value="peserta">Peserta</option><option value="kelas">Peserta pada kelas tertentu</option></select></label><label>Kelas<select name="class_id"><option value="">Pilih kelas jika sasaran kelas</option>${(classes || []).map(c => `<option value="${safeText(c.id)}">${safeText(c.title)}</option>`).join('')}</select></label><label>Judul<input name="title" maxlength="160" required></label><label>Pesan<textarea name="body" maxlength="3000" rows="3" required></textarea></label><button class="app-button" type="submit">Terbitkan</button><span class="abt-v20-feedback" role="status"></span></form>`;
+  }
+  const rows = notifications.map(n => `<article class="abt-v20-notification ${n.read_at ? '' : 'is-unread'}"><div class="abt-v20-notification-meta"><span class="status-pill">${safeText(classMap[n.class_id]?.title || (n.source === 'announcement' ? 'Pengumuman Admin' : 'Pemberitahuan'))}</span><time>${safeText(abtV20Date(n.created_at, true))}</time></div><h3>${safeText(n.title)}</h3><p>${safeText(n.body || '')}</p>${n.read_at ? '<span class="abt-v20-muted">Sudah dibaca</span>' : `<button class="app-button secondary" type="button" data-v20-read-notification="${safeText(n.id)}">Tandai dibaca</button>`}</article>`).join('');
+  return `${compose}<section class="panel-card"><div class="abt-v20-section-head"><div><h3>Pusat Notifikasi</h3><p class="panel-subtitle">Pengumuman, perubahan kelas, tugas, pengingat, laporan honor, dan invoice.</p></div><span class="abt-v20-status">${notifications.filter(n => !n.read_at).length} belum dibaca</span></div><div class="abt-v20-notification-list">${rows || '<div class="empty-state">Belum ada notifikasi.</div>'}</div></section>`;
+}
+
+async function refreshGlobalNotificationCount() {
+  const badge = document.getElementById('globalNotificationCount');
+  if (!badge || !currentUser) return;
+  const { count, error } = await supabaseClient.from('abt_notifications').select('id', { count: 'exact', head: true }).eq('recipient_id', currentUser.id).is('read_at', null);
+  if (error) { badge.hidden = true; return; }
+  badge.textContent = count > 99 ? '99+' : String(count || 0);
+  badge.hidden = !count;
+  if (!abtV20NotificationTimer) abtV20NotificationTimer = window.setInterval(() => { if (currentUser) refreshGlobalNotificationCount(); }, 45000);
+}
+
+async function refreshTopbarAvatar() {
+  const avatar = document.getElementById('userAvatar');
+  if (!avatar || !currentUser) return;
+  avatar.textContent = (currentProfile?.full_name || currentProfile?.username || 'A').trim().charAt(0).toUpperCase();
+  const { data, error } = await supabaseClient.from('teacher_profile_photos').select('storage_path').eq('profile_id', currentUser.id).maybeSingle();
+  if (error || !data?.storage_path) return;
+  const url = await abtTeacherSignedUrl(ABT_TEACHER_AVATAR_BUCKET, data.storage_path);
+  if (url) avatar.innerHTML = `<img src="${safeText(url)}" alt="Foto profil">`;
+}
+
+async function abtV20SubmitSession(form) {
+  const fd = new FormData(form); const classId = fd.get('class_id');
+  const activity = form.querySelector('[name="activity_id"]')?.selectedOptions[0];
+  const student = form.querySelector('[name="student_id"]')?.selectedOptions[0];
+  if (!classId || activity?.dataset.classId !== classId || student?.dataset.classId !== classId) { form.querySelector('.abt-v20-feedback').textContent = 'Pilih kelas, jadwal, dan peserta dari kelas yang sama.'; return; }
+  const payload = { activity_id: fd.get('activity_id'), class_id: classId, teacher_id: currentUser.id, student_id: fd.get('student_id'), session_date: fd.get('session_date'), minutes: Number(fd.get('minutes')), status: fd.get('status'), notes: String(fd.get('notes') || '').trim() || null };
+  const fb = form.querySelector('.abt-v20-feedback'); fb.textContent = 'Menyimpan...';
+  const { error } = await supabaseClient.from('teacher_sessions').insert(payload);
+  if (error) { fb.textContent = `Belum tersimpan: ${error.message}`; return; }
+  await renderDashboardPage('sessions');
+}
+function abtV20FilterSessionSelect(select, classId) {
+  if (!select) return;
+  [...select.options].forEach((o, i) => { if (i) o.hidden = Boolean(classId) && o.dataset.classId !== classId; });
+  if (select.selectedOptions[0]?.hidden) select.value = '';
+}
+
+document.addEventListener('submit', async event => {
+  const form = event.target;
+  if (form?.matches('.abt-v20-reminder-form')) {
+    event.preventDefault(); const value = Number(form.querySelector('select').value);
+    const { error } = await supabaseClient.rpc('set_class_reminder', { p_activity_id: form.dataset.activityId, p_minutes_before: value });
+    if (error) alert(`Pengingat belum tersimpan: ${error.message}`); else await renderDashboardPage('schedule');
+    return;
+  }
+  if (form?.matches('.abt-v20-submission-form')) {
+    event.preventDefault(); const fb = form.querySelector('.abt-v20-feedback'); const payload = { evaluation_id: form.dataset.evaluationId, student_id: currentUser.id, response_text: form.elements.response_text.value.trim() || null, response_url: abtV20SafeUrl(form.elements.response_url.value) || null, updated_at: new Date().toISOString() };
+    if (!payload.response_text && !payload.response_url) { fb.textContent = 'Isi jawaban atau tautan terlebih dahulu.'; return; }
+    fb.textContent = 'Mengirim...'; const { error } = await supabaseClient.from('teacher_evaluation_submissions').upsert(payload, { onConflict: 'evaluation_id,student_id' });
+    if (error) { fb.textContent = `Belum terkirim: ${error.message}`; return; } fb.textContent = 'Jawaban tersimpan.'; return;
+  }
+  if (form?.id === 'abtV20SessionForm') { event.preventDefault(); await abtV20SubmitSession(form); return; }
+  if (form?.matches('.abt-v20-link-form')) {
+    event.preventDefault(); const fd = new FormData(form); const fb = form.querySelector('.abt-v20-feedback');
+    const group = fd.get('whatsapp_group_url') ? abtV20SafeUrl(fd.get('whatsapp_group_url')) : null;
+    const meeting = fd.get('default_meeting_url') ? abtV20SafeUrl(fd.get('default_meeting_url')) : null;
+    if (fd.get('whatsapp_group_url') && !group || fd.get('default_meeting_url') && !meeting) { fb.textContent = 'Tautan harus menggunakan http:// atau https://.'; return; }
+    const payload = { class_id: form.dataset.classId, whatsapp_group_url: group, teacher_whatsapp: String(fd.get('teacher_whatsapp') || '').trim() || null, default_meeting_url: meeting, updated_by: currentUser.id, updated_at: new Date().toISOString() };
+    fb.textContent = 'Menyimpan...'; const { error } = await supabaseClient.from('teacher_class_links').upsert(payload, { onConflict: 'class_id' });
+    fb.textContent = error ? `Gagal menyimpan: ${error.message}` : 'Akses kelas tersimpan.'; return;
+  }
+  if (form?.matches('.abt-v20-rate-form')) {
+    event.preventDefault(); const fb = form.querySelector('.abt-v20-feedback'); const rate = Number(form.elements.rate.value);
+    if (!Number.isFinite(rate) || rate < 0) { fb.textContent = 'Tarif tidak valid.'; return; }
+    const kind = form.dataset.kind; fb.textContent = 'Menyimpan...'; let error = null;
+    if (kind === 'teacher') {
+      ({ error } = await supabaseClient.from('teacher_session_rates').upsert({ teacher_id: form.dataset.id, rate_per_session: rate, updated_by: currentUser.id, updated_at: new Date().toISOString() }, { onConflict: 'teacher_id' }));
+    } else if (kind === 'regular') {
+      ({ error } = await supabaseClient.from('classes').update({ price_amount: rate, payment_type: 'monthly' }).eq('id', form.dataset.id));
+    } else if (kind === 'private-tier') {
+      ({ error } = await supabaseClient.from('private_class_rate_tiers').update({ rate_per_participant: rate, updated_by: currentUser.id, updated_at: new Date().toISOString() }).eq('participant_count', Number(form.dataset.id)));
+    } else {
+      ({ error } = await supabaseClient.from('class_session_rates').upsert({ class_id: form.dataset.id, rate_per_session: rate, updated_by: currentUser.id, updated_at: new Date().toISOString() }, { onConflict: 'class_id' }));
+    }
+    fb.textContent = error ? `Gagal: ${error.message}` : 'Tarif tersimpan.'; return;
+  }
+  if (form?.id === 'abtV20AnnouncementForm') {
+    event.preventDefault(); const fd = new FormData(form); const fb = form.querySelector('.abt-v20-feedback');
+    const audience = currentRole === 'pengajar' ? 'kelas' : fd.get('audience');
+    const { error } = await supabaseClient.rpc('send_abt_notification', { p_title: String(fd.get('title')).trim(), p_body: String(fd.get('body')).trim(), p_audience: audience, p_class_id: fd.get('class_id') || null });
+    fb.textContent = error ? `Gagal mengirim: ${error.message}` : 'Notifikasi sudah dikirim.';
+    if (!error) { form.reset(); await refreshGlobalNotificationCount(); }
+  }
+});
+
+document.addEventListener('change', event => {
+  if (event.target?.name === 'class_id' && event.target.closest('#abtV20SessionForm')) {
+    const form = event.target.closest('#abtV20SessionForm');
+    abtV20FilterSessionSelect(form.querySelector('[name="activity_id"]'), event.target.value);
+    abtV20FilterSessionSelect(form.querySelector('[name="student_id"]'), event.target.value);
+  }
+});
+
+document.addEventListener('click', async event => {
+  const issueRegular = event.target.closest('#abtV21IssueRegularInvoices');
+  if (issueRegular) {
+    const fb = document.getElementById('abtV21RegularInvoiceFeedback');
+    issueRegular.disabled = true; fb.textContent = 'Menerbitkan tagihan bulan ini...';
+    const { data, error } = await supabaseClient.rpc('issue_regular_monthly_invoices', { p_billing_month: abtV21CurrentMonth() });
+    if (error) { fb.textContent = `Gagal menerbitkan tagihan: ${error.message}`; issueRegular.disabled = false; }
+    else { fb.textContent = `${data?.invoices_created ?? 0} invoice reguler baru diterbitkan. Jatuh tempo ${abtV20Date(data?.due_date)}.`; await renderDashboardPage('finance'); }
+    return;
+  }
+  const privateChoice = event.target.closest('[data-private-choice]');
+  if (privateChoice) {
+    const accept = privateChoice.dataset.privateChoice === 'accept';
+    if (!accept && !confirm('Lewati pendaftaran privat peserta ini?')) return;
+    privateChoice.disabled = true;
+    const { data, error } = await supabaseClient.rpc('decide_private_enrollment', { p_class_id: privateChoice.dataset.classId, p_student_id: privateChoice.dataset.studentId, p_accept: accept });
+    if (error) { alert(`Status peserta belum berubah: ${error.message}`); privateChoice.disabled = false; return; }
+    if (data?.message) alert(data.message);
+    await renderDashboardPage('private'); return;
+  }
+  const read = event.target.closest('[data-v20-read-notification]');
+  if (read) {
+    const { error } = await supabaseClient.rpc('mark_abt_notification_read', { p_notification_id: read.dataset.v20ReadNotification });
+    if (error) alert(`Notifikasi belum diperbarui: ${error.message}`); else { await refreshGlobalNotificationCount(); await renderDashboardPage('notifications'); }
+    return;
+  }
+  const payroll = event.target.closest('#abtV20SubmitPayroll');
+  if (payroll) {
+    const fb = document.getElementById('abtV20PayrollFeedback'); payroll.disabled = true; fb.textContent = 'Mengirim laporan...';
+    const { start: reportMonth } = abtV20JakartaPreviousMonth();
+    const { error } = await supabaseClient.rpc('submit_teacher_monthly_report', { p_report_month: reportMonth });
+    if (error) { fb.textContent = `Belum terkirim: ${error.message}`; payroll.disabled = false; }
+    else await renderDashboardPage('payroll');
+    return;
+  }
+  const review = event.target.closest('[data-v20-review]');
+  if (review) {
+    const approve = review.dataset.v20Review === 'approve';
+    const note = approve ? null : prompt('Catatan untuk pengajar (wajib):');
+    if (!approve && !String(note || '').trim()) return;
+    review.disabled = true;
+    const { error } = await supabaseClient.rpc('review_teacher_monthly_report', { p_report_id: review.dataset.reportId, p_approve: approve, p_admin_note: String(note || '').trim() || null });
+    if (error) { alert(`Laporan belum diperbarui: ${error.message}`); review.disabled = false; } else await renderDashboardPage('finance');
+    return;
+  }
+  const invoice = event.target.closest('[data-v20-invoice-status]');
+  if (invoice) {
+    const status = invoice.dataset.v20InvoiceStatus;
+    const { error } = await supabaseClient.rpc('set_participant_invoice_status', { p_invoice_id: invoice.dataset.invoiceId, p_status: status, p_admin_note: null });
+    if (error) alert(`Status invoice belum diperbarui: ${error.message}`); else await renderDashboardPage('finance');
+    return;
+  }
+  const print = event.target.closest('[data-print-invoice]');
+  if (print) { abtV20PrintInvoice(print.dataset.printInvoice); return; }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('globalNotificationBell')?.addEventListener('click', () => navigate('notifications'));
+});
+</script>
   <script>
     // Konfigurasi frontend Supabase. Publishable key boleh berada di frontend;
     // jangan pernah menaruh service_role/secret key di file ini.
@@ -814,7 +2018,7 @@
         registerProvince.disabled=false;
       }catch(e){
         console.error('Gagal memuat provinsi:',e);
-        registerProvince.innerHTML='<option value="">Provinsi gagal dimuat â€” klik untuk mencoba lagi</option>';
+        registerProvince.innerHTML='<option value="">Provinsi gagal dimuat \u2014 klik untuk mencoba lagi</option>';
         registerProvince.disabled=false;
       }
     }
@@ -955,7 +2159,7 @@
     function applyPublicTheme(){
       const dark=localStorage.getItem('abt_public_theme')==='dark';
       document.body.classList.toggle('public-dark',dark);
-      if(publicThemeToggle)publicThemeToggle.textContent=dark?'â˜¾':'â˜¼';
+      if(publicThemeToggle)publicThemeToggle.textContent=dark?'\u263E':'\u263C';
     }
     applyPublicTheme();
     publicThemeToggle?.addEventListener('click',()=>{localStorage.setItem('abt_public_theme',document.body.classList.contains('public-dark')?'light':'dark');applyPublicTheme();});
@@ -1041,12 +2245,12 @@
         isManager ? countRows('profiles') : Promise.resolve(null)
       ]);
       const stats = [
-        ['â–¤', isManager ? 'Total Kelas' : currentRole === 'pengajar' ? 'Kelas Diampu' : 'Kelas Tersedia', classes],
-        ['â–£', 'Materi Pembelajaran', lessons],
-        ['â™§', currentRole === 'peserta' ? 'Pendaftaran Saya' : 'Data Pendaftaran', enrollments],
-        ['â™™', 'Total Pengguna', users]
+        ['\u25A4', isManager ? 'Total Kelas' : currentRole === 'pengajar' ? 'Kelas Diampu' : 'Kelas Tersedia', classes],
+        ['\u25A3', 'Materi Pembelajaran', lessons],
+        ['\u2667', currentRole === 'peserta' ? 'Pendaftaran Saya' : 'Data Pendaftaran', enrollments],
+        ['\u2659', 'Total Pengguna', users]
       ].filter((item, i) => item[2] !== null || (i === 3 && !isManager));
-      const cards = stats.map(item => `<article class="stat-card"><div class="stat-card-copy"><small>${item[1]}</small><strong>${item[2] === null ? 'â€”' : item[2]}</strong><span class="stat-accent" aria-hidden="true"></span></div></article>`).join('');
+      const cards = stats.map(item => `<article class="stat-card"><div class="stat-card-copy"><small>${item[1]}</small><strong>${item[2] === null ? '\u2014' : item[2]}</strong><span class="stat-accent" aria-hidden="true"></span></div></article>`).join('');
       const [classResult, enrollmentResult] = await Promise.all([
         supabaseClient.from('classes').select('id,title,status,category,level').order('created_at',{ascending:false}).limit(5),
         currentRole === 'peserta'
@@ -1054,7 +2258,7 @@
           : supabaseClient.from('enrollments').select('id,status,classes(title)').order('enrollment_date',{ascending:false}).limit(5)
       ]);
       const classRows = !classResult.error && classResult.data?.length
-        ? classResult.data.map(c => `<tr><td><strong>${safeText(c.title)}</strong></td><td>${safeText(c.category || c.level || 'â€”')}</td><td><span class="status-pill">${safeText(c.status || 'tersedia')}</span></td></tr>`).join('')
+        ? classResult.data.map(c => `<tr><td><strong>${safeText(c.title)}</strong></td><td>${safeText(c.category || c.level || '\u2014')}</td><td><span class="status-pill">${safeText(c.status || 'tersedia')}</span></td></tr>`).join('')
         : `<tr><td colspan="3"><div class="empty-state">Belum ada data kelas yang dapat ditampilkan.</div></td></tr>`;
       const enrollmentRows = !enrollmentResult.error && enrollmentResult.data?.length
         ? enrollmentResult.data.map(e => `<tr><td>${safeText(e.classes?.title || 'Kelas')}</td><td><span class="status-pill">${safeText(e.status)}</span></td></tr>`).join('')
@@ -1120,37 +2324,37 @@
               <div class="field"><label for="newClassPayment">Skema biaya *</label><select id="newClassPayment" required><option value="">Pilih skema biaya</option><option value="one_time">1x bayar</option><option value="monthly">Bulanan</option><option value="custom_package">Paket khusus</option></select></div>
               <div class="field"><label for="newClassPrice">Nominal biaya (Rp)</label><input id="newClassPrice" type="number" min="0" step="1000" placeholder="Contoh: 350000"></div>
               <div class="field"><label for="newClassDuration">Lama pembelajaran *</label><input id="newClassDuration" required maxlength="80" placeholder="Contoh: 4 bulan / 16 pertemuan"></div>
-              <div class="field"><label for="newClassThumbnail">Link thumbnail Google Drive</label><input id="newClassThumbnail" type="url" placeholder="Tempel link berbagi Google Drive"><small class="field-help">Atur akses file Google Drive menjadi â€œSiapa saja yang memiliki link â€” Viewerâ€.</small></div>
+              <div class="field"><label for="newClassThumbnail">Link thumbnail Google Drive</label><input id="newClassThumbnail" type="url" placeholder="Tempel link berbagi Google Drive"><small class="field-help">Atur akses file Google Drive menjadi \u201CSiapa saja yang memiliki link \u2014 Viewer\u201D.</small></div>
               <div class="field"><label for="newClassLevel">Tingkat</label><select id="newClassLevel"><option value="">Pilih tingkat</option><option>Pemula</option><option>Menengah</option><option>Lanjutan</option><option>Umum</option></select></div>
               <div class="field"><label for="newClassCapacity">Kuota peserta</label><input id="newClassCapacity" type="number" min="1" placeholder="Contoh: 30"></div>
               <div class="field"><label for="newClassStart">Tanggal mulai</label><input id="newClassStart" type="date"></div>
               <div class="field"><label for="newClassEnd">Tanggal selesai</label><input id="newClassEnd" type="date"></div>
-              <div class="field full"><label for="newClassSchedule">Jadwal pembelajaran</label><input id="newClassSchedule" placeholder="Contoh: Selasa & Rabu, 20.00â€“21.00 WIB"></div>
+              <div class="field full"><label for="newClassSchedule">Jadwal pembelajaran</label><input id="newClassSchedule" placeholder="Contoh: Selasa & Rabu, 20.00\u201321.00 WIB"></div>
               <div class="field full"><label for="newClassDescription">Deskripsi kelas</label><textarea id="newClassDescription" placeholder="Jelaskan tujuan, materi, dan gambaran kelas..."></textarea></div>
               <div class="field"><label for="newClassInstructor">Pengajar</label><select id="newClassInstructor"><option value="">Belum ditentukan</option>${teacherOptions}</select></div>
               <div class="field"><label for="newClassStatus">Status publikasi</label><select id="newClassStatus"><option value="draft">Draft</option><option value="published">Publikasikan</option></select></div>
             </div>
-            <div id="privateClassPricingHelp" class="panel-card" hidden style="margin-top:14px"><strong>Kelas privat Â· durasi per pertemuan 60 menit</strong><p class="panel-subtitle">Biaya pendaftaran dibayar satu kali. Setelah peserta aktif belajar, tagihan pertemuan diterbitkan Admin dari laporan pengajar. Kosongkan pengajar agar pengajar pertama yang mengambil permintaan menjadi penanggung jawab kelas.</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta aktif</th><th>Tarif per peserta / pertemuan</th><th>Total kelas / pertemuan</th></tr></thead><tbody>${privateTierRows||'<tr><td colspan="3">Tarif akan muncul setelah migrasi V21 diterapkan.</td></tr>'}</tbody></table></div>${tierError?'<small class="field-help">Tarif privat belum terhubung. Jalankan SQL V21 sebelum menerima pendaftaran.</small>':''}</div>
-            <div class="class-form-actions"><button class="app-button" type="submit">ï¼‹ Buat Kelas</button><span class="form-feedback" id="createClassFeedback" role="status"></span></div>
+            <div id="privateClassPricingHelp" class="panel-card" hidden style="margin-top:14px"><strong>Kelas privat \u00B7 durasi per pertemuan 60 menit</strong><p class="panel-subtitle">Biaya pendaftaran dibayar satu kali. Setelah peserta aktif belajar, tagihan pertemuan diterbitkan Admin dari laporan pengajar. Kosongkan pengajar agar pengajar pertama yang mengambil permintaan menjadi penanggung jawab kelas.</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta aktif</th><th>Tarif per peserta / pertemuan</th><th>Total kelas / pertemuan</th></tr></thead><tbody>${privateTierRows||'<tr><td colspan="3">Tarif akan muncul setelah migrasi V21 diterapkan.</td></tr>'}</tbody></table></div>${tierError?'<small class="field-help">Tarif privat belum terhubung. Jalankan SQL V21 sebelum menerima pendaftaran.</small>':''}</div>
+            <div class="class-form-actions"><button class="app-button" type="submit">\uFF0B Buat Kelas</button><span class="form-feedback" id="createClassFeedback" role="status"></span></div>
           </form></section>`;
       }
 
       const activeCount=classes.filter(c=>c.status==='published').length;
       const draftCount=classes.filter(c=>c.status!=='published').length;
-      const toolbar=`<div class="class-manager-toolbar"><div><h3 style="margin:0 0 5px">Ringkasan Kelas</h3><p class="panel-subtitle" style="margin:0">Pantau kelas, pengajar, dan peserta aktif dari satu tempat.</p></div><div class="class-manager-summary"><div class="mini-stat"><strong>${activeCount}</strong><span>Kelas aktif</span></div><div class="mini-stat"><strong>${draftCount}</strong><span>Draft</span></div><div class="mini-stat"><strong>${classes.reduce((n,c)=>n+(enrollmentCounts[c.id]||0),0)}</strong><span>Peserta aktif</span></div></div>${canManageClasses?'<button type="button" class="app-button class-create-toggle" id="showCreateClass">ï¼‹ Buat Kelas Baru</button>':''}</div>`;
+      const toolbar=`<div class="class-manager-toolbar"><div><h3 style="margin:0 0 5px">Ringkasan Kelas</h3><p class="panel-subtitle" style="margin:0">Pantau kelas, pengajar, dan peserta aktif dari satu tempat.</p></div><div class="class-manager-summary"><div class="mini-stat"><strong>${activeCount}</strong><span>Kelas aktif</span></div><div class="mini-stat"><strong>${draftCount}</strong><span>Draft</span></div><div class="mini-stat"><strong>${classes.reduce((n,c)=>n+(enrollmentCounts[c.id]||0),0)}</strong><span>Peserta aktif</span></div></div>${canManageClasses?'<button type="button" class="app-button class-create-toggle" id="showCreateClass">\uFF0B Buat Kelas Baru</button>':''}</div>`;
       const cards=classes.length?`<div class="class-dashboard-grid">${classes.map(c=>`<article class="panel-card class-dashboard-card">
         ${c.thumbnail_url?`<img class="class-dashboard-thumb" src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Thumbnail ${safeText(c.title)}" loading="lazy" onerror="this.style.display='none'">`:`<div class="class-dashboard-thumb-placeholder">Thumbnail belum tersedia</div>`}
         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><span class="status-pill">${safeText(c.status==='published'?'Kelas aktif':'Draft')}</span>${canManageClasses?`<button class="app-button secondary edit-class-btn" type="button" data-class-id="${safeText(c.id)}" style="padding:7px 11px;font-size:11px">Edit</button>`:''}</div>
-        <h3>${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' Â· ')||'Program pembelajaran')}</p>
+        <h3>${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' \u00B7 ')||'Program pembelajaran')}</p>
         <p class="class-description">${safeText(c.description||'Deskripsi kelas belum ditambahkan.')}</p>
         <div class="class-dashboard-meta"><div><small>Biaya</small><strong>${c.price_amount!=null?'Rp '+Number(c.price_amount).toLocaleString('id-ID'):'Belum diatur'}${c.payment_type==='monthly'?' / bulan':c.payment_type==='one_time'?' / sekali bayar':''}</strong></div><div><small>Peserta aktif</small><strong>${enrollmentCounts[c.id]||0}${c.capacity?` / ${c.capacity}`:''}</strong></div><div><small>Pengajar</small><strong>${safeText(c.instructor_id?teacherMap[c.instructor_id]||'Pengajar':'Belum ditentukan')}</strong></div><div><small>Jadwal</small><strong>${safeText(c.schedule||'Belum diatur')}</strong></div></div>
         <small style="color:var(--muted,#718078)">${safeText(c.duration_text||'Durasi belum diatur')}</small>
-      </article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas. ${canManageClasses?'Tekan â€œBuat Kelas Baruâ€ untuk menambahkan kelas pertama.':''}</div>`;
+      </article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas. ${canManageClasses?'Tekan \u201CBuat Kelas Baru\u201D untuk menambahkan kelas pertama.':''}</div>`;
 
       let paymentPanel='';
       if(currentRole==='super_admin'||currentRole==='admin'){
         const {data:payments,error:paymentError}=await supabaseClient.from('class_enrollments').select('id,payment_status,payment_method,payment_reference,created_at,classes(title),profiles:profiles!class_enrollments_student_id_fkey(full_name,username)').order('created_at',{ascending:false}).limit(100);
-        paymentPanel=`<section class="panel-card" style="margin-top:18px"><h3>Konfirmasi Pembayaran & Pendaftaran</h3><p class="panel-subtitle">Periksa konfirmasi peserta dan perbarui status setelah pembayaran diverifikasi.</p>${paymentError?`<div class="app-alert">Data konfirmasi belum dapat dimuat: ${safeText(paymentError.message)}</div>`:!payments?.length?'<p>Belum ada pendaftaran.</p>':`<div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Kelas</th><th>Metode / Catatan</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${payments.map(x=>`<tr><td>${safeText(x.profiles?.full_name||x.profiles?.username||'Peserta')}</td><td>${safeText(x.classes?.title||'â€”')}</td><td>${safeText(x.payment_method||'â€”')}<br><small>${safeText(x.payment_reference||'â€”')}</small></td><td><span class="status-pill">${safeText(x.payment_status)}</span></td><td><div class="payment-action-wrap"><select class="payment-status-select" data-payment-status="${safeText(x.id)}" aria-label="Status pembayaran ${safeText(x.profiles?.full_name||'peserta')}"><option value="menunggu_konfirmasi" ${x.payment_status==='menunggu_konfirmasi'?'selected':''}>Menunggu konfirmasi</option><option value="terverifikasi" ${x.payment_status==='terverifikasi'?'selected':''}>Terverifikasi</option><option value="ditolak" ${x.payment_status==='ditolak'?'selected':''}>Ditolak</option></select><button type="button" class="app-button secondary" data-save-payment="${safeText(x.id)}">Simpan</button></div><small class="payment-save-feedback" id="paymentFeedback-${safeText(x.id)}" role="status"></small></td></tr>`).join('')}</tbody></table></div>`}</section>`;
+        paymentPanel=`<section class="panel-card" style="margin-top:18px"><h3>Konfirmasi Pembayaran & Pendaftaran</h3><p class="panel-subtitle">Periksa konfirmasi peserta dan perbarui status setelah pembayaran diverifikasi.</p>${paymentError?`<div class="app-alert">Data konfirmasi belum dapat dimuat: ${safeText(paymentError.message)}</div>`:!payments?.length?'<p>Belum ada pendaftaran.</p>':`<div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Kelas</th><th>Metode / Catatan</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${payments.map(x=>`<tr><td>${safeText(x.profiles?.full_name||x.profiles?.username||'Peserta')}</td><td>${safeText(x.classes?.title||'\u2014')}</td><td>${safeText(x.payment_method||'\u2014')}<br><small>${safeText(x.payment_reference||'\u2014')}</small></td><td><span class="status-pill">${safeText(x.payment_status)}</span></td><td><div class="payment-action-wrap"><select class="payment-status-select" data-payment-status="${safeText(x.id)}" aria-label="Status pembayaran ${safeText(x.profiles?.full_name||'peserta')}"><option value="menunggu_konfirmasi" ${x.payment_status==='menunggu_konfirmasi'?'selected':''}>Menunggu konfirmasi</option><option value="terverifikasi" ${x.payment_status==='terverifikasi'?'selected':''}>Terverifikasi</option><option value="ditolak" ${x.payment_status==='ditolak'?'selected':''}>Ditolak</option></select><button type="button" class="app-button secondary" data-save-payment="${safeText(x.id)}">Simpan</button></div><small class="payment-save-feedback" id="paymentFeedback-${safeText(x.id)}" role="status"></small></td></tr>`).join('')}</tbody></table></div>`}</section>`;
       }
       return toolbar+createPanel+cards+paymentPanel+`<div id="editClassMount"></div>`;
     }
@@ -1163,7 +2367,7 @@
         if(!['super_admin','admin'].includes(currentRole)) return;
         const id=savePayment.dataset.savePayment,select=document.querySelector(`[data-payment-status="${CSS.escape(id)}"]`),feedback=document.getElementById(`paymentFeedback-${id}`);
         if(!select)return;
-        savePayment.disabled=true;savePayment.textContent='Menyimpanâ€¦';if(feedback)feedback.textContent='';
+        savePayment.disabled=true;savePayment.textContent='Menyimpan\u2026';if(feedback)feedback.textContent='';
         supabaseClient.from('class_enrollments').update({payment_status:select.value}).eq('id',id).then(async({error})=>{
           if(error){if(feedback){feedback.textContent='Gagal: '+error.message;feedback.style.color='#b54747';}savePayment.disabled=false;savePayment.textContent='Simpan';}
           else {if(feedback){feedback.textContent='Status berhasil diperbarui.';feedback.style.color='#087f9b';}savePayment.disabled=false;savePayment.textContent='Tersimpan';}
@@ -1241,7 +2445,7 @@
       const {error}=await supabaseClient.from('classes').insert(payload);
       if(error){feedback.textContent='Gagal membuat kelas: '+error.message;feedback.style.color='#B54747';}
       else {feedback.textContent='Kelas berhasil dibuat.';feedback.style.color='#087F9B';form.reset();await renderDashboardPage('classes');}
-      button.disabled=false;button.textContent='ï¼‹ Buat Kelas';
+      button.disabled=false;button.textContent='\uFF0B Buat Kelas';
     });
     async function loadLessons() {
       let query = supabaseClient.from('lessons').select('id,title,description,order_number,is_published,class_id,classes(title)').order('order_number',{ascending:true}).limit(100);
@@ -1255,7 +2459,7 @@
       const {data,error} = await query;
       if (error) return `<div class="app-alert">Materi belum dapat dimuat: ${safeText(error.message)}</div>`;
       if (!data?.length) return `<div class="panel-card empty-state">Belum ada materi pembelajaran yang diterbitkan.</div>`;
-      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Materi</th><th>Kelas</th><th>Urutan</th><th>Status</th></tr></thead><tbody>${data.map(l=>`<tr><td><strong>${safeText(l.title)}</strong><br><small>${safeText(l.description || '')}</small></td><td>${safeText(l.classes?.title || 'â€”')}</td><td>${safeText(l.order_number ?? 'â€”')}</td><td><span class="status-pill">${l.is_published?'Terbit':'Draft'}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Materi</th><th>Kelas</th><th>Urutan</th><th>Status</th></tr></thead><tbody>${data.map(l=>`<tr><td><strong>${safeText(l.title)}</strong><br><small>${safeText(l.description || '')}</small></td><td>${safeText(l.classes?.title || '\u2014')}</td><td>${safeText(l.order_number ?? '\u2014')}</td><td><span class="status-pill">${l.is_published?'Terbit':'Draft'}</span></td></tr>`).join('')}</tbody></table></div></div>`;
     }
     async function loadUsers() {
       if (!['super_admin','admin'].includes(currentRole)) return `<div class="app-alert">Anda tidak memiliki akses ke halaman ini.</div>`;
@@ -1263,7 +2467,7 @@
       if (error) return `<div class="app-alert">Data pengguna belum dapat dimuat: ${safeText(error.message)}</div>`;
       if (!data?.length) return `<div class="panel-card empty-state">Belum ada data pengguna.</div>`;
       const actions=currentRole==='super_admin';
-      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Username</th><th>Email</th><th>Peran</th><th>Bergabung</th>${actions?'<th>Aksi</th>':''}</tr></thead><tbody>${data.map(u=>`<tr><td><strong>${safeText(u.full_name || 'Tanpa nama')}</strong></td><td>${safeText(u.username||'â€”')}</td><td>${safeText(u.contact_email||'â€”')}</td><td>${safeText(roleConfig[u.role]?.label || u.role)}</td><td>${u.created_at?new Date(u.created_at).toLocaleDateString('id-ID'):'â€”'}</td>${actions?`<td><div class="class-form-actions"><button type="button" class="app-button secondary" data-edit-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||'')}">Edit</button><button type="button" class="app-button" style="background:#fff0f0;color:#b42318;border:1px solid #f3caca" data-delete-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||u.username||'akun ini')}">Hapus</button></div></td>`:''}</tr>`).join('')}</tbody></table></div><p class="panel-subtitle" style="margin-top:12px">Super Admin dapat mengubah nama lengkap atau menghapus akun secara permanen.</p></div>`;
+      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Username</th><th>Email</th><th>Peran</th><th>Bergabung</th>${actions?'<th>Aksi</th>':''}</tr></thead><tbody>${data.map(u=>`<tr><td><strong>${safeText(u.full_name || 'Tanpa nama')}</strong></td><td>${safeText(u.username||'\u2014')}</td><td>${safeText(u.contact_email||'\u2014')}</td><td>${safeText(roleConfig[u.role]?.label || u.role)}</td><td>${u.created_at?new Date(u.created_at).toLocaleDateString('id-ID'):'\u2014'}</td>${actions?`<td><div class="class-form-actions"><button type="button" class="app-button secondary" data-edit-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||'')}">Edit</button><button type="button" class="app-button" style="background:#fff0f0;color:#b42318;border:1px solid #f3caca" data-delete-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||u.username||'akun ini')}">Hapus</button></div></td>`:''}</tr>`).join('')}</tbody></table></div><p class="panel-subtitle" style="margin-top:12px">Super Admin dapat mengubah nama lengkap atau menghapus akun secara permanen.</p></div>`;
     }
     function loadProfile() {
       const p=currentProfile||{};
@@ -1406,7 +2610,7 @@
         document.querySelector('body > footer').style.display='none';
         const mount=publicDetailMount();
         mount.style.display='block';
-        mount.innerHTML=`<div class="course-detail-view"><button class="btn btn-outline" id="abtBackClasses">â† Kembali ke daftar kelas</button><article class="course-detail-card" style="margin-top:18px">${c.thumbnail_url?`<div class="course-detail-gallery"><img class="course-detail-gallery-item" src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Poster ${safeText(c.title)}" onerror="this.closest('.course-detail-gallery').remove()"></div>`:''}<div class="course-detail-content"><span class="badge">${safeText(c.category||'Program')}</span><h1>${safeText(c.title)}</h1><p style="color:#66808a">${safeText([c.level,c.duration_text].filter(Boolean).join(' Â· '))}</p><div class="course-detail-description">${safeText(c.description||'Informasi lengkap kelas akan diperbarui oleh pengelola.')}</div><div class="profile-grid" style="margin-top:20px"><div class="profile-item"><small>${isPrivate?'Biaya pendaftaran':'Biaya'}</small><strong>${formatRupiah(c.price_amount)} Â· ${safeText(isPrivate?'dibayar satu kali':({one_time:'Sekali bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||'')}</strong></div><div class="profile-item"><small>Jadwal</small><strong>${safeText(c.schedule||'Diumumkan kemudian')}</strong></div><div class="profile-item"><small>Periode</small><strong>${safeText([c.start_date,c.end_date].filter(Boolean).join(' â€“ ')||c.duration_text||'Informasi menyusul')}</strong></div><div class="profile-item"><small>Kuota</small><strong>${safeText(isPrivate?'Maksimal 5 peserta':c.capacity??'Terbatas')}</strong></div></div><div class="course-detail-actions"><button class="btn btn-primary" id="abtEnrollNow" data-class-id="${safeText(c.id)}">Daftar Sekarang</button></div></div></article>${privatePricing}</div>`;
+        mount.innerHTML=`<div class="course-detail-view"><button class="btn btn-outline" id="abtBackClasses">\u2190 Kembali ke daftar kelas</button><article class="course-detail-card" style="margin-top:18px">${c.thumbnail_url?`<div class="course-detail-gallery"><img class="course-detail-gallery-item" src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Poster ${safeText(c.title)}" onerror="this.closest('.course-detail-gallery').remove()"></div>`:''}<div class="course-detail-content"><span class="badge">${safeText(c.category||'Program')}</span><h1>${safeText(c.title)}</h1><p style="color:#66808a">${safeText([c.level,c.duration_text].filter(Boolean).join(' \u00B7 '))}</p><div class="course-detail-description">${safeText(c.description||'Informasi lengkap kelas akan diperbarui oleh pengelola.')}</div><div class="profile-grid" style="margin-top:20px"><div class="profile-item"><small>${isPrivate?'Biaya pendaftaran':'Biaya'}</small><strong>${formatRupiah(c.price_amount)} \u00B7 ${safeText(isPrivate?'dibayar satu kali':({one_time:'Sekali bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||'')}</strong></div><div class="profile-item"><small>Jadwal</small><strong>${safeText(c.schedule||'Diumumkan kemudian')}</strong></div><div class="profile-item"><small>Periode</small><strong>${safeText([c.start_date,c.end_date].filter(Boolean).join(' \u2013 ')||c.duration_text||'Informasi menyusul')}</strong></div><div class="profile-item"><small>Kuota</small><strong>${safeText(isPrivate?'Maksimal 5 peserta':c.capacity??'Terbatas')}</strong></div></div><div class="course-detail-actions"><button class="btn btn-primary" id="abtEnrollNow" data-class-id="${safeText(c.id)}">Daftar Sekarang</button></div></div></article>${privatePricing}</div>`;
         document.getElementById('abtBackClasses').onclick=()=>{history.pushState({view:'home'},'','/#kelas');mount.style.display='none';document.querySelector('body > main').style.display='';document.querySelector('body > footer').style.display='';document.getElementById('kelas')?.scrollIntoView();};
         document.getElementById('abtEnrollNow').onclick=()=>beginClassEnrollment(c.id);
       }catch(e){alert(e.message);history.replaceState({},'','/');}
@@ -1426,7 +2630,7 @@
         history.pushState({view:'checkout',classId:String(classId)},'','/?checkout='+encodeURIComponent(classId));
         setAppMode(false);dashboard.style.display='none';
         document.querySelector('body > main').style.display='none';document.querySelector('body > footer').style.display='none';
-        mount.innerHTML=`<section class="abt-checkout"><button class="btn btn-outline" id="abtCheckoutBack">â† Kembali ke kelas</button><h2>Konfirmasi Pendaftaran</h2><p>Anda mendaftar pada kelas <strong>${safeText(c.title)}</strong>.</p><div class="profile-item"><small>Total pembayaran</small><strong>${formatRupiah(c.price_amount)} Â· ${safeText(c.payment_type||'')}</strong></div><form id="abtPaymentForm"><div class="field"><label>Metode pembayaran *</label><select id="abtPayMethod" required><option value="">Pilih metode</option><option value="transfer_bank">Transfer bank</option><option value="qris">QRIS</option><option value="konfirmasi_admin">Konfirmasi dengan Admin</option></select></div><div class="field"><label>Nomor referensi / catatan pembayaran</label><textarea id="abtPayReference" rows="3" placeholder="Isi nomor referensi transfer atau catatan. Jika belum membayar, tulis 'Menunggu instruksi pembayaran'."></textarea></div><div class="app-alert">Setelah mengirim konfirmasi, status pendaftaran menjadi <strong>Menunggu konfirmasi Admin</strong>. Detail rekening/QRIS harus diperoleh dari kanal resmi Admin.</div><button class="btn btn-primary" type="submit">Kirim Konfirmasi Pendaftaran</button><p id="abtPayFeedback" role="status"></p></form></section>`;
+        mount.innerHTML=`<section class="abt-checkout"><button class="btn btn-outline" id="abtCheckoutBack">\u2190 Kembali ke kelas</button><h2>Konfirmasi Pendaftaran</h2><p>Anda mendaftar pada kelas <strong>${safeText(c.title)}</strong>.</p><div class="profile-item"><small>Total pembayaran</small><strong>${formatRupiah(c.price_amount)} \u00B7 ${safeText(c.payment_type||'')}</strong></div><form id="abtPaymentForm"><div class="field"><label>Metode pembayaran *</label><select id="abtPayMethod" required><option value="">Pilih metode</option><option value="transfer_bank">Transfer bank</option><option value="qris">QRIS</option><option value="konfirmasi_admin">Konfirmasi dengan Admin</option></select></div><div class="field"><label>Nomor referensi / catatan pembayaran</label><textarea id="abtPayReference" rows="3" placeholder="Isi nomor referensi transfer atau catatan. Jika belum membayar, tulis 'Menunggu instruksi pembayaran'."></textarea></div><div class="app-alert">Setelah mengirim konfirmasi, status pendaftaran menjadi <strong>Menunggu konfirmasi Admin</strong>. Detail rekening/QRIS harus diperoleh dari kanal resmi Admin.</div><button class="btn btn-primary" type="submit">Kirim Konfirmasi Pendaftaran</button><p id="abtPayFeedback" role="status"></p></form></section>`;
         document.getElementById('abtCheckoutBack').onclick=()=>{history.pushState({view:'class',classId:String(classId)},'','/?kelas='+encodeURIComponent(classId));openClassDetail(classId);};
         document.getElementById('abtPaymentForm').onsubmit=async ev=>{
           ev.preventDefault();const fb=document.getElementById('abtPayFeedback');const btn=ev.target.querySelector('button[type=submit]');btn.disabled=true;btn.textContent='Mengirim...';
@@ -1446,7 +2650,7 @@
       const {data,error}=await supabaseClient.from('classes').select('id,title,description,category,duration_text,payment_type,price_amount,thumbnail_url').eq('status','published').order('created_at',{ascending:false}).limit(12);
       if(error){grid.innerHTML='<p class="empty-state">Daftar kelas belum dapat dimuat. Silakan coba beberapa saat lagi.</p>';return;}
       if(!data?.length){grid.innerHTML='<p class="empty-state">Kelas baru akan ditampilkan di sini setelah dipublikasikan.</p>';return;}
-      grid.innerHTML=data.map(c=>{const isPrivate=String(c.category||'').toLowerCase().includes('privat');return `<article class="course">${c.thumbnail_url?`<div class="course-top"><img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="${safeText(c.title)}" loading="lazy" onerror="this.style.display='none'"></div>`:`<div class="course-top"><span class="badge">${safeText(c.category||'PROGRAM')}</span></div>`}<div class="course-body"><h3>${safeText(c.title)}</h3><p>${safeText((c.description||'Program pembelajaran Ayo Belajar Tajwid.').slice(0,145))}${(c.description||'').length>145?'â€¦':''}</p><div class="course-meta"><span>${safeText(c.duration_text||'Durasi menyusul')}</span><span>${safeText(c.category||'Kelas')}</span></div><p><strong>${formatRupiah(c.price_amount)}</strong> Â· ${safeText(isPrivate?'biaya pendaftaran sekali bayar':({one_time:'1x bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||c.payment_type||'')}</p>${isPrivate?'<small>Tagihan pertemuan dihitung setelah laporan pengajar disetujui. Maksimal 5 peserta per kelas.</small>':''}<div class="course-detail-actions"><button class="btn btn-outline" type="button" data-class-detail="${safeText(c.id)}">Selengkapnya</button><button class="btn btn-primary" type="button" data-class-enroll="${safeText(c.id)}">Daftar Sekarang</button></div></div></article>`;}).join('');
+      grid.innerHTML=data.map(c=>{const isPrivate=String(c.category||'').toLowerCase().includes('privat');return `<article class="course">${c.thumbnail_url?`<div class="course-top"><img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="${safeText(c.title)}" loading="lazy" onerror="this.style.display='none'"></div>`:`<div class="course-top"><span class="badge">${safeText(c.category||'PROGRAM')}</span></div>`}<div class="course-body"><h3>${safeText(c.title)}</h3><p>${safeText((c.description||'Program pembelajaran Ayo Belajar Tajwid.').slice(0,145))}${(c.description||'').length>145?'\u2026':''}</p><div class="course-meta"><span>${safeText(c.duration_text||'Durasi menyusul')}</span><span>${safeText(c.category||'Kelas')}</span></div><p><strong>${formatRupiah(c.price_amount)}</strong> \u00B7 ${safeText(isPrivate?'biaya pendaftaran sekali bayar':({one_time:'1x bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||c.payment_type||'')}</p>${isPrivate?'<small>Tagihan pertemuan dihitung setelah laporan pengajar disetujui. Maksimal 5 peserta per kelas.</small>':''}<div class="course-detail-actions"><button class="btn btn-outline" type="button" data-class-detail="${safeText(c.id)}">Selengkapnya</button><button class="btn btn-primary" type="button" data-class-enroll="${safeText(c.id)}">Daftar Sekarang</button></div></div></article>`;}).join('');
     }
     document.addEventListener('click',e=>{
       const detail=e.target.closest('[data-class-detail]');if(detail){history.pushState({},'','/?kelas='+encodeURIComponent(detail.dataset.classDetail));openClassDetail(detail.dataset.classDetail);}
@@ -1463,7 +2667,7 @@
     async function loadSiteContentEditor(){
       if(currentRole!=='super_admin')return '<div class="app-alert">Halaman ini hanya dapat diakses Super Admin.</div>';
       const config=await getLandingConfig();
-      const cards=config.sections.map((x,i)=>`<article class="builder-item" draggable="true" data-builder-key="${safeText(x.key)}"><div class="builder-handle" title="Seret untuk mengurutkan">â ¿</div><div><strong>${safeText(x.label||x.key)}</strong><label class="builder-help"><input type="checkbox" data-builder-visible ${x.visible!==false?'checked':''}> Tampilkan bagian ini</label><label class="builder-help">Judul / headline</label><input data-builder-title value="${safeText(x.title||'')}"><label class="builder-help">Deskripsi</label><textarea data-builder-description>${safeText(x.description||'')}</textarea></div><div class="builder-actions"><button type="button" class="app-button secondary" data-move-up>â†‘</button><button type="button" class="app-button secondary" data-move-down>â†“</button></div></article>`).join('');
+      const cards=config.sections.map((x,i)=>`<article class="builder-item" draggable="true" data-builder-key="${safeText(x.key)}"><div class="builder-handle" title="Seret untuk mengurutkan">\u283F</div><div><strong>${safeText(x.label||x.key)}</strong><label class="builder-help"><input type="checkbox" data-builder-visible ${x.visible!==false?'checked':''}> Tampilkan bagian ini</label><label class="builder-help">Judul / headline</label><input data-builder-title value="${safeText(x.title||'')}"><label class="builder-help">Deskripsi</label><textarea data-builder-description>${safeText(x.description||'')}</textarea></div><div class="builder-actions"><button type="button" class="app-button secondary" data-move-up>\u2191</button><button type="button" class="app-button secondary" data-move-down>\u2193</button></div></article>`).join('');
       return `<section class="panel-card"><h3>Visual Landing Page Builder</h3><p class="panel-subtitle">Atur urutan dengan drag-and-drop, ubah judul/deskripsi, dan aktifkan/nonaktifkan bagian. Semua perubahan disimpan sebagai konfigurasi JSON di Supabase, bukan di file HTML.</p><div class="builder-list" id="landingBuilderList">${cards}</div><div class="builder-actions"><button class="app-button" id="saveLandingBuilder">Simpan & Publikasikan</button><button class="app-button secondary" id="resetLandingBuilder">Kembalikan Default</button><button class="app-button secondary" id="previewLanding">Pratinjau</button></div><div class="notice" id="landingBuilderNotice" role="status"></div><p class="builder-help">Catatan: versi uji coba mengedit urutan, visibilitas, judul, dan deskripsi bagian utama. Struktur visual dasar tetap ditentukan oleh template HTML.</p></section>
       <section class="panel-card" style="margin-top:16px"><h3>Kontak Landing Page</h3><p class="panel-subtitle">Pengaturan kontak disimpan pada tabel site_content lama.</p><form id="siteContentForm"><div class="field"><label>Nomor WhatsApp (628...)</label><input id="contentWhatsapp" placeholder="628..."></div><div class="field"><label>Email kontak</label><input id="contentEmail" type="email" placeholder="info@... "></div><button class="app-button" type="submit">Simpan Kontak</button><div class="notice" id="siteContentNotice"></div></form></section>`;
     }
@@ -1497,20 +2701,20 @@
     async function loadTeacherManager(){
       if(currentRole!=='super_admin')return '<div class="app-alert">Hanya Super Admin yang dapat mengelola undangan pengajar.</div>';
       const {data,error}=await supabaseClient.from('teacher_invites').select('id,email,full_name,invite_code,created_at,expires_at,redeemed_at').order('created_at',{ascending:false}).limit(100);
-      const rows=error?`<tr><td colspan="6">${safeText(error.message)} â€” jalankan SQL migrasi ABT V18.</td></tr>`:(data||[]).map(x=>{
+      const rows=error?`<tr><td colspan="6">${safeText(error.message)} \u2014 jalankan SQL migrasi ABT V18.</td></tr>`:(data||[]).map(x=>{
         const expired=!x.redeemed_at && new Date(x.expires_at).getTime()<Date.now();
         const status=x.redeemed_at?'Sudah digunakan':(expired?'Kedaluwarsa':'Menunggu aktivasi');
         const code=x.invite_code?`<div class="invite-code-cell"><code>${safeText(x.invite_code)}</code><button class="app-button secondary invite-copy-row" type="button" data-code="${safeText(x.invite_code)}">Salin</button></div>`:'<span class="muted">Tidak tersedia (undangan lama)</span>';
-        return `<tr><td>${safeText(x.full_name)}</td><td>${safeText(x.email||'â€”')}</td><td>${code}</td><td><span class="status-pill">${status}</span></td><td>${new Date(x.expires_at).toLocaleDateString('id-ID')}</td><td><button class="app-button danger invite-delete-row" type="button" data-id="${safeText(x.id)}" data-name="${safeText(x.full_name)}">${x.redeemed_at?'Hapus riwayat':'Batalkan'}</button></td></tr>`;
+        return `<tr><td>${safeText(x.full_name)}</td><td>${safeText(x.email||'\u2014')}</td><td>${code}</td><td><span class="status-pill">${status}</span></td><td>${new Date(x.expires_at).toLocaleDateString('id-ID')}</td><td><button class="app-button danger invite-delete-row" type="button" data-id="${safeText(x.id)}" data-name="${safeText(x.full_name)}">${x.redeemed_at?'Hapus riwayat':'Batalkan'}</button></td></tr>`;
       }).join('')||'<tr><td colspan="6">Belum ada undangan.</td></tr>';
-      return `<style>.invite-code-cell{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.invite-code-cell code{font-weight:800;letter-spacing:1px;color:#075b76;background:#eaf5f7;padding:7px 9px;border-radius:8px}.invite-code-cell .app-button{padding:7px 10px;font-size:12px}.app-button.danger{background:#fff1f0;color:#b42318;border:1px solid #ffc9c4}.status-pill{display:inline-block;padding:6px 9px;border-radius:20px;background:#edf5ed;font-size:12px;font-weight:700}.muted{color:#87939a;font-size:12px}</style><section class="panel-card"><h3>Buat Akun Pengajar</h3><p class="panel-subtitle">Buat undangan khusus untuk guru. Email bersifat opsional; aktivasi menggunakan kode undangan yang valid dan belum digunakan.</p><form id="teacherInviteForm" class="teacher-form"><div class="class-form-grid"><div class="field"><label>Nama lengkap pengajar *</label><input id="inviteTeacherName" required maxlength="120"></div><div class="field"><label>Email pengajar (opsional)</label><input id="inviteTeacherEmail" type="email" placeholder="Boleh dikosongkan"></div></div><button class="app-button" type="submit">ï¼‹ Buat Undangan Pengajar</button><span id="teacherInviteFeedback" class="form-feedback"></span></form><div id="teacherInviteResult"></div></section><section class="panel-card" style="margin-top:16px"><h3>Daftar Undangan Pengajar</h3><p class="panel-subtitle">Kode undangan tersimpan agar dapat dilihat dan disalin kembali oleh Super Admin. Jaga kerahasiaan kode ini.</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Email</th><th>Kode Undangan</th><th>Status</th><th>Kedaluwarsa</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+      return `<style>.invite-code-cell{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.invite-code-cell code{font-weight:800;letter-spacing:1px;color:#075b76;background:#eaf5f7;padding:7px 9px;border-radius:8px}.invite-code-cell .app-button{padding:7px 10px;font-size:12px}.app-button.danger{background:#fff1f0;color:#b42318;border:1px solid #ffc9c4}.status-pill{display:inline-block;padding:6px 9px;border-radius:20px;background:#edf5ed;font-size:12px;font-weight:700}.muted{color:#87939a;font-size:12px}</style><section class="panel-card"><h3>Buat Akun Pengajar</h3><p class="panel-subtitle">Buat undangan khusus untuk guru. Email bersifat opsional; aktivasi menggunakan kode undangan yang valid dan belum digunakan.</p><form id="teacherInviteForm" class="teacher-form"><div class="class-form-grid"><div class="field"><label>Nama lengkap pengajar *</label><input id="inviteTeacherName" required maxlength="120"></div><div class="field"><label>Email pengajar (opsional)</label><input id="inviteTeacherEmail" type="email" placeholder="Boleh dikosongkan"></div></div><button class="app-button" type="submit">\uFF0B Buat Undangan Pengajar</button><span id="teacherInviteFeedback" class="form-feedback"></span></form><div id="teacherInviteResult"></div></section><section class="panel-card" style="margin-top:16px"><h3>Daftar Undangan Pengajar</h3><p class="panel-subtitle">Kode undangan tersimpan agar dapat dilihat dan disalin kembali oleh Super Admin. Jaga kerahasiaan kode ini.</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Email</th><th>Kode Undangan</th><th>Status</th><th>Kedaluwarsa</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
     }
     document.addEventListener('submit',async event=>{
       if(event.target?.id!=='teacherInviteForm')return;event.preventDefault();const f=event.target;const fb=document.getElementById('teacherInviteFeedback');fb.textContent='Membuat undangan...';
       const {data,error}=await supabaseClient.rpc('create_teacher_invite',{p_email:document.getElementById('inviteTeacherEmail').value.trim().toLowerCase()||null,p_full_name:document.getElementById('inviteTeacherName').value.trim()});
       if(error){fb.textContent='Gagal: '+error.message;return;}
       const code=data?.invite_code||data?.[0]?.invite_code;if(!code){fb.textContent='Undangan dibuat tetapi kode tidak diterima. Periksa fungsi SQL.';return;}
-      document.getElementById('teacherInviteResult').innerHTML=`<div class="teacher-code"><strong>Undangan berhasil dibuat</strong><p>Kode ini juga tersimpan pada tabel Daftar Undangan Pengajar sehingga dapat disalin kembali nanti.</p><code id="teacherInviteCodeValue">${safeText(code)}</code><p>Email kontak: ${safeText(document.getElementById('inviteTeacherEmail').value.trim()||'Tidak dicantumkan')}</p><button class="app-button secondary" type="button" id="copyTeacherInvite">Salin Kode</button><p class="builder-help">Pengajar membuka website â†’ Daftar â†’ mengisi data â†’ memasukkan kode undangan ini â†’ membuat password sendiri.</p></div>`;fb.textContent='';f.reset();
+      document.getElementById('teacherInviteResult').innerHTML=`<div class="teacher-code"><strong>Undangan berhasil dibuat</strong><p>Kode ini juga tersimpan pada tabel Daftar Undangan Pengajar sehingga dapat disalin kembali nanti.</p><code id="teacherInviteCodeValue">${safeText(code)}</code><p>Email kontak: ${safeText(document.getElementById('inviteTeacherEmail').value.trim()||'Tidak dicantumkan')}</p><button class="app-button secondary" type="button" id="copyTeacherInvite">Salin Kode</button><p class="builder-help">Pengajar membuka website \u2192 Daftar \u2192 mengisi data \u2192 memasukkan kode undangan ini \u2192 membuat password sendiri.</p></div>`;fb.textContent='';f.reset();
     });
     document.addEventListener('click',async e=>{
       const copyBtn=e.target.closest('#copyTeacherInvite,.invite-copy-row');
@@ -1598,7 +2802,7 @@
       const submitButton=loginForm.querySelector('button[type="submit"]');
       const loginId=document.getElementById('loginUsername').value.trim().toLowerCase();
       const password=document.getElementById('password').value;
-      submitButton.disabled=true;submitButton.textContent='Memeriksa akunâ€¦';loginNotice.classList.remove('show');
+      submitButton.disabled=true;submitButton.textContent='Memeriksa akun\u2026';loginNotice.classList.remove('show');
       try{
         const {data:resolvedEmail,error:resolveError}=await supabaseClient.rpc('resolve_login_email',{p_login:loginId});
         if(resolveError) throw resolveError;
@@ -1611,7 +2815,7 @@
         // jika pengguna menekan kembali tombol Daftar Sekarang secara sadar.
       }catch(error){
         showLoginMessage(error.message||'Login gagal. Periksa username/email dan password.');
-      }finally{submitButton.disabled=false;submitButton.textContent='Login â†’';}
+      }finally{submitButton.disabled=false;submitButton.textContent='Login \u2192';}
     });
 
     registerForm.addEventListener('submit', async event => {
@@ -1630,12 +2834,12 @@
       const phone=document.getElementById('registerPhone').value.trim();
       const birthYear=Number(registerBirthYear.value);
       const age=new Date().getFullYear()-birthYear;
-      if(!/^[a-z0-9._-]{4,24}$/.test(username)){showLoginMessage('Username 4â€“24 karakter: gunakan huruf, angka, titik, garis bawah, atau tanda hubung.');return;}
+      if(!/^[a-z0-9._-]{4,24}$/.test(username)){showLoginMessage('Username 4\u201324 karakter: gunakan huruf, angka, titik, garis bawah, atau tanda hubung.');return;}
       if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showLoginMessage('Format email tidak valid. Kosongkan jika tidak ingin mengisi email.');return;}
       if(password.length<8){showLoginMessage('Password minimal 8 karakter.');return;}
       if(password!==passwordConfirm){showLoginMessage('Konfirmasi password tidak sama.');return;}
       if(!gender||!provinceCode||!city||!address||!phone||!birthYear||age<5||age>100){showLoginMessage('Lengkapi seluruh data pendaftaran dengan benar.');return;}
-      button.disabled=true;button.textContent='Membuat akunâ€¦';loginNotice.classList.remove('show');
+      button.disabled=true;button.textContent='Membuat akun\u2026';loginNotice.classList.remove('show');
       try{
         const internalEmail=`${username}.${crypto.randomUUID()}@login.abt.invalid`;
         const {data,error}=await supabaseClient.auth.signUp({
@@ -1661,7 +2865,7 @@
           showLoginMessage('Database menolak pembuatan profil. Jika menggunakan kode undangan, jalankan SQL perbaikan V17 di Supabase terlebih dahulu. Pastikan kode belum digunakan dan belum kedaluwarsa.');
         }else{showLoginMessage(msg);}
       }
-      finally{button.disabled=false;button.textContent='Buat Akun â†’';}
+      finally{button.disabled=false;button.textContent='Buat Akun \u2192';}
     });
 
     document.getElementById('logoutButton').addEventListener('click', async () => {
@@ -1716,4 +2920,3 @@
   </script>
 </body>
 </html>
-
