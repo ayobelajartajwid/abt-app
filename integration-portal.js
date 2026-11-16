@@ -1,5 +1,5 @@
-/* ABT V20 cross-account workspace. This file uses only the V18/V19 schema
-   already present in the supplied package plus SQL_ABT_V20_INTEGRASI.sql. */
+/* ABT V21 cross-account workspace. Builds on the V18/V19/V20 schema and
+   SQL_ABT_V21_PRIVAT_TAGIHAN.sql for group-private classes and billing. */
 const ABT_V20_ACTIVE_ENROLLMENT = new Set(['terverifikasi', 'approved', 'active', 'aktif']);
 let abtV20NotificationTimer = null;
 
@@ -26,6 +26,10 @@ function abtV20JakartaPreviousMonth() {
   const end = `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, '0')}-01`;
   return { start, end };
 }
+function abtV21CurrentMonth() {
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit' }).formatToParts(new Date());
+  return `${parts.find(p => p.type === 'year')?.value}-${parts.find(p => p.type === 'month')?.value}-01`;
+}
 function abtV20MonthLabel(month) {
   return new Date(`${month}T00:00:00`).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
 }
@@ -48,8 +52,12 @@ function abtV20Alert(error, title = 'Data belum dapat dimuat') {
 function abtV20SchemaNotice(error) {
   return `<div class="abt-v20-note"><strong>Integrasi V20 belum aktif.</strong><br>Jalankan <code>SQL_ABT_V20_INTEGRASI.sql</code> di Supabase setelah migrasi V19. Detail: ${safeText(error?.message || '')}</div>`;
 }
-async function abtV20GetTeacherClasses() {
-  return await supabaseClient.from('classes').select('id,title,category,level,status,schedule,instructor_id').eq('instructor_id', currentUser.id).order('title');
+async function abtV20GetTeacherClasses(includeOpenPrivate = false) {
+  let query = supabaseClient.from('classes').select('id,title,category,level,status,schedule,instructor_id').order('title');
+  query = includeOpenPrivate
+    ? query.or(`instructor_id.eq.${currentUser.id},instructor_id.is.null`)
+    : query.eq('instructor_id', currentUser.id);
+  return await query;
 }
 async function abtV20GetClassMap(classIds) {
   if (!classIds?.length) return {};
@@ -92,7 +100,7 @@ async function loadStudentOverview() {
     supabaseClient.from('participant_invoices').select('id', { count: 'exact', head: true }).eq('student_id', currentUser.id).eq('status', 'issued'),
     activeIds.length ? supabaseClient.from('teacher_activities').select('id,class_id,title,starts_at').in('class_id', activeIds).gte('starts_at', new Date().toISOString()).order('starts_at').limit(3) : Promise.resolve({ data: [], error: null })
   ]);
-  const stats = [['Kelas terdaftar', context.enrollments.length], ['Kelas aktif', context.activeRows.length], ['Jadwal mendatang', activityResult.error ? '—' : (activityResult.data || []).length], ['Tagihan terbuka', unpaid ?? '—'], ['Notifikasi baru', unread ?? '—']];
+  const stats = [['Kelas terdaftar', context.enrollments.length], ['Kelas aktif', context.activeRows.length], ['Jadwal mendatang', activityResult.error ? 'â€”' : (activityResult.data || []).length], ['Tagihan terbuka', unpaid ?? 'â€”'], ['Notifikasi baru', unread ?? 'â€”']];
   const cards = context.enrollments.slice(0, 4).map(e => {
     const c = context.classMap[e.class_id] || {};
     const isPrivate = String(c.category || '').toLowerCase().includes('privat');
@@ -154,7 +162,7 @@ async function loadStudentFollowClasses() {
   const registered = new Set(own.enrollments.map(e => e.class_id));
   const available = (classes || []).filter(c => !registered.has(c.id));
   if (!available.length) return `<section class="panel-card"><h3>Ikuti Kelas</h3><div class="empty-state">Semua kelas terbit sudah Anda daftarkan, atau belum ada kelas baru yang tersedia.</div></section>`;
-  return `<section class="abt-v20-card-grid">${available.map(c => `<article class="panel-card abt-v20-class-card"><span class="status-pill">${safeText(c.category || 'Program')}</span><h3>${safeText(c.title)}</h3><p>${safeText(c.description || 'Program pembelajaran Ayo Belajar Tajwid.')}</p><div class="abt-v20-class-facts"><span>${safeText(c.level || 'Semua tingkat')}</span><span>${safeText(c.duration_text || c.schedule || 'Jadwal menyusul')}</span><strong>${safeText(formatRupiah(c.price_amount))}</strong></div><button type="button" class="app-button" data-class-enroll="${safeText(c.id)}">Daftar kelas</button></article>`).join('')}</section>`;
+  return `<section><section class="panel-card"><h3>Ikuti Kelas</h3><p class="panel-subtitle">Kelas privat menampilkan biaya pendaftaran satu kali. Tagihan pertemuan privat dihitung dari jumlah pertemuan dan jumlah peserta aktif, lalu diterbitkan Admin setelah laporan pengajar disetujui. Tarif bulanan kelas reguler bersifat tetap.</p></section><div class="abt-v20-card-grid">${available.map(c => { const isPrivate = String(c.category || '').toLowerCase().includes('privat'); return `<article class="panel-card abt-v20-class-card"><span class="status-pill">${safeText(c.category || 'Program')}</span><h3>${safeText(c.title)}</h3><p>${safeText(c.description || 'Program pembelajaran Ayo Belajar Tajwid.')}</p><div class="abt-v20-class-facts"><span>${safeText(c.level || 'Semua tingkat')}</span><span>${safeText(c.duration_text || c.schedule || 'Jadwal menyusul')}</span><strong>${safeText(formatRupiah(c.price_amount))}${isPrivate ? ' biaya pendaftaran' : c.payment_type === 'monthly' ? ' / bulan' : ''}</strong></div><button type="button" class="app-button" data-class-enroll="${safeText(c.id)}">Daftar kelas</button></article>`; }).join('')}</div></section>`;
 }
 
 async function loadStudentLearningMaterials() {
@@ -175,7 +183,7 @@ async function loadStudentLearningMaterials() {
     if (!url && item.storage_path) url = await abtTeacherSignedUrl(ABT_TEACHER_MATERIAL_BUCKET, item.storage_path);
     cards.push(`<article class="panel-card abt-v20-record"><span class="status-pill">${safeText(map[item.class_id]?.title || 'Kelas')}</span><h3>${safeText(item.title)}</h3><p>${safeText(item.description || 'Materi tambahan dari pengajar.')}</p>${url ? `<a class="app-button secondary" href="${safeText(url)}" target="_blank" rel="noopener noreferrer">Buka materi</a>` : '<span class="abt-v20-muted">Tautan materi belum tersedia</span>'}</article>`);
   }
-  for (const item of (core || [])) cards.push(`<article class="panel-card abt-v20-record"><span class="status-pill">${safeText(map[item.class_id]?.title || 'Kelas')} · Materi inti</span><h3>${safeText(item.title)}</h3><p>${safeText(item.description || '')}</p></article>`);
+  for (const item of (core || [])) cards.push(`<article class="panel-card abt-v20-record"><span class="status-pill">${safeText(map[item.class_id]?.title || 'Kelas')} Â· Materi inti</span><h3>${safeText(item.title)}</h3><p>${safeText(item.description || '')}</p></article>`);
   return `<section class="panel-card"><h3>Materi Belajar</h3><p class="panel-subtitle">Materi hanya dimuat dari kelas aktif yang terdaftar pada akun Anda.</p><div class="abt-v20-card-grid">${cards.join('') || '<div class="empty-state">Belum ada materi yang diterbitkan untuk kelas aktif.</div>'}</div></section>`;
 }
 
@@ -224,23 +232,27 @@ async function loadStudentAssignments() {
   return `<section class="abt-v20-card-grid">${evals.map(e => {
     const sub = submissions[e.id] || {};
     const grade = results[e.id];
-    return `<article class="panel-card abt-v20-record"><span class="status-pill">${safeText(context.classMap[e.class_id]?.title || 'Kelas')} · ${safeText(e.kind)}</span><h3>${safeText(e.title)}</h3><p>${safeText(e.instructions || 'Tidak ada instruksi tambahan.')}</p><p class="abt-v20-muted">Tenggat: ${safeText(abtV20Date(e.due_at, true))} · Nilai maksimum ${safeText(e.max_score)}</p>${grade ? `<div class="abt-v20-grade"><strong>Nilai ${safeText(grade.score)}</strong><p>${safeText(grade.feedback || 'Belum ada umpan balik.')}</p></div>` : ''}<form class="abt-v20-submission-form" data-evaluation-id="${safeText(e.id)}"><label>Jawaban teks<textarea maxlength="5000" rows="3" name="response_text" placeholder="Tulis jawaban atau catatan">${safeText(sub.response_text || '')}</textarea></label><label>Tautan jawaban (opsional)<input name="response_url" type="url" maxlength="1000" value="${safeText(sub.response_url || '')}" placeholder="https://..."></label><button class="app-button" type="submit">${sub.id ? 'Perbarui Jawaban' : 'Kirim Jawaban'}</button><span class="abt-v20-feedback" role="status"></span></form></article>`;
+    return `<article class="panel-card abt-v20-record"><span class="status-pill">${safeText(context.classMap[e.class_id]?.title || 'Kelas')} Â· ${safeText(e.kind)}</span><h3>${safeText(e.title)}</h3><p>${safeText(e.instructions || 'Tidak ada instruksi tambahan.')}</p><p class="abt-v20-muted">Tenggat: ${safeText(abtV20Date(e.due_at, true))} Â· Nilai maksimum ${safeText(e.max_score)}</p>${grade ? `<div class="abt-v20-grade"><strong>Nilai ${safeText(grade.score)}</strong><p>${safeText(grade.feedback || 'Belum ada umpan balik.')}</p></div>` : ''}<form class="abt-v20-submission-form" data-evaluation-id="${safeText(e.id)}"><label>Jawaban teks<textarea maxlength="5000" rows="3" name="response_text" placeholder="Tulis jawaban atau catatan">${safeText(sub.response_text || '')}</textarea></label><label>Tautan jawaban (opsional)<input name="response_url" type="url" maxlength="1000" value="${safeText(sub.response_url || '')}" placeholder="https://..."></label><button class="app-button" type="submit">${sub.id ? 'Perbarui Jawaban' : 'Kirim Jawaban'}</button><span class="abt-v20-feedback" role="status"></span></form></article>`;
   }).join('') || '<section class="panel-card empty-state">Belum ada tugas atau latihan yang diterbitkan.</section>'}</section>`;
 }
 
 async function loadStudentInvoices() {
-  const { data, error } = await supabaseClient.from('participant_invoices').select('id,invoice_no,report_id,class_id,billing_month,session_count,rate_per_session,amount_due,status,issued_at,paid_at,admin_note').eq('student_id', currentUser.id).order('billing_month', { ascending: false });
+  const { data, error } = await supabaseClient.from('participant_invoices').select('id,invoice_no,report_id,class_id,billing_month,session_count,rate_per_session,amount_due,status,billing_type,due_date,participant_count,issued_at,paid_at,admin_note').eq('student_id', currentUser.id).order('billing_month', { ascending: false });
   if (error) return abtV20SchemaNotice(error);
   const invoices = data || [];
   const classMap = await abtV20GetClassMap(invoices.map(i => i.class_id));
   window.abtV20Invoices = Object.fromEntries(invoices.map(i => [i.id, i]));
   window.abtV20InvoiceClassMap = classMap;
-  return `<section class="panel-card"><h3>Tagihan Bulanan</h3><p class="panel-subtitle">Tagihan diterbitkan Admin setelah laporan pertemuan pengajar ditinjau.</p><div class="abt-v20-card-grid">${invoices.map(i => `<article class="panel-card abt-v20-invoice-card"><div class="abt-v20-card-head"><div><span class="status-pill">${safeText(i.invoice_no)}</span><h3>${safeText(classMap[i.class_id]?.title || 'Kelas')}</h3></div><span class="abt-v20-status ${i.status === 'paid' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(i.status))}</span></div><p>${safeText(abtV20MonthLabel(i.billing_month))}</p><div class="abt-v20-invoice-total">${safeText(abtV20Money(i.amount_due))}</div><p>${safeText(i.session_count)} pertemuan × ${safeText(abtV20Money(i.rate_per_session))}</p>${i.admin_note ? `<p class="abt-v20-muted">Catatan Admin: ${safeText(i.admin_note)}</p>` : ''}<button class="app-button secondary" type="button" data-print-invoice="${safeText(i.id)}">Cetak invoice</button></article>`).join('') || '<div class="empty-state">Belum ada tagihan bulanan.</div>'}</div></section>`;
+  return `<section class="panel-card"><h3>Tagihan</h3><p class="panel-subtitle">Tagihan reguler memakai biaya yang tercatat saat Anda mendaftar, terbit otomatis setiap awal bulan, dan jatuh tempo tanggal 5. Tagihan privat terbit setelah Admin menyetujui laporan pertemuan pengajar.</p><div class="abt-v20-card-grid">${invoices.map(i => { const kind = i.billing_type || 'legacy'; const detail = kind === 'regular' ? `Biaya tetap bulanan Â· jatuh tempo ${i.due_date ? safeText(abtV20Date(i.due_date)) : 'tanggal 5'}` : kind === 'private' ? `${safeText(i.session_count)} pertemuan Ã— ${safeText(abtV20Money(i.rate_per_session))} per peserta${i.participant_count ? ` Â· tarif untuk ${safeText(i.participant_count)} peserta aktif` : ''}` : `${safeText(i.session_count)} pertemuan Ã— ${safeText(abtV20Money(i.rate_per_session))}`; return `<article class="panel-card abt-v20-invoice-card"><div class="abt-v20-card-head"><div><span class="status-pill">${safeText(i.invoice_no)} Â· ${safeText(kind === 'regular' ? 'Reguler' : kind === 'private' ? 'Privat' : 'Tagihan lama')}</span><h3>${safeText(classMap[i.class_id]?.title || 'Kelas')}</h3></div><span class="abt-v20-status ${i.status === 'paid' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(i.status))}</span></div><p>${safeText(abtV20MonthLabel(i.billing_month))}</p><div class="abt-v20-invoice-total">${safeText(abtV20Money(i.amount_due))}</div><p>${detail}</p>${i.admin_note ? `<p class="abt-v20-muted">Catatan Admin: ${safeText(i.admin_note)}</p>` : ''}<button class="app-button secondary" type="button" data-print-invoice="${safeText(i.id)}">Cetak invoice</button></article>`; }).join('') || '<div class="empty-state">Belum ada tagihan.</div>'}</div></section>`;
 }
 function abtV20PrintInvoice(id) {
   const i = window.abtV20Invoices?.[id]; if (!i) return;
   const className = window.abtV20InvoiceClassMap?.[i.class_id]?.title || 'Kelas';
-  const body = `<!doctype html><html lang="id"><meta charset="utf-8"><title>Invoice ${safeText(i.invoice_no)}</title><style>body{font:16px Arial,sans-serif;max-width:720px;margin:40px auto;color:#153b45}h1{color:#087f9b}.box{border:1px solid #d7e5e8;border-radius:12px;padding:24px}.row{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid #edf2f3}.total{font-size:24px;font-weight:700;margin-top:18px}@media print{button{display:none}}</style><body><div class="box"><h1>Ayo Belajar Tajwid</h1><h2>Invoice ${safeText(i.invoice_no)}</h2><div class="row"><span>Peserta</span><strong>${safeText(currentProfile?.full_name || currentProfile?.username || 'Peserta')}</strong></div><div class="row"><span>Kelas</span><strong>${safeText(className)}</strong></div><div class="row"><span>Bulan tagihan</span><strong>${safeText(abtV20MonthLabel(i.billing_month))}</strong></div><div class="row"><span>Jumlah pertemuan</span><strong>${safeText(i.session_count)}</strong></div><div class="row"><span>Tarif per pertemuan</span><strong>${safeText(abtV20Money(i.rate_per_session))}</strong></div><div class="total">Total: ${safeText(abtV20Money(i.amount_due))}</div><p>Status: ${safeText(abtV20StatusLabel(i.status))}</p><p>Terbit: ${safeText(abtV20Date(i.issued_at))}</p><button onclick="window.print()">Cetak</button></div></body></html>`;
+  const kind = i.billing_type || 'legacy';
+  const rows = kind === 'regular'
+    ? `<div class="row"><span>Jenis</span><strong>Tagihan flat bulanan</strong></div><div class="row"><span>Jatuh tempo</span><strong>${safeText(i.due_date ? abtV20Date(i.due_date) : 'Tanggal 5')}</strong></div>`
+    : `<div class="row"><span>Jumlah pertemuan</span><strong>${safeText(i.session_count)}</strong></div><div class="row"><span>Tarif / peserta / pertemuan</span><strong>${safeText(abtV20Money(i.rate_per_session))}</strong></div>${i.participant_count ? `<div class="row"><span>Jumlah peserta aktif</span><strong>${safeText(i.participant_count)}</strong></div>` : ''}`;
+  const body = `<!doctype html><html lang="id"><meta charset="utf-8"><title>Invoice ${safeText(i.invoice_no)}</title><style>body{font:16px Arial,sans-serif;max-width:720px;margin:40px auto;color:#153b45}h1{color:#087f9b}.box{border:1px solid #d7e5e8;border-radius:12px;padding:24px}.row{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid #edf2f3}.total{font-size:24px;font-weight:700;margin-top:18px}@media print{button{display:none}}</style><body><div class="box"><h1>Ayo Belajar Tajwid</h1><h2>Invoice ${safeText(i.invoice_no)}</h2><div class="row"><span>Peserta</span><strong>${safeText(currentProfile?.full_name || currentProfile?.username || 'Peserta')}</strong></div><div class="row"><span>Kelas</span><strong>${safeText(className)}</strong></div><div class="row"><span>Bulan tagihan</span><strong>${safeText(abtV20MonthLabel(i.billing_month))}</strong></div>${rows}<div class="total">Total: ${safeText(abtV20Money(i.amount_due))}</div><p>Status: ${safeText(abtV20StatusLabel(i.status))}</p><p>Terbit: ${safeText(abtV20Date(i.issued_at))}</p><button onclick="window.print()">Cetak</button></div></body></html>`;
   const win = window.open('', '_blank');
   if (!win) { alert('Izinkan jendela baru untuk mencetak invoice.'); return; }
   win.opener = null;
@@ -248,20 +260,15 @@ function abtV20PrintInvoice(id) {
 }
 
 async function loadTeacherPrivateRequests() {
-  const { data: classes, error } = await abtV20GetTeacherClasses();
-  if (error) return abtV20Alert(error, 'Kelas pengajar belum dapat dimuat');
-  const privateClasses = (classes || []).filter(c => String(c.category || '').toLowerCase().includes('privat'));
-  if (!privateClasses.length) return `<section class="panel-card"><h3>Permintaan Kelas Privat</h3><div class="empty-state">Belum ada kelas privat yang ditugaskan kepada akun Anda.</div></section>`;
-  let context;
-  try { context = await abtV20TeacherParticipants(privateClasses); } catch (e) { return abtV20SchemaNotice(e); }
-  const rows = context.rows.map(e => {
-    const s = context.selections[`${e.class_id}:${e.student_id}`];
-    const p = context.profiles[e.student_id] || {};
-    const state = s?.status === 'aktif' ? 'Aktif belajar' : s?.status === 'ditolak' ? 'Tidak diambil' : 'Menunggu keputusan';
-    const actions = s?.status === 'aktif' ? '<span class="abt-v20-muted">Peserta aktif</span>' : `<div class="abt-v20-inline-actions"><button class="app-button" type="button" data-private-choice="accept" data-class-id="${safeText(e.class_id)}" data-student-id="${safeText(e.student_id)}">Ambil peserta</button><button class="app-button secondary" type="button" data-private-choice="decline" data-class-id="${safeText(e.class_id)}" data-student-id="${safeText(e.student_id)}">Lewati</button></div>`;
-    return `<tr><td><strong>${safeText(p.full_name || p.username || 'Peserta')}</strong><br><small>${safeText(p.phone || p.contact_email || '')}</small></td><td>${safeText(context.classMap[e.class_id]?.title || 'Kelas')}</td><td>${safeText(abtV20StatusLabel(e.payment_status))}</td><td><span class="abt-v20-status ${s?.status === 'aktif' ? 'is-active' : ''}">${safeText(state)}</span></td><td>${safeText(abtV20Date(e.created_at))}</td><td>${actions}</td></tr>`;
+  const { data, error } = await supabaseClient.rpc('list_teacher_private_requests');
+  if (error) return abtV20Alert(error, 'Permintaan kelas privat belum dapat dimuat. Pastikan SQL V21 sudah diterapkan.');
+  const rows = (data || []).map(e => {
+    const s = e.selection_status;
+    const state = s === 'aktif' ? 'Aktif belajar' : s === 'ditolak' ? 'Pernah dilewati Â· masih terbuka' : 'Menunggu keputusan';
+    const actions = s === 'aktif' ? '<span class="abt-v20-muted">Peserta aktif</span>' : `<div class="abt-v20-inline-actions"><button class="app-button" type="button" data-private-choice="accept" data-class-id="${safeText(e.class_id)}" data-student-id="${safeText(e.student_id)}">Ambil peserta</button><button class="app-button secondary" type="button" data-private-choice="decline" data-class-id="${safeText(e.class_id)}" data-student-id="${safeText(e.student_id)}">Lewati</button></div>`;
+    return `<tr><td><strong>${safeText(e.student_name || e.student_username || 'Peserta')}</strong><br><small>${safeText(e.student_phone || '')}</small></td><td>${safeText(e.class_title || 'Kelas')}</td><td>${safeText(abtV20StatusLabel(e.payment_status))}</td><td><span class="abt-v20-status ${s === 'aktif' ? 'is-active' : ''}">${safeText(state)}</span></td><td>${safeText(abtV20Date(e.registered_at))}</td><td>${actions}</td></tr>`;
   }).join('');
-  return `<section class="panel-card"><h3>Pilih Peserta Privat</h3><p class="panel-subtitle">Setelah dipilih, status privat menjadi aktif dan akses ke jadwal, materi, tugas, serta tautan kelas terbuka untuk peserta tersebut.</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Kelas privat</th><th>Status pendaftaran</th><th>Status seleksi</th><th>Tanggal daftar</th><th>Aksi</th></tr></thead><tbody>${rows || '<tr><td colspan="6">Belum ada peserta yang mendaftar kelas privat ini.</td></tr>'}</tbody></table></div></section>`;
+  return `<section class="panel-card"><h3>Permintaan Kelas Privat</h3><p class="panel-subtitle">Kelas privat berkelompok diambil oleh satu pengajar. Pengajar pertama yang menerima peserta menjadi penanggung jawab kelas; peserta yang dipilih menerima pesan konfirmasi dan hanya belajar dengan pengajar tersebut.</p><div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Kelas privat</th><th>Status pendaftaran</th><th>Status seleksi</th><th>Tanggal daftar</th><th>Aksi</th></tr></thead><tbody>${rows || '<tr><td colspan="6">Belum ada permintaan yang menunggu keputusan.</td></tr>'}</tbody></table></div></section>`;
 }
 
 async function loadTeacherClassLinks() {
@@ -290,8 +297,8 @@ async function loadTeacherSessions() {
   const activitiesIn = activities || [];
   const options = (items, placeholder, valueKey, label) => `<option value="">${placeholder}</option>${items.map(x => `<option value="${safeText(x[valueKey])}" data-class-id="${safeText(x.class_id)}">${safeText(label(x))}</option>`).join('')}`;
   const students = activeParticipants.map(e => ({ ...e, name: context.profiles[e.student_id]?.full_name || context.profiles[e.student_id]?.username || 'Peserta', class_name: context.classMap[e.class_id]?.title || 'Kelas' }));
-  const activityOptions = options(activitiesIn, 'Pilih aktivitas', 'id', a => `${a.title} · ${context.classMap[a.class_id]?.title || 'Kelas'}`);
-  const studentOptions = options(students, 'Pilih peserta aktif', 'student_id', s => `${s.name} · ${s.class_name}`);
+  const activityOptions = options(activitiesIn, 'Pilih aktivitas', 'id', a => `${a.title} Â· ${context.classMap[a.class_id]?.title || 'Kelas'}`);
+  const studentOptions = options(students, 'Pilih peserta aktif', 'student_id', s => `${s.name} Â· ${s.class_name}`);
   const sessionRows = (sessions || []).map(s => `<tr><td>${safeText(abtV20Date(s.session_date))}</td><td>${safeText(context.classMap[s.class_id]?.title || 'Kelas')}</td><td>${safeText(context.profiles[s.student_id]?.full_name || 'Peserta')}</td><td>${safeText(abtV20StatusLabel(s.status))}</td><td>${safeText(s.minutes)} menit</td><td>${safeText(s.notes || '')}</td></tr>`).join('');
   return `<section class="panel-card"><h3>Catat Pertemuan Peserta</h3><p class="panel-subtitle">Hanya peserta aktif di kelas Anda yang bisa dicatat. Laporan honor menghitung pertemuan berstatus Selesai.</p><form id="abtV20SessionForm" class="abt-v20-form-grid"><label>Kelas<select name="class_id" required>${options(classes, 'Pilih kelas', 'id', c => c.title)}</select></label><label>Aktivitas / jadwal<select name="activity_id" required>${activityOptions}</select></label><label>Peserta<select name="student_id" required>${studentOptions}</select></label><label>Tanggal pertemuan<input name="session_date" type="date" value="${abtV20DateInput()}" required></label><label>Durasi (menit)<input name="minutes" type="number" min="1" max="1440" value="60" required></label><label>Status<select name="status"><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option><option value="no_show">Tidak hadir</option></select></label><label class="abt-v20-span-all">Catatan<textarea name="notes" maxlength="1000" rows="2"></textarea></label><button class="app-button" type="submit">Simpan pertemuan</button><span class="abt-v20-feedback" role="status"></span></form></section><section class="panel-card"><h3>Riwayat Pertemuan</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Tanggal</th><th>Kelas</th><th>Peserta</th><th>Status</th><th>Durasi</th><th>Catatan</th></tr></thead><tbody>${sessionRows || '<tr><td colspan="6">Belum ada pertemuan yang dicatat.</td></tr>'}</tbody></table></div></section>`;
 }
@@ -310,30 +317,31 @@ async function loadTeacherPayroll() {
   const reportCount = report?.status === 'needs_correction' ? count : (report?.session_count ?? count);
   const total = count * Number(rate?.rate_per_session || 0);
   const locked = ['submitted', 'approved'].includes(report?.status);
-  return `<section class="panel-card"><div class="abt-v20-section-head"><div><h3>Laporan Honor</h3><p class="panel-subtitle">Laporan dibuat untuk bulan sebelumnya dan dikirim ke Admin untuk ditinjau.</p></div><span class="abt-v20-status ${report?.status === 'approved' ? 'is-active' : ''}">${safeText(report ? abtV20StatusLabel(report.status) : 'Belum dikirim')}</span></div><div class="abt-v20-payroll-summary"><div><small>Periode</small><strong>${safeText(abtV20MonthLabel(month))}</strong></div><div><small>Pertemuan selesai</small><strong>${safeText(reportCount)}</strong></div><div><small>Tarif / pertemuan</small><strong>${safeText(abtV20Money(report?.status === 'needs_correction' ? rate?.rate_per_session : report?.rate_per_session ?? rate?.rate_per_session ?? 0))}</strong></div><div><small>Perkiraan honor</small><strong>${safeText(abtV20Money(report?.status === 'needs_correction' ? total : report?.total_amount ?? total))}</strong></div></div>${rate ? `<p class="abt-v20-muted">Tarif ditetapkan Admin${rate.updated_at ? ` · diperbarui ${safeText(abtV20Date(rate.updated_at))}` : ''}.</p>` : '<div class="abt-v20-note">Tarif per pertemuan belum ditetapkan Admin. Laporan belum dapat dikirim.</div>'}${report?.admin_note ? `<div class="abt-v20-note">Catatan Admin: ${safeText(report.admin_note)}</div>` : ''}<button type="button" class="app-button" id="abtV20SubmitPayroll" ${!rate || locked ? 'disabled' : ''}>${report?.status === 'needs_correction' ? 'Kirim ulang laporan' : 'Kirim laporan bulan sebelumnya'}</button><span id="abtV20PayrollFeedback" class="abt-v20-feedback" role="status"></span><p class="abt-v20-muted">Pengiriman dilakukan saat tombol ini ditekan. Sistem tidak mengirim laporan otomatis di latar belakang.</p></section>`;
+  return `<section class="panel-card"><div class="abt-v20-section-head"><div><h3>Laporan Honor</h3><p class="panel-subtitle">Laporan dibuat untuk bulan sebelumnya dan dikirim ke Admin untuk ditinjau.</p></div><span class="abt-v20-status ${report?.status === 'approved' ? 'is-active' : ''}">${safeText(report ? abtV20StatusLabel(report.status) : 'Belum dikirim')}</span></div><div class="abt-v20-payroll-summary"><div><small>Periode</small><strong>${safeText(abtV20MonthLabel(month))}</strong></div><div><small>Pertemuan selesai</small><strong>${safeText(reportCount)}</strong></div><div><small>Tarif / pertemuan</small><strong>${safeText(abtV20Money(report?.status === 'needs_correction' ? rate?.rate_per_session : report?.rate_per_session ?? rate?.rate_per_session ?? 0))}</strong></div><div><small>Perkiraan honor</small><strong>${safeText(abtV20Money(report?.status === 'needs_correction' ? total : report?.total_amount ?? total))}</strong></div></div>${rate ? `<p class="abt-v20-muted">Tarif ditetapkan Admin${rate.updated_at ? ` Â· diperbarui ${safeText(abtV20Date(rate.updated_at))}` : ''}.</p>` : '<div class="abt-v20-note">Tarif per pertemuan belum ditetapkan Admin. Laporan belum dapat dikirim.</div>'}${report?.admin_note ? `<div class="abt-v20-note">Catatan Admin: ${safeText(report.admin_note)}</div>` : ''}<button type="button" class="app-button" id="abtV20SubmitPayroll" ${!rate || locked ? 'disabled' : ''}>${report?.status === 'needs_correction' ? 'Kirim ulang laporan' : 'Kirim laporan bulan sebelumnya'}</button><span id="abtV20PayrollFeedback" class="abt-v20-feedback" role="status"></span><p class="abt-v20-muted">Pengiriman dilakukan saat tombol ini ditekan. Sistem tidak mengirim laporan otomatis di latar belakang.</p></section>`;
 }
 
 async function loadAdminFinance() {
   if (!abtV20IsAdmin()) return `<div class="app-alert">Anda tidak memiliki akses ke halaman ini.</div>`;
-  const [{ data: teachers, error: teacherError }, { data: classes, error: classError }, { data: reports, error: reportError }, { data: invoices, error: invoiceError }] = await Promise.all([
+  const [{ data: teachers, error: teacherError }, { data: classes, error: classError }, { data: reports, error: reportError }, { data: invoices, error: invoiceError }, { data: privateTiers, error: tierError }, { data: teacherRates, error: trError }] = await Promise.all([
     supabaseClient.from('profiles').select('id,full_name,username').eq('role', 'pengajar').order('full_name'),
-    supabaseClient.from('classes').select('id,title,category,instructor_id').order('title'),
+    supabaseClient.from('classes').select('id,title,category,instructor_id,payment_type,price_amount,status').order('title'),
     supabaseClient.from('teacher_monthly_reports').select('*').order('report_month', { ascending: false }).limit(100),
-    supabaseClient.from('participant_invoices').select('*').order('billing_month', { ascending: false }).limit(100)
+    supabaseClient.from('participant_invoices').select('*').order('billing_month', { ascending: false }).limit(100),
+    supabaseClient.from('private_class_rate_tiers').select('participant_count,rate_per_participant,updated_at').order('participant_count'),
+    supabaseClient.from('teacher_session_rates').select('teacher_id,rate_per_session,updated_at')
   ]);
-  if (teacherError || classError || reportError || invoiceError) return abtV20SchemaNotice(teacherError || classError || reportError || invoiceError);
-  const [{ data: teacherRates, error: trError }, { data: classRates, error: crError }] = await Promise.all([
-    supabaseClient.from('teacher_session_rates').select('teacher_id,rate_per_session,updated_at'),
-    supabaseClient.from('class_session_rates').select('class_id,rate_per_session,updated_at')
-  ]);
-  if (trError || crError) return abtV20SchemaNotice(trError || crError);
+  if (teacherError || classError || reportError || invoiceError || tierError || trError) return abtV20SchemaNotice(teacherError || classError || reportError || invoiceError || tierError || trError);
   const teacherRateMap = Object.fromEntries((teacherRates || []).map(x => [x.teacher_id, x.rate_per_session]));
-  const classRateMap = Object.fromEntries((classRates || []).map(x => [x.class_id, x.rate_per_session]));
   const profileMap = await abtV20GetProfiles([...(reports || []).map(r => r.teacher_id), ...(invoices || []).map(i => i.student_id)], 'id,full_name,username').catch(() => ({}));
   const classMap = Object.fromEntries((classes || []).map(c => [c.id, c]));
-  const reportRows = (reports || []).map(r => `<tr><td>${safeText(profileMap[r.teacher_id]?.full_name || profileMap[r.teacher_id]?.username || 'Pengajar')}</td><td>${safeText(abtV20MonthLabel(r.report_month))}</td><td>${safeText(r.session_count)}</td><td>${safeText(abtV20Money(r.rate_per_session))}</td><td><strong>${safeText(abtV20Money(r.total_amount))}</strong></td><td><span class="abt-v20-status ${r.status === 'approved' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(r.status))}</span>${r.admin_note ? `<br><small>${safeText(r.admin_note)}</small>` : ''}</td><td>${r.status === 'submitted' ? `<div class="abt-v20-inline-actions"><button class="app-button" type="button" data-v20-review="approve" data-report-id="${safeText(r.id)}">Setujui & terbitkan tagihan</button><button class="app-button secondary" type="button" data-v20-review="return" data-report-id="${safeText(r.id)}">Minta perbaikan</button></div>` : ''}</td></tr>`).join('');
-  const invoiceRows = (invoices || []).map(i => `<tr><td>${safeText(i.invoice_no)}</td><td>${safeText(profileMap[i.student_id]?.full_name || 'Peserta')}</td><td>${safeText(classMap[i.class_id]?.title || 'Kelas')}</td><td>${safeText(abtV20MonthLabel(i.billing_month))}</td><td>${safeText(abtV20Money(i.amount_due))}</td><td><span class="abt-v20-status ${i.status === 'paid' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(i.status))}</span></td><td>${i.status === 'void' ? '' : `<button class="app-button secondary" type="button" data-v20-invoice-status="${i.status === 'paid' ? 'issued' : 'paid'}" data-invoice-id="${safeText(i.id)}">${i.status === 'paid' ? 'Tandai belum dibayar' : 'Tandai lunas'}</button>`}</td></tr>`).join('');
-  return `<section class="panel-card"><h3>Tarif Honor Pengajar</h3><p class="panel-subtitle">Tarif ini digunakan menghitung honor pengajar. Perubahan tarif berlaku untuk laporan berikutnya.</p><div class="abt-v20-rate-grid">${(teachers || []).map(t => `<form class="abt-v20-rate-form" data-kind="teacher" data-id="${safeText(t.id)}"><label>${safeText(t.full_name || t.username || 'Pengajar')}<span class="abt-v20-input-money"><span>Rp</span><input name="rate" type="number" min="0" step="500" required value="${safeText(teacherRateMap[t.id] ?? '')}" placeholder="Tarif / pertemuan"></span></label><button class="app-button secondary" type="submit">Simpan tarif</button><span class="abt-v20-feedback" role="status"></span></form>`).join('') || '<div class="empty-state">Belum ada akun pengajar.</div>'}</div></section><section class="panel-card"><h3>Tarif Tagihan Peserta</h3><p class="panel-subtitle">Tarif peserta ditetapkan terpisah dari honor pengajar. Ini memastikan invoice memakai nilai yang Admin tentukan.</p><div class="abt-v20-rate-grid">${(classes || []).map(c => `<form class="abt-v20-rate-form" data-kind="class" data-id="${safeText(c.id)}"><label>${safeText(c.title)}<span class="abt-v20-input-money"><span>Rp</span><input name="rate" type="number" min="0" step="500" required value="${safeText(classRateMap[c.id] ?? '')}" placeholder="Tarif / pertemuan"></span></label><button class="app-button secondary" type="submit">Simpan tarif</button><span class="abt-v20-feedback" role="status"></span></form>`).join('') || '<div class="empty-state">Belum ada kelas.</div>'}</div></section><section class="panel-card"><h3>Laporan Honor Masuk</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Pengajar</th><th>Periode</th><th>Pertemuan</th><th>Tarif</th><th>Total honor</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>${reportRows || '<tr><td colspan="7">Belum ada laporan.</td></tr>'}</tbody></table></div></section><section class="panel-card"><h3>Invoice Peserta</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Invoice</th><th>Peserta</th><th>Kelas</th><th>Bulan</th><th>Tagihan</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>${invoiceRows || '<tr><td colspan="7">Belum ada tagihan terbit.</td></tr>'}</tbody></table></div></section>`;
+  const regularClasses = (classes || []).filter(c => String(c.category || '').toLowerCase() === 'reguler' && c.payment_type === 'monthly');
+  const reportRows = (reports || []).map(r => `<tr><td>${safeText(profileMap[r.teacher_id]?.full_name || profileMap[r.teacher_id]?.username || 'Pengajar')}</td><td>${safeText(abtV20MonthLabel(r.report_month))}</td><td>${safeText(r.session_count)}</td><td>${safeText(abtV20Money(r.rate_per_session))}</td><td><strong>${safeText(abtV20Money(r.total_amount))}</strong></td><td><span class="abt-v20-status ${r.status === 'approved' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(r.status))}</span>${r.admin_note ? `<br><small>${safeText(r.admin_note)}</small>` : ''}</td><td>${r.status === 'submitted' ? `<div class="abt-v20-inline-actions"><button class="app-button" type="button" data-v20-review="approve" data-report-id="${safeText(r.id)}">Setujui & terbitkan tagihan privat</button><button class="app-button secondary" type="button" data-v20-review="return" data-report-id="${safeText(r.id)}">Minta perbaikan</button></div>` : ''}</td></tr>`).join('');
+  const invoiceRows = (invoices || []).map(i => { const kind = i.billing_type || 'legacy'; return `<tr><td>${safeText(i.invoice_no)}</td><td>${safeText(kind === 'regular' ? 'Reguler' : kind === 'private' ? 'Privat' : 'Lama')}</td><td>${safeText(profileMap[i.student_id]?.full_name || 'Peserta')}</td><td>${safeText(classMap[i.class_id]?.title || 'Kelas')}</td><td>${safeText(abtV20MonthLabel(i.billing_month))}</td><td>${i.due_date ? safeText(abtV20Date(i.due_date)) : 'â€”'}</td><td>${safeText(abtV20Money(i.amount_due))}</td><td><span class="abt-v20-status ${i.status === 'paid' ? 'is-active' : ''}">${safeText(abtV20StatusLabel(i.status))}</span></td><td>${i.status === 'void' ? '' : `<button class="app-button secondary" type="button" data-v20-invoice-status="${i.status === 'paid' ? 'issued' : 'paid'}" data-invoice-id="${safeText(i.id)}">${i.status === 'paid' ? 'Tandai belum dibayar' : 'Tandai lunas'}</button>`}</td></tr>`; }).join('');
+  const tierRows = (privateTiers || []).map(t => `<tr><td>${safeText(t.participant_count)} peserta</td><td><form class="abt-v20-rate-form abt-v21-inline-rate" data-kind="private-tier" data-id="${safeText(t.participant_count)}"><span class="abt-v20-input-money"><span>Rp</span><input name="rate" type="number" min="0" step="500" required value="${safeText(t.rate_per_participant)}" aria-label="Tarif per peserta untuk ${safeText(t.participant_count)} orang"></span><button class="app-button secondary" type="submit">Simpan</button><span class="abt-v20-feedback" role="status"></span></form></td><td>${safeText(abtV20Money(Number(t.rate_per_participant) * Number(t.participant_count)))}</td></tr>`).join('');
+  return `<section class="panel-card"><h3>Tarif Honor Pengajar</h3><p class="panel-subtitle">Tarif ini digunakan menghitung honor pengajar. Perubahan berlaku untuk laporan berikutnya.</p><div class="abt-v20-rate-grid">${(teachers || []).map(t => `<form class="abt-v20-rate-form" data-kind="teacher" data-id="${safeText(t.id)}"><label>${safeText(t.full_name || t.username || 'Pengajar')}<span class="abt-v20-input-money"><span>Rp</span><input name="rate" type="number" min="0" step="500" required value="${safeText(teacherRateMap[t.id] ?? '')}" placeholder="Tarif / pertemuan"></span></label><button class="app-button secondary" type="submit">Simpan tarif</button><span class="abt-v20-feedback" role="status"></span></form>`).join('') || '<div class="empty-state">Belum ada akun pengajar.</div>'}</div></section>
+  <section class="panel-card"><h3>Tarif Tagihan Peserta</h3><p class="panel-subtitle">Reguler: biaya per bulan dibekukan saat peserta mendaftar. Tagihan terbit otomatis setiap tanggal 1 dan jatuh tempo tanggal 5. Privat: tagihan menunggu persetujuan laporan pengajar; tarif per peserta per pertemuan mengikuti jumlah peserta aktif pada kelas.</p><h4>Biaya tetap kelas reguler</h4><div class="abt-v20-rate-grid">${regularClasses.map(c => `<form class="abt-v20-rate-form" data-kind="regular" data-id="${safeText(c.id)}"><label>${safeText(c.title)}<span class="abt-v20-input-money"><span>Rp</span><input name="rate" type="number" min="0" step="1000" required value="${safeText(c.price_amount ?? '')}" aria-label="Tagihan bulanan ${safeText(c.title)}"></span></label><button class="app-button secondary" type="submit">Simpan biaya</button><span class="abt-v20-feedback" role="status"></span></form>`).join('') || '<div class="empty-state">Belum ada kelas reguler dengan skema bulanan.</div>'}</div><h4 style="margin-top:20px">Tarif privat per peserta per pertemuan (60 menit)</h4><div class="table-wrap"><table class="app-table"><thead><tr><th>Jumlah peserta aktif</th><th>Biaya per peserta</th><th>Total kelas / pertemuan</th></tr></thead><tbody>${tierRows || '<tr><td colspan="3">Tarif belum tersedia. Jalankan SQL V21.</td></tr>'}</tbody></table></div><p class="abt-v20-muted">Biaya pendaftaran privat disetel pada detail kelas (awal Rp50.000). Nilai tagihan yang sudah terbit menyimpan snapshot tarifnya.</p><div class="abt-v20-inline-actions"><button type="button" class="app-button" id="abtV21IssueRegularInvoices">Terbitkan tagihan reguler bulan ini</button><span id="abtV21RegularInvoiceFeedback" class="abt-v20-feedback" role="status"></span></div></section>
+  <section class="panel-card"><h3>Laporan Honor Masuk</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Pengajar</th><th>Periode</th><th>Pertemuan</th><th>Tarif</th><th>Total honor</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>${reportRows || '<tr><td colspan="7">Belum ada laporan.</td></tr>'}</tbody></table></div></section>
+  <section class="panel-card"><h3>Invoice Peserta</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Invoice</th><th>Jenis</th><th>Peserta</th><th>Kelas</th><th>Bulan</th><th>Jatuh tempo</th><th>Tagihan</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>${invoiceRows || '<tr><td colspan="9">Belum ada tagihan terbit.</td></tr>'}</tbody></table></div></section>`;
 }
 
 async function loadIntegratedNotifications() {
@@ -418,9 +426,16 @@ document.addEventListener('submit', async event => {
   if (form?.matches('.abt-v20-rate-form')) {
     event.preventDefault(); const fb = form.querySelector('.abt-v20-feedback'); const rate = Number(form.elements.rate.value);
     if (!Number.isFinite(rate) || rate < 0) { fb.textContent = 'Tarif tidak valid.'; return; }
-    const isTeacher = form.dataset.kind === 'teacher'; const table = isTeacher ? 'teacher_session_rates' : 'class_session_rates';
-    const payload = isTeacher ? { teacher_id: form.dataset.id, rate_per_session: rate, updated_by: currentUser.id, updated_at: new Date().toISOString() } : { class_id: form.dataset.id, rate_per_session: rate, updated_by: currentUser.id, updated_at: new Date().toISOString() };
-    fb.textContent = 'Menyimpan...'; const { error } = await supabaseClient.from(table).upsert(payload, { onConflict: isTeacher ? 'teacher_id' : 'class_id' });
+    const kind = form.dataset.kind; fb.textContent = 'Menyimpan...'; let error = null;
+    if (kind === 'teacher') {
+      ({ error } = await supabaseClient.from('teacher_session_rates').upsert({ teacher_id: form.dataset.id, rate_per_session: rate, updated_by: currentUser.id, updated_at: new Date().toISOString() }, { onConflict: 'teacher_id' }));
+    } else if (kind === 'regular') {
+      ({ error } = await supabaseClient.from('classes').update({ price_amount: rate, payment_type: 'monthly' }).eq('id', form.dataset.id));
+    } else if (kind === 'private-tier') {
+      ({ error } = await supabaseClient.from('private_class_rate_tiers').update({ rate_per_participant: rate, updated_by: currentUser.id, updated_at: new Date().toISOString() }).eq('participant_count', Number(form.dataset.id)));
+    } else {
+      ({ error } = await supabaseClient.from('class_session_rates').upsert({ class_id: form.dataset.id, rate_per_session: rate, updated_by: currentUser.id, updated_at: new Date().toISOString() }, { onConflict: 'class_id' }));
+    }
     fb.textContent = error ? `Gagal: ${error.message}` : 'Tarif tersimpan.'; return;
   }
   if (form?.id === 'abtV20AnnouncementForm') {
@@ -441,13 +456,23 @@ document.addEventListener('change', event => {
 });
 
 document.addEventListener('click', async event => {
+  const issueRegular = event.target.closest('#abtV21IssueRegularInvoices');
+  if (issueRegular) {
+    const fb = document.getElementById('abtV21RegularInvoiceFeedback');
+    issueRegular.disabled = true; fb.textContent = 'Menerbitkan tagihan bulan ini...';
+    const { data, error } = await supabaseClient.rpc('issue_regular_monthly_invoices', { p_billing_month: abtV21CurrentMonth() });
+    if (error) { fb.textContent = `Gagal menerbitkan tagihan: ${error.message}`; issueRegular.disabled = false; }
+    else { fb.textContent = `${data?.invoices_created ?? 0} invoice reguler baru diterbitkan. Jatuh tempo ${abtV20Date(data?.due_date)}.`; await renderDashboardPage('finance'); }
+    return;
+  }
   const privateChoice = event.target.closest('[data-private-choice]');
   if (privateChoice) {
     const accept = privateChoice.dataset.privateChoice === 'accept';
     if (!accept && !confirm('Lewati pendaftaran privat peserta ini?')) return;
     privateChoice.disabled = true;
-    const { error } = await supabaseClient.rpc('decide_private_enrollment', { p_class_id: privateChoice.dataset.classId, p_student_id: privateChoice.dataset.studentId, p_accept: accept });
+    const { data, error } = await supabaseClient.rpc('decide_private_enrollment', { p_class_id: privateChoice.dataset.classId, p_student_id: privateChoice.dataset.studentId, p_accept: accept });
     if (error) { alert(`Status peserta belum berubah: ${error.message}`); privateChoice.disabled = false; return; }
+    if (data?.message) alert(data.message);
     await renderDashboardPage('private'); return;
   }
   const read = event.target.closest('[data-v20-read-notification]');
@@ -489,3 +514,4 @@ document.addEventListener('click', async event => {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('globalNotificationBell')?.addEventListener('click', () => navigate('notifications'));
 });
+
