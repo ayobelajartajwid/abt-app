@@ -517,7 +517,32 @@
     body.public-dark .navlinks a,body.public-dark .brand,body.public-dark .public-profile-button{color:var(--ink)}
     body.public-dark .public-theme-toggle{background:#142b36;color:var(--ink)}
     @media(max-width:760px){.public-account{gap:5px}.public-profile-button{font-size:12px}.public-profile-button span:last-child{max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.public-account .btn{padding:8px 10px;font-size:12px}}
-  </style>
+  
+/* ABT V15 - Class manager dashboard */
+.class-manager-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:0 0 18px}
+.class-manager-summary{display:flex;gap:10px;flex-wrap:wrap}
+.class-manager-summary .mini-stat{background:var(--surface,#fff);border:1px solid var(--border,#dce8e8);border-radius:14px;padding:12px 16px;min-width:130px}
+.class-manager-summary .mini-stat strong{display:block;font-size:20px;color:var(--primary,#075b78)}
+.class-manager-summary .mini-stat span{font-size:11px;color:var(--muted,#718078)}
+.class-dashboard-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:14px 0 22px}
+.class-dashboard-card{padding:14px!important;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.class-dashboard-thumb{width:100%;max-width:210px;aspect-ratio:4/5;object-fit:cover;border-radius:12px;background:#edf4f3;display:block;margin:0 auto 13px}
+.class-dashboard-thumb-placeholder{width:100%;max-width:210px;aspect-ratio:4/5;border-radius:12px;background:linear-gradient(145deg,#e9f3f1,#d9e9e7);display:grid;place-items:center;margin:0 auto 13px;color:#78918d;font-size:13px}
+.class-dashboard-card h3{margin:10px 0 5px}
+.class-dashboard-card .class-description{font-size:12px;line-height:1.65;color:var(--muted,#718078);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:58px}
+.class-dashboard-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.class-dashboard-meta div{background:var(--surface-soft,#f5f9f8);border:1px solid var(--border,#e1ebea);padding:9px;border-radius:10px;min-width:0}
+.class-dashboard-meta small{display:block;font-size:10px;color:var(--muted,#718078);margin-bottom:3px}
+.class-dashboard-meta strong{font-size:12px;overflow-wrap:anywhere}
+.class-create-toggle{display:flex;align-items:center;gap:8px}
+.class-create-card[hidden]{display:none!important}
+.payment-status-select{min-width:190px;max-width:100%;appearance:none;border:1px solid #cbdedc;border-radius:10px;padding:10px 36px 10px 12px;background-color:#fff;color:#164b58;font:inherit;font-size:12px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23075b78' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.payment-status-select:focus{outline:3px solid rgba(8,127,155,.14);border-color:#087f9b}
+.payment-action-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.payment-save-feedback{display:block;font-size:11px;margin-top:5px}
+@media(max-width:1050px){.class-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.class-dashboard-grid{grid-template-columns:1fr}.class-dashboard-thumb,.class-dashboard-thumb-placeholder{max-width:190px}.class-manager-toolbar{align-items:stretch}.class-manager-toolbar>.app-button{width:100%}}
+</style>
 </head>
 <body>
   <div id="abtLoading" aria-live="polite"><div class="abt-spinner"></div><span>Memuat Ayo Belajar Tajwid...</span></div>
@@ -1048,12 +1073,27 @@
       if (currentRole === 'pengajar') query = query.eq('instructor_id',currentUser.id);
       const {data,error} = await query;
       if (error) return `<div class="app-alert">Data kelas belum dapat dimuat: ${safeText(error.message)}</div>`;
+      const classes=data||[];
+      window.abtClassRecords=classes;
+
+      let teacherMap={};
+      const teacherIds=[...new Set(classes.map(c=>c.instructor_id).filter(Boolean))];
+      if(teacherIds.length){
+        const {data:teachers}=await supabaseClient.from('profiles').select('id,full_name').in('id',teacherIds);
+        (teachers||[]).forEach(t=>teacherMap[t.id]=t.full_name||'Pengajar');
+      }
+      let enrollmentCounts={};
+      if(classes.length){
+        const {data:enrollments}=await supabaseClient.from('class_enrollments').select('class_id,payment_status').in('class_id',classes.map(c=>c.id));
+        (enrollments||[]).filter(e=>['terverifikasi','approved','active','aktif'].includes(String(e.payment_status||'').toLowerCase())).forEach(e=>enrollmentCounts[e.class_id]=(enrollmentCounts[e.class_id]||0)+1);
+      }
+
       let createPanel='';
       if(currentRole==='super_admin'){
         const {data:teachers}=await supabaseClient.from('profiles').select('id,full_name').eq('role','pengajar').order('full_name');
         const teacherOptions=(teachers||[]).map(t=>`<option value="${t.id}">${safeText(t.full_name||'Pengajar')}</option>`).join('');
-        createPanel=`<section class="panel-card class-create-card">
-          <h3>Buat Kelas Baru</h3><p class="panel-subtitle">Buat program pembelajaran baru dan atur informasi kelas.</p>
+        createPanel=`<section class="panel-card class-create-card" id="classCreatePanel" hidden>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h3>Buat Kelas Baru</h3><p class="panel-subtitle">Buat program pembelajaran baru dan atur informasi kelas.</p></div><button class="app-button secondary" type="button" id="cancelCreateClass">Tutup</button></div>
           <form id="createClassForm">
             <div class="class-form-grid">
               <div class="field"><label for="newClassTitle">Nama kelas *</label><input id="newClassTitle" required maxlength="120" placeholder="Contoh: Tahsin Metode Asy-Syafi'i"></div>
@@ -1068,23 +1108,48 @@
               <div class="field"><label for="newClassEnd">Tanggal selesai</label><input id="newClassEnd" type="date"></div>
               <div class="field full"><label for="newClassSchedule">Jadwal pembelajaran</label><input id="newClassSchedule" placeholder="Contoh: Selasa & Rabu, 20.00–21.00 WIB"></div>
               <div class="field full"><label for="newClassDescription">Deskripsi kelas</label><textarea id="newClassDescription" placeholder="Jelaskan tujuan, materi, dan gambaran kelas..."></textarea></div>
-              <div class="field"><label for="newClassInstructor">Pengajar (opsional)</label><select id="newClassInstructor"><option value="">Belum ditentukan</option>${teacherOptions}</select></div>
+              <div class="field"><label for="newClassInstructor">Pengajar</label><select id="newClassInstructor"><option value="">Belum ditentukan</option>${teacherOptions}</select></div>
               <div class="field"><label for="newClassStatus">Status publikasi</label><select id="newClassStatus"><option value="draft">Draft</option><option value="published">Publikasikan</option></select></div>
             </div>
             <div class="class-form-actions"><button class="app-button" type="submit">＋ Buat Kelas</button><span class="form-feedback" id="createClassFeedback" role="status"></span></div>
           </form></section>`;
       }
-      window.abtClassRecords = data || [];
-      const cards=data?.length?`<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${data.map(c=>`<article class="panel-card">${c.thumbnail_url?`<img src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Thumbnail ${safeText(c.title)}" style="width:100%;aspect-ratio:4/5;height:auto;object-fit:cover;border-radius:12px;margin-bottom:12px" onerror="this.style.display='none'">`:''}<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="status-pill">${safeText(c.status==='published'?'Publikasi':'Draft')}</span>${currentRole==='super_admin'?`<button class="app-button secondary edit-class-btn" type="button" data-class-id="${safeText(c.id)}" style="padding:7px 11px;font-size:11px">✎ Edit kelas</button>`:''}</div><h3 style="margin-top:13px">${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p><p style="font-size:12px;color:#718078">${safeText(c.description||'Informasi kelas belum ditambahkan.')}</p><small style="color:#849189">${safeText(c.duration_text||'Durasi menyusul')} · ${safeText(c.payment_type||'Biaya menyusul')} · Kuota: ${c.capacity??'—'}</small></article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas yang tersedia. ${currentRole==='super_admin'?'Gunakan formulir di atas untuk membuat kelas pertama.':''}</div>`;
+
+      const activeCount=classes.filter(c=>c.status==='published').length;
+      const draftCount=classes.filter(c=>c.status!=='published').length;
+      const toolbar=`<div class="class-manager-toolbar"><div><h3 style="margin:0 0 5px">Ringkasan Kelas</h3><p class="panel-subtitle" style="margin:0">Pantau kelas, pengajar, dan peserta aktif dari satu tempat.</p></div><div class="class-manager-summary"><div class="mini-stat"><strong>${activeCount}</strong><span>Kelas aktif</span></div><div class="mini-stat"><strong>${draftCount}</strong><span>Draft</span></div><div class="mini-stat"><strong>${classes.reduce((n,c)=>n+(enrollmentCounts[c.id]||0),0)}</strong><span>Peserta aktif</span></div></div>${currentRole==='super_admin'?'<button type="button" class="app-button class-create-toggle" id="showCreateClass">＋ Buat Kelas Baru</button>':''}</div>`;
+      const cards=classes.length?`<div class="class-dashboard-grid">${classes.map(c=>`<article class="panel-card class-dashboard-card">
+        ${c.thumbnail_url?`<img class="class-dashboard-thumb" src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Thumbnail ${safeText(c.title)}" loading="lazy" onerror="this.style.display='none'">`:`<div class="class-dashboard-thumb-placeholder">Thumbnail belum tersedia</div>`}
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><span class="status-pill">${safeText(c.status==='published'?'Kelas aktif':'Draft')}</span>${currentRole==='super_admin'?`<button class="app-button secondary edit-class-btn" type="button" data-class-id="${safeText(c.id)}" style="padding:7px 11px;font-size:11px">Edit</button>`:''}</div>
+        <h3>${safeText(c.title)}</h3><p class="panel-subtitle">${safeText([c.category,c.level].filter(Boolean).join(' · ')||'Program pembelajaran')}</p>
+        <p class="class-description">${safeText(c.description||'Deskripsi kelas belum ditambahkan.')}</p>
+        <div class="class-dashboard-meta"><div><small>Biaya</small><strong>${c.price_amount!=null?'Rp '+Number(c.price_amount).toLocaleString('id-ID'):'Belum diatur'}${c.payment_type==='monthly'?' / bulan':c.payment_type==='one_time'?' / sekali bayar':''}</strong></div><div><small>Peserta aktif</small><strong>${enrollmentCounts[c.id]||0}${c.capacity?` / ${c.capacity}`:''}</strong></div><div><small>Pengajar</small><strong>${safeText(c.instructor_id?teacherMap[c.instructor_id]||'Pengajar':'Belum ditentukan')}</strong></div><div><small>Jadwal</small><strong>${safeText(c.schedule||'Belum diatur')}</strong></div></div>
+        <small style="color:var(--muted,#718078)">${safeText(c.duration_text||'Durasi belum diatur')}</small>
+      </article>`).join('')}</div>`:`<div class="panel-card empty-state">Belum ada kelas. ${currentRole==='super_admin'?'Tekan “Buat Kelas Baru” untuk menambahkan kelas pertama.':''}</div>`;
+
       let paymentPanel='';
       if(currentRole==='super_admin'||currentRole==='admin'){
         const {data:payments,error:paymentError}=await supabaseClient.from('class_enrollments').select('id,payment_status,payment_method,payment_reference,created_at,classes(title),profiles:profiles!class_enrollments_student_id_fkey(full_name,username)').order('created_at',{ascending:false}).limit(100);
-        paymentPanel=`<section class="panel-card" style="margin-top:18px"><h3>Konfirmasi Pembayaran & Pendaftaran</h3><p class="panel-subtitle">Periksa konfirmasi peserta dan perbarui status setelah pembayaran diverifikasi.</p>${paymentError?`<div class="app-alert">Jalankan migrasi SQL V12 terlebih dahulu: ${safeText(paymentError.message)}</div>`:!payments?.length?'<p>Belum ada pendaftaran.</p>':`<div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Kelas</th><th>Metode / Catatan</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${payments.map(x=>`<tr><td>${safeText(x.profiles?.full_name||x.profiles?.username||'Peserta')}</td><td>${safeText(x.classes?.title||'—')}</td><td>${safeText(x.payment_method||'—')}<br><small>${safeText(x.payment_reference||'—')}</small></td><td><span class="status-pill">${safeText(x.payment_status)}</span></td><td><select data-payment-status="${safeText(x.id)}"><option value="menunggu_konfirmasi" ${x.payment_status==='menunggu_konfirmasi'?'selected':''}>Menunggu konfirmasi</option><option value="terverifikasi" ${x.payment_status==='terverifikasi'?'selected':''}>Terverifikasi</option><option value="ditolak" ${x.payment_status==='ditolak'?'selected':''}>Ditolak</option></select><button type="button" class="app-button secondary" data-save-payment="${safeText(x.id)}">Simpan</button></td></tr>`).join('')}</tbody></table></div>`}</section>`;
+        paymentPanel=`<section class="panel-card" style="margin-top:18px"><h3>Konfirmasi Pembayaran & Pendaftaran</h3><p class="panel-subtitle">Periksa konfirmasi peserta dan perbarui status setelah pembayaran diverifikasi.</p>${paymentError?`<div class="app-alert">Data konfirmasi belum dapat dimuat: ${safeText(paymentError.message)}</div>`:!payments?.length?'<p>Belum ada pendaftaran.</p>':`<div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Kelas</th><th>Metode / Catatan</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${payments.map(x=>`<tr><td>${safeText(x.profiles?.full_name||x.profiles?.username||'Peserta')}</td><td>${safeText(x.classes?.title||'—')}</td><td>${safeText(x.payment_method||'—')}<br><small>${safeText(x.payment_reference||'—')}</small></td><td><span class="status-pill">${safeText(x.payment_status)}</span></td><td><div class="payment-action-wrap"><select class="payment-status-select" data-payment-status="${safeText(x.id)}" aria-label="Status pembayaran ${safeText(x.profiles?.full_name||'peserta')}"><option value="menunggu_konfirmasi" ${x.payment_status==='menunggu_konfirmasi'?'selected':''}>Menunggu konfirmasi</option><option value="terverifikasi" ${x.payment_status==='terverifikasi'?'selected':''}>Terverifikasi</option><option value="ditolak" ${x.payment_status==='ditolak'?'selected':''}>Ditolak</option></select><button type="button" class="app-button secondary" data-save-payment="${safeText(x.id)}">Simpan</button></div><small class="payment-save-feedback" id="paymentFeedback-${safeText(x.id)}" role="status"></small></td></tr>`).join('')}</tbody></table></div>`}</section>`;
       }
-      return createPanel+cards+paymentPanel+`<div id="editClassMount"></div>`;
+      return toolbar+createPanel+cards+paymentPanel+`<div id="editClassMount"></div>`;
     }
 
     document.addEventListener('click',event=>{
+      if(event.target?.closest('#showCreateClass')){const panel=document.getElementById('classCreatePanel');if(panel){panel.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'start'});}return;}
+      if(event.target?.closest('#cancelCreateClass')){const panel=document.getElementById('classCreatePanel');if(panel){panel.hidden=true;document.getElementById('createClassForm')?.reset();}return;}
+      const savePayment=event.target.closest('[data-save-payment]');
+      if(savePayment){
+        if(!['super_admin','admin'].includes(currentRole)) return;
+        const id=savePayment.dataset.savePayment,select=document.querySelector(`[data-payment-status="${CSS.escape(id)}"]`),feedback=document.getElementById(`paymentFeedback-${id}`);
+        if(!select)return;
+        savePayment.disabled=true;savePayment.textContent='Menyimpan…';if(feedback)feedback.textContent='';
+        supabaseClient.from('class_enrollments').update({payment_status:select.value}).eq('id',id).then(async({error})=>{
+          if(error){if(feedback){feedback.textContent='Gagal: '+error.message;feedback.style.color='#b54747';}savePayment.disabled=false;savePayment.textContent='Simpan';}
+          else {if(feedback){feedback.textContent='Status berhasil diperbarui.';feedback.style.color='#087f9b';}savePayment.disabled=false;savePayment.textContent='Tersimpan';}
+        });
+        return;
+      }
       const button=event.target.closest('.edit-class-btn'); if(!button) return;
       if(currentRole!=='super_admin') return;
       const c=(window.abtClassRecords||[]).find(x=>String(x.id)===button.dataset.classId); if(!c) return;
@@ -1092,8 +1157,7 @@
       const val=(v)=>String(v??'').replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/</g,'&lt;');
       mount.innerHTML=`<section class="panel-card" id="editClassPanel" style="margin-top:18px;border:2px solid #087F9B"><div style="display:flex;justify-content:space-between;align-items:center"><div><h3>Edit Kelas</h3><p class="panel-subtitle">Perbarui informasi kelas atau ubah Draft menjadi Publikasi.</p></div><button type="button" class="app-button secondary" id="closeEditClass">Tutup</button></div><form id="editClassForm" data-id="${val(c.id)}"><div class="class-form-grid"><div class="field"><label>Nama kelas *</label><input name="title" required value="${val(c.title)}"></div><div class="field"><label>Kategori</label><select name="category"><option ${c.category==='Privat'?'selected':''}>Privat</option><option ${c.category==='Reguler'?'selected':''}>Reguler</option><option ${c.category==='Langganan'?'selected':''}>Langganan</option></select></div><div class="field"><label>Skema biaya</label><select name="payment_type"><option value="one_time" ${c.payment_type==='one_time'?'selected':''}>1x bayar</option><option value="monthly" ${c.payment_type==='monthly'?'selected':''}>Bulanan</option><option value="custom_package" ${c.payment_type==='custom_package'?'selected':''}>Paket khusus</option></select></div><div class="field"><label>Nominal biaya (Rp)</label><input name="price_amount" type="number" min="0" value="${val(c.price_amount)}"></div><div class="field"><label>Lama pembelajaran</label><input name="duration_text" value="${val(c.duration_text)}"></div><div class="field"><label>Thumbnail Google Drive</label><input name="thumbnail_url" type="url" value="${val(c.thumbnail_url)}"></div><div class="field"><label>Tingkat</label><input name="level" value="${val(c.level)}"></div><div class="field"><label>Kuota</label><input name="capacity" type="number" min="1" value="${val(c.capacity)}"></div><div class="field"><label>Tanggal mulai</label><input name="start_date" type="date" value="${val(c.start_date)}"></div><div class="field"><label>Tanggal selesai</label><input name="end_date" type="date" value="${val(c.end_date)}"></div><div class="field full"><label>Jadwal</label><input name="schedule" value="${val(c.schedule)}"></div><div class="field full"><label>Deskripsi</label><textarea name="description">${val(c.description)}</textarea></div><div class="field"><label>Status publikasi</label><select name="status"><option value="draft" ${c.status==='draft'?'selected':''}>Draft</option><option value="published" ${c.status==='published'?'selected':''}>Publikasikan</option></select></div></div><div class="class-form-actions"><button class="app-button" type="submit">Simpan Perubahan</button><span id="editClassFeedback" class="form-feedback" role="status"></span></div></form></section>`;
       mount.scrollIntoView({behavior:'smooth',block:'start'});
-    });
-    document.addEventListener('click',event=>{if(event.target?.id==='closeEditClass'){document.getElementById('editClassMount').innerHTML='';}});
+    });    document.addEventListener('click',event=>{if(event.target?.id==='closeEditClass'){document.getElementById('editClassMount').innerHTML='';}});
     document.addEventListener('submit',async event=>{
       if(event.target?.id==='editClassForm'){
         event.preventDefault(); if(currentRole!=='super_admin') return;
