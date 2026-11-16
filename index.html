@@ -543,7 +543,7 @@
 @media(max-width:1050px){.class-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.class-dashboard-grid{grid-template-columns:1fr}.class-dashboard-thumb,.class-dashboard-thumb-placeholder{max-width:190px}.class-manager-toolbar{align-items:stretch}.class-manager-toolbar>.app-button{width:100%}}
 </style>
-</head>
+<meta name="abt-version" content="V16-LANDING-AFTER-LOGIN">\n</head>
 <body>
   <div id="abtLoading" aria-live="polite"><div class="abt-spinner"></div><span>Memuat Ayo Belajar Tajwid...</span></div>
   <header class="topbar">
@@ -1485,7 +1485,9 @@
         navigate(parsePageFromPath(),true);
       }else{
         setAppMode(false);
-        if(location.pathname.startsWith('/dashboard'))history.replaceState({},'','/');
+        if(location.pathname.startsWith('/dashboard') || new URLSearchParams(location.search).has('checkout')) {
+          history.replaceState({view:'home'},'', '/' + location.hash);
+        }
       }
     }
     function showPublicWebsite() {
@@ -1512,7 +1514,8 @@
         if(error) throw error;
         await openUserDashboard(data.user,false);
         showLoginMessage('Login berhasil. Anda tetap berada di halaman utama. Klik nama atau foto profil untuk membuka dashboard.',false);
-        try{await continuePendingEnrollment();}catch(enrollError){console.error('Login berhasil, tetapi proses pendaftaran belum dapat dilanjutkan:',enrollError);}
+        // Setelah login, pengguna tetap di landing page. Checkout dilanjutkan hanya
+        // jika pengguna menekan kembali tombol Daftar Sekarang secara sadar.
       }catch(error){
         showLoginMessage(error.message||'Login gagal. Periksa username/email dan password.');
       }finally{submitButton.disabled=false;submitButton.textContent='Login →';}
@@ -1554,7 +1557,7 @@
           closeModal();
           await openUserDashboard(data.user,false);
           showLoginMessage('Pendaftaran berhasil. Selamat datang! Anda tetap berada di halaman utama.',false);
-          try{await continuePendingEnrollment();}catch(enrollError){console.error('Pendaftaran akun berhasil, kelanjutan pendaftaran kelas tertunda:',enrollError);}
+          // Setelah registrasi, pengguna tetap di landing page; tidak otomatis membuka checkout.
         }else{
           openAuth('login');
           showLoginMessage('Pendaftaran berhasil. Silakan login menggunakan username dan password.',false);
@@ -1592,8 +1595,11 @@
         const onDashboardRoute=location.pathname.startsWith('/dashboard');
         await openUserDashboard(session.user,onDashboardRoute);
         if(!onDashboardRoute){
-          try{await continuePendingEnrollment();}
-          catch(enrollError){console.error('Pendaftaran kelas belum dapat dilanjutkan:',enrollError);}
+          // Jangan pulihkan checkout secara otomatis setelah refresh/login.
+          // Simpan pilihan kelas di sessionStorage agar bisa dilanjutkan dari landing page.
+          if(new URLSearchParams(location.search).has('checkout')) {
+            history.replaceState({view:'home'},'', '/' + location.hash);
+          }
         }
       } catch(error) { console.error('Gagal memuat profil pengguna:',error); showPublicWebsite(); }
     })();
