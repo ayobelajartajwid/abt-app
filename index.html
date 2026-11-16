@@ -543,7 +543,9 @@
 @media(max-width:1050px){.class-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.class-dashboard-grid{grid-template-columns:1fr}.class-dashboard-thumb,.class-dashboard-thumb-placeholder{max-width:190px}.class-manager-toolbar{align-items:stretch}.class-manager-toolbar>.app-button{width:100%}}
 </style>
-<meta name="abt-version" content="V16-LANDING-AFTER-LOGIN">\n</head>
+<meta name="abt-version" content="V19-PENGAJAR">
+<link rel="stylesheet" href="./teacher-portal.css">
+</head>
 <body>
   <div id="abtLoading" aria-live="polite"><div class="abt-spinner"></div><span>Memuat Ayo Belajar Tajwid...</span></div>
   <header class="topbar">
@@ -723,6 +725,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./teacher-portal.js"></script>
   <script>
     // Konfigurasi frontend Supabase. Publishable key boleh berada di frontend;
     // jangan pernah menaruh service_role/secret key di file ini.
@@ -971,8 +974,10 @@
         ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['profile','Profil Saya','◎']
       ],
       pengajar: [
-        ['overview','Ringkasan','▦'], ['classes','Kelas Saya','▤'],
-        ['lessons','Materi Pembelajaran','▣'], ['profile','Profil Saya','◎']
+        ['overview','Dashboard','▦'], ['classes','Kelas Saya','▤'],
+        ['students','Peserta Kelas','♙'], ['materials','Materi Pembelajaran','▣'],
+        ['activities','Aktivitas & Jadwal','◷'], ['evaluations','Evaluasi','✓'],
+        ['lessons','Materi Inti','▤'], ['notifications','Notifikasi','●'], ['profile','Profil Saya','◎']
       ],
       peserta: [
         ['overview','Ringkasan','▦'], ['classes','Kelas Saya','▤'],
@@ -1017,6 +1022,7 @@
       return count ?? 0;
     }
     async function loadOverview() {
+      if (currentRole === 'pengajar') return loadTeacherOverview();
       const isManager = ['super_admin','admin'].includes(currentRole);
       const [classes, lessons, enrollments, users] = await Promise.all([
         countRows('classes', q => currentRole === 'pengajar' ? q.eq('instructor_id', currentUser.id) : q),
@@ -1201,6 +1207,13 @@
     });
     async function loadLessons() {
       let query = supabaseClient.from('lessons').select('id,title,description,order_number,is_published,class_id,classes(title)').order('order_number',{ascending:true}).limit(100);
+      if (currentRole === 'pengajar') {
+        const {data:assigned,error:assignedError}=await supabaseClient.from('classes').select('id').eq('instructor_id',currentUser.id);
+        if (assignedError) return `<div class="app-alert">Daftar kelas pengajar belum dapat dimuat: ${safeText(assignedError.message)}</div>`;
+        const classIds=(assigned||[]).map(c=>c.id);
+        if (!classIds.length) return `<div class="panel-card empty-state">Belum ada materi inti pada kelas yang ditugaskan.</div>`;
+        query=query.in('class_id',classIds);
+      }
       const {data,error} = await query;
       if (error) return `<div class="app-alert">Materi belum dapat dimuat: ${safeText(error.message)}</div>`;
       if (!data?.length) return `<div class="panel-card empty-state">Belum ada materi pembelajaran yang diterbitkan.</div>`;
@@ -1286,6 +1299,11 @@
         lessons:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M8 7h8M8 11h8M8 15h5"/>',
         teachers:'<path d="M16 20v-1.5a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4V20"/><circle cx="10" cy="7" r="3.5"/><path d="M20 20v-1.5a4 4 0 0 0-2.8-3.8M16.5 3.7a3.5 3.5 0 0 1 0 6.7"/>',
         users:'<path d="M16 20v-1.5a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4V20"/><circle cx="10" cy="7" r="3.5"/><path d="M20 20v-1.5a4 4 0 0 0-2.8-3.8M16.5 3.7a3.5 3.5 0 0 1 0 6.7"/>',
+        students:'<path d="M16 20v-1.5a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4V20"/><circle cx="10" cy="7" r="3.5"/><path d="M20 20v-1.5a4 4 0 0 0-2.8-3.8M16.5 3.7a3.5 3.5 0 0 1 0 6.7"/>',
+        materials:'<path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+        activities:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+        evaluations:'<path d="m5 12 4 4L19 6"/><path d="M4 3h16v18H4z"/>',
+        notifications:'<path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
         profile:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="9" r="3"/><path d="M6.8 18a5.5 5.5 0 0 1 10.4 0"/>',
         sitecontent:'<path d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'
       };
@@ -1453,6 +1471,7 @@
     });
     async function renderDashboardPage(page) {
       showAbtLoading();
+      if (!(roleMenus[currentRole] || []).some(item => item[0] === page)) page = 'overview';
       const nav = document.getElementById('appNavigation');
       nav.innerHTML = (roleMenus[currentRole] || []).map(m=>`<a href="${routePath(m[0])}" data-page="${m[0]}" class="${page===m[0]?'active':''}"><span class="nav-icon">${navIcon(m[0])}</span>${m[1]}</a>`).join('');
       nav.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setSidebarOpen(false);navigate(a.dataset.page);}));
@@ -1464,11 +1483,16 @@
         let result;
         if (page==='overview') result = await loadOverview();
         else if (page==='classes') result = await loadClasses();
+        else if (page==='students') result = await loadTeacherStudents();
+        else if (page==='materials') result = await loadTeacherMaterials();
+        else if (page==='activities') result = await loadTeacherActivities();
+        else if (page==='evaluations') result = await loadTeacherEvaluations();
+        else if (page==='notifications') result = await loadTeacherNotifications();
         else if (page==='lessons') result = await loadLessons();
         else if (page==='users') result = await loadUsers();
         else if (page==='sitecontent') result = await loadSiteContentEditor();
         else if (page==='teachers') result = await loadTeacherManager();
-        else if (page==='profile') result = loadProfile();
+        else if (page==='profile') result = currentRole==='pengajar' ? await loadTeacherProfile() : loadProfile();
         else result = `<div class="app-alert">Halaman tidak ditemukan.</div>`;
         content.innerHTML = `<div class="page-heading"><div><h2>${page==='overview'?'Ringkasan Aktivitas':safeText(document.getElementById('dashboardTitle').textContent)}</h2><p>Informasi terbaru dari platform Ayo Belajar Tajwid.</p></div>${page!=='overview'?'<button class="app-button secondary" data-page="overview">Kembali ke ringkasan</button>':''}</div>${result}`;
         content.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();navigate(a.dataset.page);}));
