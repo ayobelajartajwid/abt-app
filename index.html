@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/">
   <meta name="theme-color" content="#075B78">
   <link rel="icon" type="image/png" sizes="any" href="./AYO%20BELAJAR%20TAJWID.png">
   <link rel="apple-touch-icon" href="./AYO%20BELAJAR%20TAJWID.png">
@@ -543,8 +544,9 @@
 @media(max-width:1050px){.class-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.class-dashboard-grid{grid-template-columns:1fr}.class-dashboard-thumb,.class-dashboard-thumb-placeholder{max-width:190px}.class-manager-toolbar{align-items:stretch}.class-manager-toolbar>.app-button{width:100%}}
 </style>
-<meta name="abt-version" content="V19-PENGAJAR">
+<meta name="abt-version" content="V20-INTEGRASI">
 <link rel="stylesheet" href="./teacher-portal.css">
+<link rel="stylesheet" href="./integration-portal.css">
 </head>
 <body>
   <div id="abtLoading" aria-live="polite"><div class="abt-spinner"></div><span>Memuat Ayo Belajar Tajwid...</span></div>
@@ -677,6 +679,10 @@
               <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
               <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"/></svg>
             </button>
+            <button class="topbar-icon-btn abt-v20-bell" id="globalNotificationBell" type="button" aria-label="Buka notifikasi" title="Notifikasi">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+              <span class="abt-v20-bell-count" id="globalNotificationCount" hidden>0</span>
+            </button>
             <button class="topbar-profile" id="topbarProfile" type="button" title="Buka profil">
               <span class="app-avatar" id="userAvatar">A</span>
               <span class="app-user-text"><strong id="dashboardName">Pengguna</strong><span id="dashboardRole">Peserta</span></span>
@@ -726,6 +732,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./teacher-portal.js"></script>
+  <script src="./integration-portal.js"></script>
   <script>
     // Konfigurasi frontend Supabase. Publishable key boleh berada di frontend;
     // jangan pernah menaruh service_role/secret key di file ini.
@@ -966,22 +973,24 @@
 
     const roleMenus = {
       super_admin: [
-        ['overview','Ringkasan','▦'], ['classes','Manajemen Kelas','▤'],
-        ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['teachers','Manajemen Pengajar','♟'], ['sitecontent','Editor Landing Page','✦'], ['profile','Profil Saya','◎']
+        ['overview','Ringkasan','+'], ['classes','Manajemen Kelas','K'], ['lessons','Materi Pembelajaran','M'],
+        ['users','Data Pengguna','P'], ['teachers','Manajemen Pengajar','G'], ['finance','Tarif, Laporan & Tagihan','Rp'],
+        ['notifications','Notifikasi','N'], ['sitecontent','Editor Landing Page','E'], ['profile','Profil Saya','A']
       ],
       admin: [
-        ['overview','Ringkasan','▦'], ['classes','Manajemen Kelas','▤'],
-        ['lessons','Materi Pembelajaran','▣'], ['users','Data Pengguna','♙'], ['profile','Profil Saya','◎']
+        ['overview','Ringkasan','+'], ['classes','Manajemen Kelas','K'], ['lessons','Materi Pembelajaran','M'],
+        ['users','Data Pengguna','P'], ['finance','Tarif, Laporan & Tagihan','Rp'], ['notifications','Notifikasi','N'], ['profile','Profil Saya','A']
       ],
       pengajar: [
-        ['overview','Dashboard','▦'], ['classes','Kelas Saya','▤'],
-        ['students','Peserta Kelas','♙'], ['materials','Materi Pembelajaran','▣'],
-        ['activities','Aktivitas & Jadwal','◷'], ['evaluations','Evaluasi','✓'],
-        ['lessons','Materi Inti','▤'], ['notifications','Notifikasi','●'], ['profile','Profil Saya','◎']
+        ['overview','Dashboard','+'], ['classes','Kelas Saya','K'], ['students','Peserta Kelas','P'],
+        ['private','Permintaan Privat','V'], ['materials','Materi Pembelajaran','M'], ['activities','Aktivitas & Jadwal','J'],
+        ['classlinks','Akses & Kontak Kelas','L'], ['sessions','Catatan Pertemuan','C'], ['evaluations','Evaluasi','E'],
+        ['payroll','Laporan Honor','Rp'], ['lessons','Materi Inti','I'], ['notifications','Notifikasi','N'], ['profile','Profil Saya','A']
       ],
       peserta: [
-        ['overview','Ringkasan','▦'], ['classes','Kelas Saya','▤'],
-        ['lessons','Materi Belajar','▣'], ['profile','Profil Saya','◎']
+        ['overview','Ringkasan','+'], ['classes','Kelas Saya','K'], ['follow','Ikuti Kelas','+'], ['lessons','Materi Belajar','M'],
+        ['assignments','Tugas & Latihan','T'], ['schedule','Jadwal & Pengingat','J'], ['invoices','Tagihan','Rp'],
+        ['notifications','Notifikasi','N'], ['profile','Profil Saya','A']
       ]
     };
 
@@ -1023,6 +1032,7 @@
     }
     async function loadOverview() {
       if (currentRole === 'pengajar') return loadTeacherOverview();
+      if (currentRole === 'peserta') return loadStudentOverview();
       const isManager = ['super_admin','admin'].includes(currentRole);
       const [classes, lessons, enrollments, users] = await Promise.all([
         countRows('classes', q => currentRole === 'pengajar' ? q.eq('instructor_id', currentUser.id) : q),
@@ -1261,6 +1271,7 @@
         feedback.textContent='Profil berhasil diperbarui.';
         document.getElementById('dashboardName').textContent=currentProfile.full_name;
         document.getElementById('userAvatar').textContent=currentProfile.full_name.trim().charAt(0).toUpperCase();
+        await refreshTopbarAvatar();
         return;
       }
       if(event.target?.id!=='changePasswordForm') return;
@@ -1304,6 +1315,10 @@
         activities:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
         evaluations:'<path d="m5 12 4 4L19 6"/><path d="M4 3h16v18H4z"/>',
         notifications:'<path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
+        follow:'<path d="M12 5v14M5 12h14"/>', private:'<path d="M12 3l8 5v8l-8 5-8-5V8z"/><path d="M12 8v8m-4-4h8"/>',
+        classlinks:'<path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.1-1.1"/>',
+        sessions:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', payroll:'<path d="M12 2v20m5-16H9a3 3 0 1 0 0 6h6a3 3 0 1 1 0 6H6"/>',
+        schedule:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>', invoices:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>', assignments:'<path d="M5 3h14v18H5z"/><path d="m8 12 2.5 2.5L16 9"/>', finance:'<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M8 9h.01M12 9h.01M16 9h.01"/>',
         profile:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="9" r="3"/><path d="M6.8 18a5.5 5.5 0 0 1 10.4 0"/>',
         sitecontent:'<path d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'
       };
@@ -1482,17 +1497,26 @@
       try {
         let result;
         if (page==='overview') result = await loadOverview();
-        else if (page==='classes') result = await loadClasses();
+        else if (page==='classes') result = currentRole==='peserta' ? await loadStudentClasses() : await loadClasses();
+        else if (page==='follow') result = await loadStudentFollowClasses();
+        else if (page==='schedule') result = await loadStudentSchedule();
+        else if (page==='invoices') result = await loadStudentInvoices();
+        else if (page==='assignments') result = await loadStudentAssignments();
+        else if (page==='private') result = await loadTeacherPrivateRequests();
+        else if (page==='classlinks') result = await loadTeacherClassLinks();
+        else if (page==='sessions') result = await loadTeacherSessions();
+        else if (page==='payroll') result = await loadTeacherPayroll();
+        else if (page==='finance') result = await loadAdminFinance();
         else if (page==='students') result = await loadTeacherStudents();
         else if (page==='materials') result = await loadTeacherMaterials();
         else if (page==='activities') result = await loadTeacherActivities();
         else if (page==='evaluations') result = await loadTeacherEvaluations();
-        else if (page==='notifications') result = await loadTeacherNotifications();
-        else if (page==='lessons') result = await loadLessons();
+        else if (page==='notifications') result = await loadIntegratedNotifications();
+        else if (page==='lessons') result = currentRole==='peserta' ? await loadStudentLearningMaterials() : await loadLessons();
         else if (page==='users') result = await loadUsers();
         else if (page==='sitecontent') result = await loadSiteContentEditor();
         else if (page==='teachers') result = await loadTeacherManager();
-        else if (page==='profile') result = currentRole==='pengajar' ? await loadTeacherProfile() : loadProfile();
+        else if (page==='profile') result = await loadTeacherProfile();
         else result = `<div class="app-alert">Halaman tidak ditemukan.</div>`;
         content.innerHTML = `<div class="page-heading"><div><h2>${page==='overview'?'Ringkasan Aktivitas':safeText(document.getElementById('dashboardTitle').textContent)}</h2><p>Informasi terbaru dari platform Ayo Belajar Tajwid.</p></div>${page!=='overview'?'<button class="app-button secondary" data-page="overview">Kembali ke ringkasan</button>':''}</div>${result}`;
         content.querySelectorAll('[data-page]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();navigate(a.dataset.page);}));
@@ -1514,6 +1538,7 @@
         document.getElementById('dashboardName').textContent = profile.full_name || profile.username || user.email;
         document.getElementById('dashboardRole').textContent = roleConfig[currentRole].label;
         document.getElementById('userAvatar').textContent = (profile.full_name || profile.username || 'A').trim().charAt(0).toUpperCase();
+        refreshGlobalNotificationCount(); refreshTopbarAvatar();
         const roleSegment='/dashboard/'+currentRole;
         if(!location.pathname.startsWith(roleSegment))history.pushState({page:'overview'},'',roleSegment);
         navigate(parsePageFromPath(),true);

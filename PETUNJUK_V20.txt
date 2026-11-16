@@ -1,0 +1,55 @@
+AYO BELAJAR TAJWID — ABT V20 INTEGRASI LINTAS AKUN
+
+Paket ini memperluas paket V18/V19. Jalankan migrasi berurutan sebelum mencoba modul baru.
+
+ISI PAKET
+- index.html: aplikasi utama, memakai konfigurasi Supabase proyek yang sudah ada.
+- teacher-portal.js / teacher-portal.css: ruang kerja pengajar V19.
+- integration-portal.js / integration-portal.css: fitur lintas akun V20.
+- SQL_ABT_V19_PENGAJAR.sql: tabel dan akses dasar V19.
+- SQL_ABT_V20_INTEGRASI.sql: seleksi privat, sesi, honor, invoice, pengingat, notifikasi bersama, dan akses foto profil lintas peran.
+- AYO BELAJAR TAJWID.png: aset logo; path pada HTML tetap persis ./AYO%20BELAJAR%20TAJWID.png.
+- vercel.json: fallback rute dashboard ketika halaman di-refresh langsung.
+- 404.html: fallback rute dashboard untuk GitHub Pages.
+
+PEMASANGAN SUPABASE
+1. Buat cadangan proyek/database sebelum migrasi.
+2. Karena basis yang berjalan adalah V18, buka Supabase SQL Editor dan jalankan seluruh SQL_ABT_V19_PENGAJAR.sql terlebih dahulu.
+3. Setelah V19 berhasil, jalankan seluruh SQL_ABT_V20_INTEGRASI.sql.
+4. Jika SQL berhenti pada pemeriksaan awal, jangan lanjut memasang HTML. Pesan tersebut menyebut tabel, kolom, atau RLS yang tidak cocok dengan skema yang ditemukan. Periksa versi V18/V19 proyek.
+5. Jangan memasukkan service_role key ke HTML. Kunci publishable/anon yang sudah ada dipertahankan.
+
+PEMASANGAN GITHUB
+1. Unggah isi folder ini ke root situs GitHub Pages/Vercel.
+2. Ganti index.html dan teacher-portal.js/teacher-portal.css dengan berkas pada paket.
+3. Tambahkan integration-portal.js, integration-portal.css, kedua berkas SQL, dan pertahankan logo AYO BELAJAR TAJWID.png di root.
+4. Pastikan nama file dan path logo tidak berubah. Commit/push, lalu tunggu deployment selesai.
+5. Buka dashboard masing-masing peran. Coba refresh langsung pada URL menu seperti /dashboard/peserta/schedule atau /dashboard/pengajar/payroll; aplikasi memulihkan rute melalui sesi Supabase.
+6. Untuk GitHub Pages, unggah juga 404.html; fallback ini ditujukan untuk situs di domain root atau custom domain. Untuk deployment Vercel, vercel.json menangani rute dashboard.
+
+ALUR FITUR
+- Peserta: Kelas Saya hanya menampilkan pendaftaran miliknya. Ikuti Kelas menampilkan kelas berstatus published dan tombol daftar tetap memakai alur checkout V18.
+- Kelas reguler membuka materi/jadwal setelah status pendaftaran aktif/terverifikasi. Kelas Privat membuka akses belajar setelah pengajar memilih peserta. Status seleksi privat disimpan terpisah, sehingga payment_status V18 tidak ditimpa.
+- Pengajar: menerima notifikasi pendaftaran privat, memilih/mengambil peserta, mengatur link grup WA, WA pengajar, dan meeting per kelas, membuat jadwal, lalu mencatat sesi selesai/dibatalkan/tidak hadir.
+- Awal bulan, pengajar membuka Laporan Honor dan menekan tombol kirim untuk melaporkan sesi bulan sebelumnya. Pengiriman tidak berjalan otomatis di latar belakang. Laporan masuk ke menu Admin dan notifikasi Admin.
+- Admin menetapkan tarif honor per pengajar dan tarif tagihan per kelas (dua tarif yang berbeda), meninjau laporan, lalu menyetujui untuk menerbitkan invoice per peserta dan kelas. Admin menandai invoice lunas setelah memeriksa pembayaran melalui kanal pembayaran yang digunakan.
+- Alur checkout dan harga pendaftaran V18 tetap berjalan. Invoice per pertemuan V20 merupakan skema terpisah; isi tarif tagihan kelas hanya untuk kelas yang memang menggunakan tagihan per pertemuan agar tidak menagih biaya yang sama dua kali.
+- Foto profil dapat dikelola sendiri oleh peserta, pengajar, dan Admin. Foto disimpan pada bucket privat; unggahan menerima JPG/PNG/WebP maksimal 5 MB.
+- Notifikasi Admin/pengajar, perubahan status pendaftaran, jadwal, tugas, tinjauan honor, serta invoice masuk ke pusat notifikasi. Badge diperbarui berkala saat dashboard terbuka.
+- Pengingat jadwal diproses saat peserta membuka halaman Jadwal atau Notifikasi setelah waktu pengingat. Ini adalah notifikasi dalam aplikasi; belum ada push notification/email atau scheduler server.
+
+BATAS AKSES
+- RLS V19/V20 membatasi pengajar pada kelas yang instructor_id-nya sama dengan akun tersebut.
+- Pengajar tidak dapat membuka menu Admin, mengubah kelas platform, menetapkan tarif, atau melihat data kelas pengajar lain.
+- Peserta membaca materi, jadwal, hasil, sesi, link kelas, invoice, dan notifikasi miliknya/kelas aktif yang terdaftar.
+- Fungsi kirim notifikasi dan tinjau invoice/laporan memeriksa role di sisi Supabase, bukan hanya menyembunyikan tombol pada halaman.
+
+CATATAN PENTING
+- Pastikan Admin mengisi tarif honor pengajar dan tarif tagihan untuk kelas yang akan ditagihkan. Persetujuan laporan akan gagal dengan pesan jelas jika tarif kelas belum diatur.
+- Invoice tidak memproses pembayaran otomatis. Status lunas hanya berubah setelah Admin menandai pembayaran.
+- Pengingat bukan notifikasi real-time ke perangkat; aplikasi membuat notifikasi in-app ketika peserta kembali membuka dashboard.
+- Migrasi V20 menambah tabel/policy/trigger dan memperketat akses materi inti, konten pengajar, file materi privat, seleksi peserta, sesi, foto profil, invoice, dan notifikasi. Jalankan pada database yang benar dan simpan cadangan.
+
+PEMERIKSAAN PAKET
+- Sintaks JavaScript untuk kedua berkas eksternal dan skrip inline diperiksa sebelum paket dibuat.
+- Pemeriksaan langsung terhadap database Supabase dan akun produksi tidak dilakukan dari paket ini. Setelah migrasi, uji dengan satu akun per peran dan dua kelas dengan pengajar berbeda sebelum dipakai luas.

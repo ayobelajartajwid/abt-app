@@ -1,0 +1,58 @@
+/* ABT V20 integration layer: inherits the V18/V19 design tokens and components. */
+.abt-v20-bell{position:relative;flex:none}
+.abt-v20-bell-count{position:absolute;right:-4px;top:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;display:grid;place-items:center;background:#c83b43;color:#fff;font-size:10px;font-weight:800;line-height:1}
+.abt-v20-bell-count[hidden]{display:none}
+.app-avatar img{width:100%;height:100%;border-radius:inherit;object-fit:cover;display:block}
+.abt-v20-section-head,.abt-v20-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.abt-v20-section-head h3,.abt-v20-card-head h3{margin:0 0 4px}
+.abt-v20-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px;margin-top:14px}
+.abt-v20-class-card,.abt-v20-record,.abt-v20-invoice-card{min-width:0}
+.abt-v20-class-card h3,.abt-v20-record h3{margin:8px 0}
+.abt-v20-card-facts{display:flex;gap:9px 14px;flex-wrap:wrap;align-items:center;margin:12px 0;color:#617887;font-size:13px}
+.abt-v20-card-facts strong{color:#075b78}
+.abt-v20-link-row,.abt-v20-inline-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.abt-v20-link-row .app-button,.abt-v20-inline-actions .app-button{font-size:12px;padding:8px 12px}
+.abt-v20-muted{font-size:12px;color:#70858e}
+.abt-v20-status{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;border-radius:999px;background:#f1f4f5;color:#556b74;font-size:11px;font-weight:750;white-space:nowrap}
+.abt-v20-status.is-active{background:#e5f7ed;color:#167448}
+.abt-v20-note{margin:12px 0;padding:13px 15px;border:1px solid #efcf8d;border-radius:12px;background:#fff9eb;color:#795419;font-size:13px;overflow-wrap:anywhere}
+.abt-v20-note code{font-size:12px}
+.abt-v20-invoice-total{font-size:24px;font-weight:850;color:#075b78;margin:10px 0}
+.abt-v20-grade{padding:10px 12px;margin:10px 0;border-radius:12px;background:#eaf7f0;color:#165f3e}
+.abt-v20-grade p{margin:4px 0 0}
+.abt-v20-student-answer{padding:9px 10px;margin:8px 0;border-radius:10px;background:#f3f8f9;max-width:360px;overflow-wrap:anywhere}
+.abt-v20-student-answer p{margin:5px 0;white-space:pre-wrap}
+.abt-v20-student-answer small{display:block;margin-top:5px;color:#71858d}
+.abt-v20-payroll-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+.abt-v20-payroll-summary>div{padding:14px;border:1px solid #dce8ec;border-radius:14px;background:#f7fafb;min-width:0}
+.abt-v20-payroll-summary small,.abt-v20-payroll-summary strong{display:block}
+.abt-v20-payroll-summary small{color:#617887;font-size:11px}
+.abt-v20-payroll-summary strong{margin-top:5px;color:#075b78;font-size:17px;overflow-wrap:anywhere}
+.abt-v20-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;margin-top:14px}
+.abt-v20-form-grid label,.abt-v20-link-form label,.abt-v20-announcement-form label,.abt-v20-submission-form label,.abt-v20-rate-form label{display:grid;gap:6px;color:#385661;font-size:12px;font-weight:700;min-width:0}
+.abt-v20-form-grid input,.abt-v20-form-grid select,.abt-v20-form-grid textarea,.abt-v20-link-form input,.abt-v20-announcement-form input,.abt-v20-announcement-form select,.abt-v20-announcement-form textarea,.abt-v20-submission-form input,.abt-v20-submission-form textarea,.abt-v20-rate-form input,.abt-v20-reminder-form select{width:100%;min-width:0;border:1px solid #d4e1e5;border-radius:10px;padding:10px 11px;background:#fff;color:#193e49;font:inherit;font-size:13px}
+.abt-v20-span-all{grid-column:1/-1}
+.abt-v20-feedback{display:block;min-height:18px;color:#087f9b;font-size:12px;overflow-wrap:anywhere}
+.abt-v20-rate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px;margin-top:14px}
+.abt-v20-rate-form{padding:12px;border:1px solid #e2ebee;border-radius:13px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:8px}
+.abt-v20-rate-form .abt-v20-feedback{grid-column:1/-1}
+.abt-v20-input-money{display:flex;align-items:center;gap:5px}
+.abt-v20-input-money input{min-width:0}
+.abt-v20-announcement-form{display:grid;gap:11px;margin-bottom:14px}
+.abt-v20-notification-list{display:grid;gap:10px;margin-top:14px}
+.abt-v20-notification{padding:14px;border:1px solid #e1eaed;border-radius:14px;background:#fff;overflow-wrap:anywhere}
+.abt-v20-notification.is-unread{border-color:#a6dbe3;background:#f5fcfd}
+.abt-v20-notification h3{margin:8px 0 4px;font-size:16px}
+.abt-v20-notification p{margin:0 0 8px;color:#506a74}
+.abt-v20-notification-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#71858d}
+.abt-v20-notification-meta time{font-size:11px}
+.abt-v20-reminder-form{display:flex;gap:6px;min-width:190px}
+.abt-v20-reminder-form .app-button{white-space:nowrap}
+.theme-dark .abt-v20-payroll-summary>div,.theme-dark .abt-v20-notification,.theme-dark .abt-v20-rate-form{background:#112a32;border-color:#294650}
+.theme-dark .abt-v20-notification.is-unread{background:#13343c;border-color:#2d6874}
+.theme-dark .abt-v20-student-answer{background:#10242b}
+.theme-dark .abt-v20-payroll-summary strong,.theme-dark .abt-v20-card-facts strong{color:#78d1dc}
+.theme-dark .abt-v20-payroll-summary small,.theme-dark .abt-v20-notification p,.theme-dark .abt-v20-muted{color:#a8bdc3}
+.theme-dark .abt-v20-form-grid input,.theme-dark .abt-v20-form-grid select,.theme-dark .abt-v20-form-grid textarea,.theme-dark .abt-v20-link-form input,.theme-dark .abt-v20-announcement-form input,.theme-dark .abt-v20-announcement-form select,.theme-dark .abt-v20-announcement-form textarea,.theme-dark .abt-v20-submission-form input,.theme-dark .abt-v20-submission-form textarea,.theme-dark .abt-v20-rate-form input,.theme-dark .abt-v20-reminder-form select{background:#10242b;color:#e5f2f4;border-color:#34525b}
+@media(max-width:900px){.abt-v20-payroll-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.abt-v20-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.abt-v20-form-grid{grid-template-columns:1fr}.abt-v20-span-all{grid-column:auto}.abt-v20-payroll-summary{grid-template-columns:1fr 1fr}.abt-v20-section-head{align-items:stretch}.abt-v20-rate-form{grid-template-columns:1fr}.abt-v20-rate-form .abt-v20-feedback{grid-column:auto}.abt-v20-reminder-form{min-width:0;flex-wrap:wrap}.abt-v20-reminder-form select{flex:1}.abt-v20-card-head{align-items:center}}

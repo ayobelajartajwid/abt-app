@@ -427,23 +427,31 @@ async function abtTeacherShowResults(id) {
   const panel = document.getElementById('abtTeacherResultsPanel');
   if (!panel) return;
   panel.innerHTML = '<div class="panel-card"><p>Memuat peserta dan nilai…</p></div>';
-  const [enrollmentResult, resultQuery] = await Promise.all([
+  const [enrollmentResult, resultQuery, submissionQuery] = await Promise.all([
     abtTeacherLoadEnrollments([evaluation.class_id]),
-    supabaseClient.from('teacher_evaluation_results').select('id,student_id,score,feedback,graded_at').eq('evaluation_id', evaluation.id)
+    supabaseClient.from('teacher_evaluation_results').select('id,student_id,score,feedback,graded_at').eq('evaluation_id', evaluation.id),
+    supabaseClient.from('teacher_evaluation_submissions').select('student_id,response_text,response_url,submitted_at').eq('evaluation_id', evaluation.id)
   ]);
-  if (enrollmentResult.error || resultQuery.error) {
-    panel.innerHTML = `<div class="app-alert">${safeText((enrollmentResult.error || resultQuery.error).message)}</div>`;
+  if (enrollmentResult.error || resultQuery.error || submissionQuery.error) {
+    const error = enrollmentResult.error || resultQuery.error || submissionQuery.error;
+    panel.innerHTML = `<div class="app-alert">${safeText(error.message)}${submissionQuery.error ? ' · Pastikan migrasi V20 sudah dijalankan untuk melihat jawaban peserta.' : ''}</div>`;
     return;
   }
   const enrollments = enrollmentResult.data || [];
   const { map: profiles, error: profileError } = await abtTeacherProfileMap(enrollments.map(x => x.student_id));
   if (profileError) { panel.innerHTML = `<div class="app-alert">Nama peserta belum dapat dimuat: ${safeText(profileError.message)}</div>`; return; }
   const results = Object.fromEntries((resultQuery.data || []).map(x => [x.student_id, x]));
+  const submissions = Object.fromEntries((submissionQuery.data || []).map(x => [x.student_id, x]));
   const rows = enrollments.map(enrollment => {
     const studentId = enrollment.student_id;
     const profile = profiles[studentId] || {};
     const result = results[studentId] || {};
-    return `<tr><td>${safeText(profile.full_name || profile.username || 'Peserta')}<br><small>${safeText(profile.username || '')}</small></td><td><span class="status-pill">${safeText(enrollment.payment_status || 'Terdaftar')}</span></td><td><form class="teacher-score-form" data-evaluation-id="${safeText(evaluation.id)}" data-student-id="${safeText(studentId)}"><input aria-label="Nilai ${safeText(profile.full_name || 'peserta')}" name="score" type="number" min="0" max="${safeText(evaluation.max_score)}" step="0.1" value="${result.score == null ? '' : safeText(result.score)}" placeholder="0–${safeText(evaluation.max_score)}"><textarea aria-label="Umpan balik untuk ${safeText(profile.full_name || 'peserta')}" name="feedback" maxlength="1500" rows="2" placeholder="Umpan balik">${safeText(result.feedback || '')}</textarea><button class="app-button secondary" type="submit">Simpan Nilai</button><span class="teacher-feedback" role="status"></span></form></td></tr>`;
+    const submission = submissions[studentId] || {};
+    const submissionUrl = abtTeacherSafeHttpUrl(submission.response_url);
+    const submissionView = submission.response_text || submissionUrl
+      ? `<div class="abt-v20-student-answer"><strong>Jawaban peserta</strong>${submission.response_text ? `<p>${safeText(submission.response_text)}</p>` : ''}${submissionUrl ? `<a href="${safeText(submissionUrl)}" target="_blank" rel="noopener noreferrer">Buka tautan jawaban</a>` : ''}<small>Dikirim ${safeText(abtTeacherDate(submission.submitted_at, true))}</small></div>`
+      : '<span class="teacher-muted">Belum ada jawaban</span>';
+    return `<tr><td>${safeText(profile.full_name || profile.username || 'Peserta')}<br><small>${safeText(profile.username || '')}</small></td><td><span class="status-pill">${safeText(enrollment.payment_status || 'Terdaftar')}</span></td><td>${submissionView}<form class="teacher-score-form" data-evaluation-id="${safeText(evaluation.id)}" data-student-id="${safeText(studentId)}"><input aria-label="Nilai ${safeText(profile.full_name || 'peserta')}" name="score" type="number" min="0" max="${safeText(evaluation.max_score)}" step="0.1" value="${result.score == null ? '' : safeText(result.score)}" placeholder="0–${safeText(evaluation.max_score)}"><textarea aria-label="Umpan balik untuk ${safeText(profile.full_name || 'peserta')}" name="feedback" maxlength="1500" rows="2" placeholder="Umpan balik">${safeText(result.feedback || '')}</textarea><button class="app-button secondary" type="submit">Simpan Nilai</button><span class="teacher-feedback" role="status"></span></form></td></tr>`;
   }).join('') || '<tr><td colspan="3">Belum ada peserta terdaftar pada kelas ini.</td></tr>';
   panel.innerHTML = `<section class="panel-card teacher-results-panel"><div class="teacher-section-heading"><div><h3>Peserta & Hasil: ${safeText(evaluation.title)}</h3><p class="panel-subtitle">Nilai maksimum ${safeText(evaluation.max_score)}. Data hanya berasal dari peserta kelas ini.</p></div><button class="app-button secondary" type="button" id="abtTeacherCloseResults">Tutup</button></div><div class="table-wrap"><table class="app-table"><thead><tr><th>Peserta</th><th>Status</th><th>Nilai & umpan balik</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
   panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -520,17 +528,17 @@ document.addEventListener('click', event => {
 });
 
 async function loadTeacherProfile() {
-  if (!abtTeacherAllowed()) return abtTeacherDenied();
+  if (!currentUser?.id) return '<div class="app-alert">Silakan masuk untuk mengelola profil.</div>';
   const { data: photo, error } = await supabaseClient.from('teacher_profile_photos')
     .select('storage_path').eq('profile_id', currentUser.id).maybeSingle();
-  if (error) return loadProfile() + abtTeacherSchemaNotice(error);
+  if (error) return loadProfile() + `<div class="abt-v20-note"><strong>Foto profil belum tersambung.</strong> Jalankan migrasi V20 untuk mengaktifkan foto bagi semua peran. ${safeText(error.message)}</div>`;
   const url = photo?.storage_path ? await abtTeacherSignedUrl(ABT_TEACHER_AVATAR_BUCKET, photo.storage_path) : '';
-  const avatar = url ? `<img class="teacher-avatar-preview" src="${safeText(url)}" alt="Foto profil pengajar">` : `<div class="teacher-avatar-preview teacher-avatar-fallback">${safeText((currentProfile?.full_name || 'P').trim().charAt(0).toUpperCase())}</div>`;
+  const avatar = url ? `<img class="teacher-avatar-preview" src="${safeText(url)}" alt="Foto profil">` : `<div class="teacher-avatar-preview teacher-avatar-fallback">${safeText((currentProfile?.full_name || 'P').trim().charAt(0).toUpperCase())}</div>`;
   return `<section class="panel-card teacher-avatar-card"><div class="teacher-avatar-layout">${avatar}<div><h3>Foto Profil</h3><p class="panel-subtitle">Unggah foto JPG, PNG, atau WebP. Maksimum 5 MB. Foto hanya dapat dikelola oleh pemilik akun.</p><form id="abtTeacherAvatarForm"><input id="abtTeacherAvatarFile" type="file" accept="image/jpeg,image/png,image/webp" required><div class="teacher-form-actions"><button class="app-button" type="submit">Simpan Foto</button><span class="teacher-feedback" id="abtTeacherAvatarFeedback" role="status"></span></div></form></div></div></section>${loadProfile()}`;
 }
 
 async function abtTeacherSaveAvatar(event) {
-  if (!abtTeacherAllowed()) return;
+  if (!currentUser?.id) return;
   event.preventDefault();
   const form = event.currentTarget;
   const file = document.getElementById('abtTeacherAvatarFile').files[0];
@@ -551,6 +559,7 @@ async function abtTeacherSaveAvatar(event) {
     return;
   }
   if (old?.storage_path) await supabaseClient.storage.from(ABT_TEACHER_AVATAR_BUCKET).remove([old.storage_path]);
+  await refreshTopbarAvatar();
   await renderDashboardPage('profile');
 }
 
