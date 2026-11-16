@@ -1,4 +1,6 @@
-AYO BELAJAR TAJWID — ABT V20 INTEGRASI LINTAS AKUN
+PEMBERITAHUAN: untuk fitur kelas Privat kelompok dan tagihan V21, ikuti PETUNJUK_V21.txt serta jalankan SQL_ABT_V21_PRIVAT_TAGIHAN.sql setelah migrasi V20.
+
+AYO BELAJAR TAJWID â€” ABT V20 INTEGRASI LINTAS AKUN
 
 Paket ini memperluas paket V18/V19. Jalankan migrasi berurutan sebelum mencoba modul baru.
 
@@ -53,3 +55,4 @@ CATATAN PENTING
 PEMERIKSAAN PAKET
 - Sintaks JavaScript untuk kedua berkas eksternal dan skrip inline diperiksa sebelum paket dibuat.
 - Pemeriksaan langsung terhadap database Supabase dan akun produksi tidak dilakukan dari paket ini. Setelah migrasi, uji dengan satu akun per peran dan dua kelas dengan pengajar berbeda sebelum dipakai luas.
+
