@@ -714,7 +714,7 @@
         <div class="field"><label for="registerPhone">Nomor WhatsApp *</label><input id="registerPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxxxx" required></div>
         <div class="field"><label for="registerBirthYear">Tahun Kelahiran *</label><select id="registerBirthYear" required><option value="">Pilih tahun kelahiran</option></select></div>
         <div class="field"><label for="registerAge">Usia saat ini</label><input id="registerAge" type="text" readonly placeholder="Terhitung otomatis"></div>
-        <button class="btn btn-primary" type="submit">Buat Akun Peserta →</button>
+        <button class="btn btn-primary" type="submit">Buat Akun →</button>
       </form>
       <div class="notice" id="loginNotice" role="status" aria-live="polite"></div>
       
@@ -1431,14 +1431,14 @@
       if(currentRole!=='super_admin')return '<div class="app-alert">Hanya Super Admin yang dapat membuat undangan pengajar.</div>';
       const {data,error}=await supabaseClient.from('teacher_invites').select('id,email,full_name,created_at,expires_at,redeemed_at').order('created_at',{ascending:false}).limit(50);
       const rows=error?`<tr><td colspan="4">${safeText(error.message)} — pastikan SQL ABT V10 sudah dijalankan.</td></tr>`:(data||[]).map(x=>`<tr><td>${safeText(x.full_name)}</td><td>${safeText(x.email)}</td><td>${x.redeemed_at?'Sudah digunakan':'Menunggu aktivasi'}</td><td>${new Date(x.expires_at).toLocaleDateString('id-ID')}</td></tr>`).join('')||'<tr><td colspan="4">Belum ada undangan.</td></tr>';
-      return `<section class="panel-card"><h3>Buat Akun Pengajar</h3><p class="panel-subtitle">Buat undangan khusus untuk guru. Demi menjaga keamanan, Super Admin tidak membuat atau mengetahui password guru. Guru menyelesaikan aktivasi sendiri dengan email, kode undangan, dan password pribadi.</p><form id="teacherInviteForm" class="teacher-form"><div class="class-form-grid"><div class="field"><label>Nama lengkap pengajar *</label><input id="inviteTeacherName" required maxlength="120"></div><div class="field"><label>Email pengajar *</label><input id="inviteTeacherEmail" type="email" required></div></div><button class="app-button" type="submit">＋ Buat Undangan Pengajar</button><span id="teacherInviteFeedback" class="form-feedback"></span></form><div id="teacherInviteResult"></div></section><section class="panel-card" style="margin-top:16px"><h3>Daftar Undangan Pengajar</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Email</th><th>Status</th><th>Kedaluwarsa</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+      return `<section class="panel-card"><h3>Buat Akun Pengajar</h3><p class="panel-subtitle">Buat undangan khusus untuk guru. Email bersifat opsional; aktivasi akun pengajar menggunakan kode undangan yang valid dan belum digunakan. Guru membuat password sendiri.</p><form id="teacherInviteForm" class="teacher-form"><div class="class-form-grid"><div class="field"><label>Nama lengkap pengajar *</label><input id="inviteTeacherName" required maxlength="120"></div><div class="field"><label>Email pengajar (opsional)</label><input id="inviteTeacherEmail" type="email" placeholder="Boleh dikosongkan"></div></div><button class="app-button" type="submit">＋ Buat Undangan Pengajar</button><span id="teacherInviteFeedback" class="form-feedback"></span></form><div id="teacherInviteResult"></div></section><section class="panel-card" style="margin-top:16px"><h3>Daftar Undangan Pengajar</h3><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Email</th><th>Status</th><th>Kedaluwarsa</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
     }
     document.addEventListener('submit',async event=>{
       if(event.target?.id!=='teacherInviteForm')return;event.preventDefault();const f=event.target;const fb=document.getElementById('teacherInviteFeedback');fb.textContent='Membuat undangan...';
-      const {data,error}=await supabaseClient.rpc('create_teacher_invite',{p_email:document.getElementById('inviteTeacherEmail').value.trim().toLowerCase(),p_full_name:document.getElementById('inviteTeacherName').value.trim()});
+      const {data,error}=await supabaseClient.rpc('create_teacher_invite',{p_email:document.getElementById('inviteTeacherEmail').value.trim().toLowerCase()||null,p_full_name:document.getElementById('inviteTeacherName').value.trim()});
       if(error){fb.textContent='Gagal: '+error.message;return;}
       const code=data?.invite_code||data?.[0]?.invite_code;if(!code){fb.textContent='Undangan dibuat tetapi kode tidak diterima. Periksa fungsi SQL.';return;}
-      document.getElementById('teacherInviteResult').innerHTML=`<div class="teacher-code"><strong>Undangan berhasil dibuat</strong><p>Kirim kode ini kepada pengajar. Kode hanya ditampilkan sekarang.</p><code id="teacherInviteCodeValue">${safeText(code)}</code><p>Email: ${safeText(document.getElementById('inviteTeacherEmail').value.trim())}</p><button class="app-button secondary" type="button" id="copyTeacherInvite">Salin Kode</button><p class="builder-help">Pengajar membuka website → Daftar → mengisi data → memasukkan kode undangan ini → membuat password sendiri.</p></div>`;fb.textContent='';f.reset();
+      document.getElementById('teacherInviteResult').innerHTML=`<div class="teacher-code"><strong>Undangan berhasil dibuat</strong><p>Kirim kode ini kepada pengajar. Kode hanya ditampilkan sekarang.</p><code id="teacherInviteCodeValue">${safeText(code)}</code><p>Email kontak: ${safeText(document.getElementById('inviteTeacherEmail').value.trim()||'Tidak dicantumkan')}</p><button class="app-button secondary" type="button" id="copyTeacherInvite">Salin Kode</button><p class="builder-help">Pengajar membuka website → Daftar → mengisi data → memasukkan kode undangan ini → membuat password sendiri.</p></div>`;fb.textContent='';f.reset();
     });
     document.addEventListener('click',async e=>{if(e.target?.id==='copyTeacherInvite'){await navigator.clipboard.writeText(document.getElementById('teacherInviteCodeValue').textContent);e.target.textContent='Tersalin';}});
     async function renderDashboardPage(page) {
@@ -1562,8 +1562,13 @@
           openAuth('login');
           showLoginMessage('Pendaftaran berhasil. Silakan login menggunakan username dan password.',false);
         }
-      }catch(error){showLoginMessage(error.message||'Pendaftaran belum berhasil.');}
-      finally{button.disabled=false;button.textContent='Buat Akun Peserta →';}
+      }catch(error){
+        const msg=error?.message||'Pendaftaran belum berhasil.';
+        if(msg.includes('Database error saving new user')){
+          showLoginMessage('Database menolak pembuatan profil. Jika menggunakan kode undangan, jalankan SQL perbaikan V17 di Supabase terlebih dahulu. Pastikan kode belum digunakan dan belum kedaluwarsa.');
+        }else{showLoginMessage(msg);}
+      }
+      finally{button.disabled=false;button.textContent='Buat Akun →';}
     });
 
     document.getElementById('logoutButton').addEventListener('click', async () => {
