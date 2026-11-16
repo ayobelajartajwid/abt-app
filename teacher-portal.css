@@ -1,0 +1,59 @@
+/* ABT V19 teacher workspace styles follow the existing dashboard palette. */
+.teacher-stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.teacher-dashboard-lower{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}
+.teacher-section-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
+.teacher-section-heading h3{margin:0 0 5px}
+.teacher-section-heading .panel-subtitle{margin:0}
+.teacher-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}
+.teacher-class-card{min-width:0;padding:17px!important}
+.teacher-class-card h3{margin:12px 0 7px;overflow-wrap:anywhere}
+.teacher-class-card p{font-size:13px;line-height:1.6;color:var(--muted,#718078);min-height:42px}
+.teacher-class-meta{font-size:12px;line-height:1.7;color:var(--muted,#718078);margin:10px 0}
+.teacher-class-card a,.teacher-file-link{color:var(--primary,#087f9b);font-weight:750;text-decoration:none}
+.teacher-class-card a:hover,.teacher-file-link:hover{text-decoration:underline}
+.teacher-form-card{border:1px solid var(--border,#dce8e8);background:var(--surface-soft,#f7faf9);border-radius:14px;padding:17px;margin:16px 0}
+.teacher-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.teacher-form-grid>label{display:block;min-width:0;font-size:12px;font-weight:750;color:#355568}
+.teacher-form-grid input:not([type=checkbox]),.teacher-form-grid select,.teacher-form-grid textarea,.teacher-score-form input,.teacher-score-form textarea{display:block;width:100%;min-height:42px;border:1px solid #dce8ec;border-radius:10px;padding:10px 11px;margin-top:6px;background:#fff;color:#243746;font:inherit;font-size:13px;box-sizing:border-box}
+.teacher-form-grid textarea,.teacher-score-form textarea{resize:vertical;min-height:82px}
+.teacher-form-grid input[type=file]{padding:8px;font-size:12px}
+.teacher-span-all{grid-column:1/-1}
+.teacher-check-label{display:flex!important;align-items:center;gap:8px}
+.teacher-check-label input{width:17px;height:17px;accent-color:#087f9b}
+.teacher-form-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:13px}
+.teacher-feedback{font-size:12px;color:#355568;overflow-wrap:anywhere}
+.teacher-help,.teacher-muted{font-size:12px;color:var(--muted,#718078);line-height:1.6}
+.teacher-record-list{display:grid;gap:11px;margin-top:16px}
+.teacher-record-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:15px;align-items:center;padding:15px;border:1px solid var(--border,#dce8e8);border-radius:13px;background:var(--surface,#fff);min-width:0}
+.teacher-record-card h4{font-size:15px;margin:9px 0 5px;overflow-wrap:anywhere}
+.teacher-record-card p{margin:0;color:var(--muted,#718078);font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.teacher-record-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.teacher-record-actions-column{flex-direction:column;align-items:stretch}
+.teacher-record-actions .app-button{white-space:nowrap}
+.app-button.danger{background:#fff1f0;color:#b42318;border:1px solid #ffc9c4}
+.teacher-count-badge{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:6px 11px;border-radius:20px;background:#e9f5f4;color:#075b78;font-size:12px;font-weight:750;white-space:nowrap}
+.teacher-score-form{display:grid;grid-template-columns:minmax(90px,140px) minmax(160px,1fr) auto;align-items:start;gap:7px;min-width:430px}
+.teacher-score-form input,.teacher-score-form textarea{margin:0;min-height:38px}
+.teacher-score-form textarea{min-height:38px}
+.teacher-results-panel{margin-top:16px;border:1px solid #b8d9d7}
+.teacher-notification-list{display:grid;gap:10px}
+.teacher-notification{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px;border:1px solid var(--border,#dce8e8);border-radius:13px;background:var(--surface,#fff)}
+.teacher-notification.is-unread{border-left:4px solid #087f9b;background:#f5fbfa}
+.teacher-notification h4{margin:8px 0 4px;font-size:15px}
+.teacher-notification p{margin:0;color:var(--muted,#718078);font-size:13px;line-height:1.6}
+.teacher-notification-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.teacher-notification-meta time{font-size:11px;color:var(--muted,#718078)}
+.teacher-avatar-card{margin-bottom:16px}
+.teacher-avatar-layout{display:flex;align-items:center;gap:18px}
+.teacher-avatar-preview{width:88px;height:88px;flex:0 0 88px;border-radius:50%;object-fit:cover;border:3px solid #d7ece8;background:#eaf5f3}
+.teacher-avatar-fallback{display:grid;place-items:center;color:#075b78;font-weight:800;font-size:32px}
+.teacher-avatar-layout h3{margin:0 0 5px}
+.teacher-avatar-layout .panel-subtitle{margin:0 0 10px}
+#appDashboard.theme-dark .teacher-form-card,#appDashboard.theme-dark .teacher-record-card,#appDashboard.theme-dark .teacher-notification{background:#10232d;border-color:#345563}
+#appDashboard.theme-dark .teacher-form-grid>label{color:#c9e2e6}
+#appDashboard.theme-dark .teacher-form-grid input:not([type=checkbox]),#appDashboard.theme-dark .teacher-form-grid select,#appDashboard.theme-dark .teacher-form-grid textarea,#appDashboard.theme-dark .teacher-score-form input,#appDashboard.theme-dark .teacher-score-form textarea{background:#10232d;border-color:#345563;color:#eaf5f7}
+#appDashboard.theme-dark .teacher-notification.is-unread{background:#132c35}
+#appDashboard.theme-dark .teacher-count-badge{background:#173741;color:#c9e2e6}
+@media(max-width:1050px){.teacher-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.teacher-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.teacher-dashboard-lower{grid-template-columns:1fr}.teacher-record-card{grid-template-columns:1fr}.teacher-record-actions{justify-content:flex-start}.teacher-record-actions-column{flex-direction:row;flex-wrap:wrap}.teacher-notification{align-items:flex-start;flex-direction:column}.teacher-score-form{min-width:0;grid-template-columns:1fr}.teacher-avatar-layout{align-items:flex-start}}
+@media(max-width:560px){.teacher-card-grid,.teacher-form-grid,.teacher-stats-grid{grid-template-columns:1fr}.teacher-span-all{grid-column:auto}.teacher-section-heading{align-items:flex-start;flex-direction:column}.teacher-avatar-layout{flex-direction:column}.teacher-record-actions .app-button{flex:1 1 auto}.teacher-form-actions .app-button{flex:1 1 auto}}
