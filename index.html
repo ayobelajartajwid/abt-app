@@ -471,7 +471,9 @@
 .course .course-top img{width:100%;height:100%;object-fit:cover;display:block}
 .course-detail-view{max-width:1080px;margin:36px auto;padding:0 22px 50px}
 .course-detail-card{background:#fff;border:1px solid #dce8ec;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(5,55,75,.08)}
-.course-detail-image{width:100%;aspect-ratio:4/5;max-height:560px;object-fit:cover;display:block;background:#edf4f4}
+.course-detail-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,210px));gap:14px;align-items:start;padding:22px 26px 0}
+.course-detail-gallery-item{width:100%;aspect-ratio:4/5;max-height:270px;object-fit:cover;display:block;background:#edf4f4;border:1px solid #dce8ec;border-radius:14px}
+@media(max-width:600px){.course-detail-gallery{grid-template-columns:repeat(2,minmax(0,1fr));padding:14px 14px 0;gap:10px}.course-detail-gallery-item{max-height:230px}}
 .course-detail-content{padding:clamp(22px,4vw,42px)}
 .course-detail-content h1{color:#075B78;margin:10px 0;font-size:clamp(25px,4vw,38px)}
 .course-detail-description{white-space:pre-line;color:#526875;line-height:1.85}
@@ -978,6 +980,8 @@
       document.querySelector('header.topbar').style.display = active ? 'none' : '';
       document.querySelector('body > main').style.display = active ? 'none' : '';
       document.querySelector('body > footer').style.display = active ? 'none' : '';
+      const publicFlow=document.getElementById('abtPublicFlow');
+      if(active && publicFlow) publicFlow.style.display='none';
     }
 
     async function countRows(table, queryBuilder) {
@@ -1140,11 +1144,11 @@
     }
     async function loadUsers() {
       if (!['super_admin','admin'].includes(currentRole)) return `<div class="app-alert">Anda tidak memiliki akses ke halaman ini.</div>`;
-      const {data,error} = await supabaseClient.from('profiles').select('id,full_name,role,created_at,username').order('created_at',{ascending:false}).limit(100);
+      const {data,error} = await supabaseClient.from('profiles').select('id,full_name,role,created_at,username,contact_email').order('created_at',{ascending:false}).limit(100);
       if (error) return `<div class="app-alert">Data pengguna belum dapat dimuat: ${safeText(error.message)}</div>`;
       if (!data?.length) return `<div class="panel-card empty-state">Belum ada data pengguna.</div>`;
       const actions=currentRole==='super_admin';
-      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Username</th><th>Peran</th><th>Bergabung</th>${actions?'<th>Aksi</th>':''}</tr></thead><tbody>${data.map(u=>`<tr><td><strong>${safeText(u.full_name || 'Tanpa nama')}</strong></td><td>${safeText(u.username||'—')}</td><td>${safeText(roleConfig[u.role]?.label || u.role)}</td><td>${u.created_at?new Date(u.created_at).toLocaleDateString('id-ID'):'—'}</td>${actions?`<td><div class="class-form-actions"><button type="button" class="app-button secondary" data-edit-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||'')}">Edit</button><button type="button" class="app-button" style="background:#fff0f0;color:#b42318;border:1px solid #f3caca" data-delete-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||u.username||'akun ini')}">Hapus</button></div></td>`:''}</tr>`).join('')}</tbody></table></div><p class="panel-subtitle" style="margin-top:12px">Super Admin dapat mengubah nama lengkap atau menghapus akun secara permanen.</p></div>`;
+      return `<div class="panel-card"><div class="table-wrap"><table class="app-table"><thead><tr><th>Nama</th><th>Username</th><th>Email</th><th>Peran</th><th>Bergabung</th>${actions?'<th>Aksi</th>':''}</tr></thead><tbody>${data.map(u=>`<tr><td><strong>${safeText(u.full_name || 'Tanpa nama')}</strong></td><td>${safeText(u.username||'—')}</td><td>${safeText(u.contact_email||'—')}</td><td>${safeText(roleConfig[u.role]?.label || u.role)}</td><td>${u.created_at?new Date(u.created_at).toLocaleDateString('id-ID'):'—'}</td>${actions?`<td><div class="class-form-actions"><button type="button" class="app-button secondary" data-edit-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||'')}">Edit</button><button type="button" class="app-button" style="background:#fff0f0;color:#b42318;border:1px solid #f3caca" data-delete-user="${safeText(u.id)}" data-user-name="${safeText(u.full_name||u.username||'akun ini')}">Hapus</button></div></td>`:''}</tr>`).join('')}</tbody></table></div><p class="panel-subtitle" style="margin-top:12px">Super Admin dapat mengubah nama lengkap atau menghapus akun secara permanen.</p></div>`;
     }
     function loadProfile() {
       const p=currentProfile||{};
@@ -1271,8 +1275,8 @@
         document.querySelector('body > footer').style.display='none';
         const mount=publicDetailMount();
         mount.style.display='block';
-        mount.innerHTML=`<div class="course-detail-view"><button class="btn btn-outline" id="abtBackClasses">← Kembali ke daftar kelas</button><article class="course-detail-card" style="margin-top:18px">${c.thumbnail_url?`<img class="course-detail-image" src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="${safeText(c.title)}" onerror="this.style.display='none'">`:''}<div class="course-detail-content"><span class="badge">${safeText(c.category||'Program')}</span><h1>${safeText(c.title)}</h1><p style="color:#66808a">${safeText([c.level,c.duration_text].filter(Boolean).join(' · '))}</p><div class="course-detail-description">${safeText(c.description||'Informasi lengkap kelas akan diperbarui oleh pengelola.')}</div><div class="profile-grid" style="margin-top:20px"><div class="profile-item"><small>Biaya</small><strong>${formatRupiah(c.price_amount)} · ${safeText(({one_time:'Sekali bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||'')}</strong></div><div class="profile-item"><small>Jadwal</small><strong>${safeText(c.schedule||'Diumumkan kemudian')}</strong></div><div class="profile-item"><small>Periode</small><strong>${safeText([c.start_date,c.end_date].filter(Boolean).join(' – ')||c.duration_text||'Informasi menyusul')}</strong></div><div class="profile-item"><small>Kuota</small><strong>${safeText(c.capacity??'Terbatas')}</strong></div></div><div class="course-detail-actions"><button class="btn btn-primary" id="abtEnrollNow" data-class-id="${safeText(c.id)}">Daftar Sekarang</button></div></div></article></div>`;
-        document.getElementById('abtBackClasses').onclick=()=>{history.pushState({},'','/#kelas');mount.style.display='none';document.querySelector('body > main').style.display='';document.querySelector('body > footer').style.display='';document.getElementById('kelas')?.scrollIntoView();};
+        mount.innerHTML=`<div class="course-detail-view"><button class="btn btn-outline" id="abtBackClasses">← Kembali ke daftar kelas</button><article class="course-detail-card" style="margin-top:18px">${c.thumbnail_url?`<div class="course-detail-gallery"><img class="course-detail-gallery-item" src="${safeText(normalizeThumbnailUrl(c.thumbnail_url))}" alt="Poster ${safeText(c.title)}" onerror="this.closest('.course-detail-gallery').remove()"></div>`:''}<div class="course-detail-content"><span class="badge">${safeText(c.category||'Program')}</span><h1>${safeText(c.title)}</h1><p style="color:#66808a">${safeText([c.level,c.duration_text].filter(Boolean).join(' · '))}</p><div class="course-detail-description">${safeText(c.description||'Informasi lengkap kelas akan diperbarui oleh pengelola.')}</div><div class="profile-grid" style="margin-top:20px"><div class="profile-item"><small>Biaya</small><strong>${formatRupiah(c.price_amount)} · ${safeText(({one_time:'Sekali bayar',monthly:'Bulanan',custom_package:'Paket khusus'})[c.payment_type]||'')}</strong></div><div class="profile-item"><small>Jadwal</small><strong>${safeText(c.schedule||'Diumumkan kemudian')}</strong></div><div class="profile-item"><small>Periode</small><strong>${safeText([c.start_date,c.end_date].filter(Boolean).join(' – ')||c.duration_text||'Informasi menyusul')}</strong></div><div class="profile-item"><small>Kuota</small><strong>${safeText(c.capacity??'Terbatas')}</strong></div></div><div class="course-detail-actions"><button class="btn btn-primary" id="abtEnrollNow" data-class-id="${safeText(c.id)}">Daftar Sekarang</button></div></div></article></div>`;
+        document.getElementById('abtBackClasses').onclick=()=>{history.pushState({view:'home'},'','/#kelas');mount.style.display='none';document.querySelector('body > main').style.display='';document.querySelector('body > footer').style.display='';document.getElementById('kelas')?.scrollIntoView();};
         document.getElementById('abtEnrollNow').onclick=()=>beginClassEnrollment(c.id);
       }catch(e){alert(e.message);history.replaceState({},'','/');}
       finally{hideAbtLoading();}
@@ -1288,10 +1292,11 @@
         const {data:c,error}=await supabaseClient.from('classes').select('id,title,price_amount,payment_type').eq('id',classId).eq('status','published').single();
         if(error||!c)throw error||new Error('Kelas tidak tersedia.');
         const mount=publicDetailMount();mount.style.display='block';
+        history.pushState({view:'checkout',classId:String(classId)},'','/?checkout='+encodeURIComponent(classId));
         setAppMode(false);dashboard.style.display='none';
         document.querySelector('body > main').style.display='none';document.querySelector('body > footer').style.display='none';
         mount.innerHTML=`<section class="abt-checkout"><button class="btn btn-outline" id="abtCheckoutBack">← Kembali ke kelas</button><h2>Konfirmasi Pendaftaran</h2><p>Anda mendaftar pada kelas <strong>${safeText(c.title)}</strong>.</p><div class="profile-item"><small>Total pembayaran</small><strong>${formatRupiah(c.price_amount)} · ${safeText(c.payment_type||'')}</strong></div><form id="abtPaymentForm"><div class="field"><label>Metode pembayaran *</label><select id="abtPayMethod" required><option value="">Pilih metode</option><option value="transfer_bank">Transfer bank</option><option value="qris">QRIS</option><option value="konfirmasi_admin">Konfirmasi dengan Admin</option></select></div><div class="field"><label>Nomor referensi / catatan pembayaran</label><textarea id="abtPayReference" rows="3" placeholder="Isi nomor referensi transfer atau catatan. Jika belum membayar, tulis 'Menunggu instruksi pembayaran'."></textarea></div><div class="app-alert">Setelah mengirim konfirmasi, status pendaftaran menjadi <strong>Menunggu konfirmasi Admin</strong>. Detail rekening/QRIS harus diperoleh dari kanal resmi Admin.</div><button class="btn btn-primary" type="submit">Kirim Konfirmasi Pendaftaran</button><p id="abtPayFeedback" role="status"></p></form></section>`;
-        document.getElementById('abtCheckoutBack').onclick=()=>openClassDetail(classId);
+        document.getElementById('abtCheckoutBack').onclick=()=>{history.pushState({view:'class',classId:String(classId)},'','/?kelas='+encodeURIComponent(classId));openClassDetail(classId);};
         document.getElementById('abtPaymentForm').onsubmit=async ev=>{
           ev.preventDefault();const fb=document.getElementById('abtPayFeedback');const btn=ev.target.querySelector('button[type=submit]');btn.disabled=true;btn.textContent='Mengirim...';
           const {error:insertError}=await supabaseClient.from('class_enrollments').insert({class_id:classId,student_id:currentUser.id,payment_method:document.getElementById('abtPayMethod').value,payment_reference:document.getElementById('abtPayReference').value.trim(),payment_status:'menunggu_konfirmasi'});
@@ -1316,7 +1321,12 @@
       const detail=e.target.closest('[data-class-detail]');if(detail){history.pushState({},'','/?kelas='+encodeURIComponent(detail.dataset.classDetail));openClassDetail(detail.dataset.classDetail);}
       const enroll=e.target.closest('[data-class-enroll]');if(enroll)beginClassEnrollment(enroll.dataset.classEnroll);
     });
-    const classFromUrl=new URLSearchParams(location.search).get('kelas');if(classFromUrl)openClassDetail(classFromUrl);else applyPublicClasses();
+    const initialParams=new URLSearchParams(location.search);
+    const classFromUrl=initialParams.get('kelas');
+    const checkoutFromUrl=initialParams.get('checkout');
+    if(checkoutFromUrl)sessionStorage.setItem('abt_pending_class_id',checkoutFromUrl);
+    if(classFromUrl)openClassDetail(classFromUrl);
+    applyPublicClasses();
 
 
     async function loadSiteContentEditor(){
@@ -1418,6 +1428,9 @@
       currentUser=null; currentProfile=null; currentRole=null;
       updatePublicAccountUI();
       setAppMode(false);
+      const publicFlow=document.getElementById('abtPublicFlow');if(publicFlow)publicFlow.style.display='none';
+      document.querySelector('body > main').style.display='';
+      document.querySelector('body > footer').style.display='';
       if (location.pathname.startsWith('/dashboard')) history.replaceState({},'', '/');
     }
 
@@ -1492,10 +1505,14 @@
       loginForm.reset();
     });
     window.addEventListener('popstate', async () => {
-      if (!currentUser) return;
-      const segment = '/dashboard/' + currentRole;
-      if (location.pathname.startsWith(segment)) { await renderDashboardPage(parsePageFromPath()); }
-      else { setAppMode(false); }
+      const params=new URLSearchParams(location.search);
+      if(location.pathname.startsWith('/dashboard') && currentUser){
+        setAppMode(true);await renderDashboardPage(parsePageFromPath());return;
+      }
+      if(params.get('checkout') && currentUser){await showEnrollmentCheckout(params.get('checkout'));return;}
+      if(params.get('kelas')){setAppMode(false);await openClassDetail(params.get('kelas'));return;}
+      showPublicWebsite();
+      if(location.hash==='#kelas')document.getElementById('kelas')?.scrollIntoView();
     });
     const FORCE_PUBLIC_PREVIEW = new URLSearchParams(location.search).get('preview') === 'public';
     (async function restoreSession() {
@@ -1507,9 +1524,14 @@
         if (location.pathname.startsWith('/dashboard')) history.replaceState({},'','/');
         return;
       }
-      try { await openUserDashboard(session.user,false);
-        try{await continuePendingEnrollment();}catch(enrollError){console.error('Pendaftaran kelas belum dapat dilanjutkan:',enrollError);} }
-      catch(error) { console.error('Gagal memuat profil pengguna:',error); showPublicWebsite(); }
+      try {
+        const onDashboardRoute=location.pathname.startsWith('/dashboard');
+        await openUserDashboard(session.user,onDashboardRoute);
+        if(!onDashboardRoute){
+          try{await continuePendingEnrollment();}
+          catch(enrollError){console.error('Pendaftaran kelas belum dapat dilanjutkan:',enrollError);}
+        }
+      } catch(error) { console.error('Gagal memuat profil pengguna:',error); showPublicWebsite(); }
     })();
     supabaseClient.auth.onAuthStateChange((event,session) => {
       if (FORCE_PUBLIC_PREVIEW) { showPublicWebsite(); return; }
